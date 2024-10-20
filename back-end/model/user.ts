@@ -1,4 +1,5 @@
 import { Beoordeling } from './beoordeling';
+import { Opdracht } from './opdracht';
 import { Pand } from './pand';
 
 export class User {
@@ -12,6 +13,7 @@ export class User {
     private bevoegdheden: string;
     private beoordelingen: Beoordeling[];
     private panden: Pand[];
+    private opdrachten: Opdracht[] = []; //toevoegen om user en opdracht te verbinden
 
     constructor(user: {
         voornaam: string;
@@ -106,5 +108,14 @@ export class User {
     addPandToUser(pand: Pand) {
         //toegevoegd
         this.panden.push(pand);
+    }
+
+    addOpdrachtToUser(opdracht: Opdracht) {
+        this.opdrachten.push(opdracht); // Voeg nieuwe opdracht toe aan de user
+    }
+
+    // Getter voor de opdrachten van de user
+    getOpdrachten(): Opdracht[] {
+        return this.opdrachten;
     }
 }

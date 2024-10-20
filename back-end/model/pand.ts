@@ -55,9 +55,6 @@ export class Pand {
     }
 
     addOpdrachtToPand(opdracht: Opdracht) {
-        //opdracht toevoegen aan pand
-        //this.opdracht.push(opdracht);
-        //COMMENTAAR: geen idee hoe ik dit moet implementeren, houd gij u daar maar mee bezig kheb geen zin om lang te zoeken.
-        //-_-
+        this.opdracht = opdracht;
     }
 }
