@@ -162,6 +162,51 @@ beoordelingRouter.delete('/:id', (req: Request, res: Response, next: NextFunctio
     }
 });
 
+/**
+ * @swagger
+ * /beoordelingen/pilot/{pilotId}:
+ *   get:
+ *     summary: Haal alle beoordelingen van een specifieke piloot op
+ *     tags:
+ *       - Beoordelingen
+ *     parameters:
+ *       - in: path
+ *         name: pilotId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID van de piloot
+ *     responses:
+ *       200:
+ *         description: Lijst van beoordelingen
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Beoordeling'
+ *       404:
+ *         description: Piloot niet gevonden
+ *       500:
+ *         description: Serverfout
+ */
+beoordelingRouter.get('/pilot/:pilotId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const pilotId = parseInt(req.params.pilotId, 10);
+        if (isNaN(pilotId)) {
+            return res.status(400).json({ message: 'Ongeldig piloot ID' });
+        }
+
+        const beoordelingen = await BeoordelingService.getBeoordelingenByPilotId(pilotId);
+        if (beoordelingen.length === 0) {
+            return res.status(404).json({ message: 'Geen beoordelingen gevonden voor deze piloot' });
+        }
+
+        res.status(200).json(beoordelingen);
+    } catch (error) {
+        next(error);
+    }
+});
 
 
 export { beoordelingRouter };

@@ -1,5 +1,6 @@
 import { Beoordeling } from '../model/beoordeling';
 import beoordelingDb from '../repository/beoordeling.db';
+import userDb from '../repository/user.db';
 
 class BeoordelingService {
     static async getBeoordelingen(): Promise<Beoordeling[]> {
@@ -21,6 +22,16 @@ class BeoordelingService {
     static deleteBeoordelingById(id: number): boolean {
         return beoordelingDb.deleteBeoordelingById(id);
     }
+
+    static async getBeoordelingenByPilotId(pilotId: number): Promise<Beoordeling[]> {
+        const pilot = userDb.getUserById(pilotId);
+        if (!pilot || pilot.getRol() !== 'pilot') {
+            throw new Error('Piloot niet gevonden');
+        }
+
+        return await beoordelingDb.getBeoordelingenByUserId(pilotId);
+    }
+
 }
 
 export { BeoordelingService };
