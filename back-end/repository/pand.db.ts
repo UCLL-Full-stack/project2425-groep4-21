@@ -1,6 +1,7 @@
 import { Pand } from '../model/pand';
 import { Opdracht } from '../model/opdracht';
 import { Media } from '../model/media';
+import { Beoordeling } from '../model/beoordeling';
 
 const panden = [
     new Pand({
@@ -11,7 +12,12 @@ const panden = [
         opdracht: new Opdracht({
             opdrachtnummer: 1,
             datum: new Date(),
-            beoordeling: 'Goed uitgevoerd',
+            beoordeling: new Beoordeling({
+                beoordelingId: 1,
+                score: 9,
+                opmerkingen: 'Goed uitgevoerd',
+                userId: 1,
+            }),
             puntentotaal: 95,
             status: 'Afgerond',
             medias: [
@@ -21,7 +27,8 @@ const panden = [
                     uploadDatum: new Date(),
                 }),
             ],
-            realtorId: 1,
+            realtorId: 456,
+            pilotId: 1,
         }),
     }),
     new Pand({
@@ -32,7 +39,12 @@ const panden = [
         opdracht: new Opdracht({
             opdrachtnummer: 2,
             datum: new Date(),
-            beoordeling: 'Uitstekend',
+            beoordeling: new Beoordeling({
+                beoordelingId: 2,
+                score: 10,
+                opmerkingen: 'Uitstekend',
+                userId: 2,
+            }),
             puntentotaal: 100,
             status: 'In Behandeling',
             medias: [
@@ -42,7 +54,8 @@ const panden = [
                     uploadDatum: new Date(),
                 }),
             ],
-            realtorId: 2,
+            realtorId: 789,
+            pilotId: 2,
         }),
     }),
     new Pand({
@@ -53,7 +66,12 @@ const panden = [
         opdracht: new Opdracht({
             opdrachtnummer: 3,
             datum: new Date(),
-            beoordeling: 'Matig',
+            beoordeling: new Beoordeling({
+                beoordelingId: 3,
+                score: 7,
+                opmerkingen: 'Matig',
+                userId: 3,
+            }),
             puntentotaal: 70,
             status: 'Open',
             medias: [
@@ -63,7 +81,8 @@ const panden = [
                     uploadDatum: new Date(),
                 }),
             ],
-            realtorId: 3,
+            realtorId: 333,
+            pilotId: 3,
         }),
     }),
 ];

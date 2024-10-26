@@ -2,6 +2,7 @@ import { Opdracht } from '../model/opdracht';
 import { User } from '../model/user';
 import opdrachtDb from '../repository/opdracht.db';
 import userDb from '../repository/user.db';
+import { Beoordeling } from '../model/beoordeling';
 
 class OpdrachtService {
     static async getOpdrachten(): Promise<Opdracht[]> {
@@ -50,6 +51,21 @@ class OpdrachtService {
     static async getCompletedAssignments(pilotId: number): Promise<Opdracht[]> {
         return opdrachtDb.getCompletedOpdrachtenByPilotId(pilotId);
     }
+
+    static async getBeoordelingByAssignmentId(assignmentId: number): Promise<string | null> {
+        const assignment = await opdrachtDb.getAssignmentById(assignmentId);
+        if (!assignment) {
+            throw new Error('Opdracht niet gevonden');
+        }
+
+        const beoordeling = assignment.getBeoordeling();
+        if (beoordeling) {
+            return beoordeling.getOpmerkingen();
+        } else {
+            return null;
+        }
+    }
+
 }
 
 export { OpdrachtService };

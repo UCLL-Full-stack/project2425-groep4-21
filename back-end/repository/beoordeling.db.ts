@@ -41,5 +41,5 @@ export default {
     getBeoordelingById,
     createBeoordeling,
     deleteBeoordelingById,
-    getBeoordelingenByUserId
+    getBeoordelingenByUserId,
 };

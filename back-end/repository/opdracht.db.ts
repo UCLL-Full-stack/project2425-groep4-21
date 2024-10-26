@@ -1,11 +1,16 @@
 import { Opdracht } from '../model/opdracht';
 import { Media } from '../model/media';
-
+import { Beoordeling } from '../model/beoordeling';
 const opdrachten: Opdracht[] = [
     new Opdracht({
         opdrachtnummer: 1,
         datum: new Date(),
-        beoordeling: 'Goed uitgevoerd',
+        beoordeling: new Beoordeling({
+            beoordelingId: 1,
+            score: 9,
+            opmerkingen: 'Goed uitgevoerd',
+            userId: 1,
+        }),
         puntentotaal: 95,
         status: 'Afgerond',
         medias: [
@@ -21,7 +26,12 @@ const opdrachten: Opdracht[] = [
     new Opdracht({
         opdrachtnummer: 2,
         datum: new Date(),
-        beoordeling: 'Uitstekend',
+        beoordeling: new Beoordeling({
+            beoordelingId: 2,
+            score: 10,
+            opmerkingen: 'Uitstekend',
+            userId: 2,
+        }),
         puntentotaal: 100,
         status: 'In Behandeling',
         medias: [
@@ -32,12 +42,17 @@ const opdrachten: Opdracht[] = [
             }),
         ],
         realtorId: 2,
-
+        pilotId: 2,
     }),
     new Opdracht({
         opdrachtnummer: 3,
         datum: new Date(),
-        beoordeling: 'Matig',
+        beoordeling: new Beoordeling({
+            beoordelingId: 3,
+            score: 7,
+            opmerkingen: 'Matig',
+            userId: 3,
+        }),
         puntentotaal: 70,
         status: 'Open',
         medias: [
@@ -51,6 +66,7 @@ const opdrachten: Opdracht[] = [
         pilotId: 3,
     }),
 ];
+
 
 const getAllOpdrachten = (): Opdracht[] => {
     return opdrachten;
@@ -97,6 +113,10 @@ const updateOpdracht = (updatedOpdracht: Opdracht): Opdracht => {
     return updatedOpdracht;
 };
 
+const getAssignmentById = async (OpdrachtId: number): Promise<Opdracht | null> => {
+    const opdracht = opdrachten.find(a => a.getOpdrachtnummer() === OpdrachtId);
+    return opdracht || null;
+};
 
 export default {
     getAllOpdrachten,
@@ -105,5 +125,6 @@ export default {
     deleteOpdrachtById,
     getOpdrachtenByRealtorId,
     getCompletedOpdrachtenByPilotId,
-    updateOpdracht
+    updateOpdracht,
+    getAssignmentById
 };

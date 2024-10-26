@@ -1,9 +1,10 @@
 import { Media } from './media';
+import { Beoordeling } from './beoordeling';
 
 export class Opdracht {
     opdrachtnummer?: number;
     public datum: Date;
-    public beoordeling: string;
+    public beoordeling: Beoordeling | null;
     public puntentotaal: number;
     public status: string;
     public medias: Media[]; //toevoegen om media aan opdracht te kunnen toevoegen
@@ -13,7 +14,7 @@ export class Opdracht {
     constructor(opdracht: {
         opdrachtnummer?: number;
         datum: Date;
-        beoordeling: string;
+        beoordeling: Beoordeling | null;
         puntentotaal: number;
         status: string;
         medias: Media[]; //toevoegen om media aan opdracht te kunnen toevoegen
@@ -50,7 +51,7 @@ export class Opdracht {
         return this.datum;
     }
 
-    getBeoordeling(): string {
+    getBeoordeling(): Beoordeling | null {
         return this.beoordeling;
     }
 
