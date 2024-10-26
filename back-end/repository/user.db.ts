@@ -13,6 +13,7 @@ const users = [
         bevoegdheden: 'all',
         beoordelingen: [],
         panden: [],
+        isVerified: true, // Add this property
     }),
     new User({
         id: 1,
@@ -26,6 +27,8 @@ const users = [
         bevoegdheden: 'limited',
         beoordelingen: [],
         panden: [],
+        isVerified: true, // Add this property
+
     }),
     new User({
         id: 3,
@@ -39,6 +42,7 @@ const users = [
         bevoegdheden: 'read-only',
         beoordelingen: [],
         panden: [],
+        isVerified: true, // Add this property
     }),
 ];
 
@@ -73,6 +77,10 @@ const getUsersByIdsAndRole = (ids: number[], role: string): User[] => {
     return users.filter(user => ids.includes(user.id) && user.getRol() === role);
 };
 
+const getUsersByRole = async (role: 'pilot' | 'realtor' | 'admin'): Promise<User[]> => {
+    return users.filter(user => user.getRol() === role);
+};
+
 export default {
     getAllUsers,
     getUserById,
@@ -80,4 +88,5 @@ export default {
     deleteUserById,
     getUsersByRoleAndRating,
     getUsersByIdsAndRole,
+    getUsersByRole
 };

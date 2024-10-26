@@ -70,6 +70,56 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+
+//Todo endpoints:
+// GET /users/pilots: Haal een lijst op van alle piloten, met mogelijkheid tot filtering.
+/**
+ * @swagger
+ * /users/pilots:
+ *   get:
+ *     summary: Haal een lijst op van alle piloten, met mogelijkheid tot filtering
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: query
+ *         name: minRating
+ *         schema:
+ *           type: number
+ *         required: false
+ *         description: Filter piloten op minimale rating
+ *       - in: query
+ *         name: niveau
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Filter piloten op niveau
+ *     responses:
+ *       200:
+ *         description: Lijst van piloten
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/PilotResponse'
+ *       400:
+ *         description: Ongeldige queryparameters
+ *       500:
+ *         description: Serverfout
+ */
+userRouter.get('/pilots', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { minRating, niveau } = req.query;
+        const ratingFilter = minRating ? parseFloat(minRating as string) : undefined;
+        const pilots = await UserService.getPilots({ minRating: ratingFilter, niveau: niveau as string });
+        res.status(200).json(pilots);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
 /**
  * @swagger
  * /users/{id}:
@@ -174,5 +224,13 @@ userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
+
+//Todo endpoints jwt
+// POST /users/register: Registreer een nieuwe gebruiker.
+// POST /users/login: Authenticeer een gebruiker en geef een JWT-token terug.
+// GET /users/profile: Haal het profiel van de ingelogde gebruiker op.
+// PUT /users/profile: Werk het profiel van de ingelogde gebruiker bij.
+// PUT /users/:id/verify: Verifieer een gebruiker (alleen voor beheerders).
+
 
 export { userRouter };

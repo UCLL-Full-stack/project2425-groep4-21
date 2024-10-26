@@ -7,27 +7,29 @@ export class User {
     private voornaam: string;
     private naam: string;
     private gebruikersnaam: string;
-    private rol: string;
+    private rol: 'pilot' | 'realtor' | 'admin';
     private emailadres: string;
     private portfolio: string;
     private niveau: string;
     private bevoegdheden: string;
-    private beoordelingen: Beoordeling[];
     private panden: Pand[];
     private opdrachten: Opdracht[] = [];
+    public isVerified: boolean;
+    beoordelingen: Beoordeling[] = [];
 
     constructor(user: {
         id: number;
         voornaam: string;
         naam: string;
         gebruikersnaam: string;
-        rol: string;
+        rol: 'pilot' | 'realtor' | 'admin';
         emailadres: string;
         portfolio: string;
         niveau: string;
         bevoegdheden: string;
-        beoordelingen: Beoordeling[];
         panden: Pand[];
+        isVerified: boolean;
+        beoordelingen?: Beoordeling[];
     }) {
         this.id = user.id;
         this.voornaam = user.voornaam;
@@ -38,12 +40,39 @@ export class User {
         this.portfolio = user.portfolio;
         this.niveau = user.niveau;
         this.bevoegdheden = user.bevoegdheden;
-        this.beoordelingen = user.beoordelingen;
         this.panden = user.panden;
+        this.isVerified = user.isVerified;
+        this.beoordelingen = user.beoordelingen || [];
+
     }
 
     getId(): number {
         return this.id;
+    }
+
+
+    getRol(): 'pilot' | 'realtor' | 'admin' {
+        return this.rol;
+    }
+
+    getNiveau(): string | undefined {
+        return this.niveau;
+    }
+
+    getBeoordelingen(): Beoordeling[] {
+        return this.beoordelingen;
+    }
+
+    addBeoordeling(beoordeling: Beoordeling) {
+        this.beoordelingen.push(beoordeling);
+    }
+
+    calculateRating(): number | undefined {
+        if (this.beoordelingen.length === 0) {
+            return undefined;
+        }
+        const totalScore = this.beoordelingen.reduce((sum, beoordeling) => sum + beoordeling.getScore(), 0);
+        return totalScore / this.beoordelingen.length;
     }
 
     getVoornaam(): string {
@@ -58,10 +87,6 @@ export class User {
         return this.gebruikersnaam;
     }
 
-    getRol(): string {
-        return this.rol;
-    }
-
     getEmailadres(): string {
         return this.emailadres;
     }
@@ -70,16 +95,8 @@ export class User {
         return this.portfolio;
     }
 
-    getNiveau(): string {
-        return this.niveau;
-    }
-
     getBevoegdheden(): string {
         return this.bevoegdheden;
-    }
-
-    getBeoordelingen(): Beoordeling[] {
-        return this.beoordelingen;
     }
 
     addBeoordelingToUser(Beoordeling: Beoordeling) {
@@ -101,4 +118,9 @@ export class User {
     getOpdrachten(): Opdracht[] {
         return this.opdrachten;
     }
+
+    public setBeoordelingen(beoordelingen: Beoordeling[]): void {
+        this.beoordelingen = beoordelingen;
+    }
+
 }
