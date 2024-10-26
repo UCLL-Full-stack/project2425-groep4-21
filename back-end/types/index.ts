@@ -1,6 +1,7 @@
 type Role = 'admin' | 'piloot' | 'makelaar';
 
 type UserInput = {
+    id: number;
     voornaam: string;
     naam: string;
     gebruikersnaam: string;
@@ -42,6 +43,14 @@ type BeoordelingInput = {
     opmerkingen: string;
     userId: number;
 };
+
+declare global {
+    namespace Express {
+        interface Request {
+            user?: UserInput;
+        }
+    }
+}
 
 // type AuthenticationResponse = {
 //     token: string;

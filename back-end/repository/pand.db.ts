@@ -21,6 +21,7 @@ const panden = [
                     uploadDatum: new Date(),
                 }),
             ],
+            realtorId: 1,
         }),
     }),
     new Pand({
@@ -41,6 +42,7 @@ const panden = [
                     uploadDatum: new Date(),
                 }),
             ],
+            realtorId: 2,
         }),
     }),
     new Pand({
@@ -61,6 +63,7 @@ const panden = [
                     uploadDatum: new Date(),
                 }),
             ],
+            realtorId: 3,
         }),
     }),
 ];

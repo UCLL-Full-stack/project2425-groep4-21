@@ -12,7 +12,7 @@ import { userRouter } from './controller/user.routes';
 
 const app = express();
 dotenv.config();
-const port = process.env.APP_PORT || 3000;
+const port = process.env.APP_PORT || 3001;
 
 app.use(cors());
 app.use(bodyParser.json());

@@ -3,6 +3,7 @@ import { Opdracht } from './opdracht';
 import { Pand } from './pand';
 
 export class User {
+    public id: number;
     private voornaam: string;
     private naam: string;
     private gebruikersnaam: string;
@@ -13,9 +14,10 @@ export class User {
     private bevoegdheden: string;
     private beoordelingen: Beoordeling[];
     private panden: Pand[];
-    private opdrachten: Opdracht[] = []; //toevoegen om user en opdracht te verbinden
+    private opdrachten: Opdracht[] = [];
 
     constructor(user: {
+        id: number;
         voornaam: string;
         naam: string;
         gebruikersnaam: string;
@@ -27,6 +29,7 @@ export class User {
         beoordelingen: Beoordeling[];
         panden: Pand[];
     }) {
+        this.id = user.id;
         this.voornaam = user.voornaam;
         this.naam = user.naam;
         this.gebruikersnaam = user.gebruikersnaam;
@@ -39,23 +42,8 @@ export class User {
         this.panden = user.panden;
     }
 
-    equals(user: User): boolean {
-        return (
-            this.voornaam === user.getVoornaam() &&
-            this.naam === user.getNaam() &&
-            this.gebruikersnaam === user.getGebruikersnaam() &&
-            this.rol === user.getRol() &&
-            this.emailadres === user.getEmailadres() &&
-            this.portfolio === user.getPortfolio() &&
-            this.niveau === user.getNiveau() &&
-            this.bevoegdheden === user.getBevoegdheden() &&
-            this.beoordelingen.length === user.getBeoordelingen().length && //checken of ze evenlang zijn
-            this.beoordelingen.every((beoordeling, index) =>
-                beoordeling.equals(user.getBeoordelingen()[index])
-            ) && //vergelijken van elke beoordeling
-            this.panden.length === user.getPanden().length && //checken of ze evenlang zijn
-            this.panden.every((pand, index) => pand.equals(user.getPanden()[index])) //vergelijken van elke beoordeling
-        );
+    getId(): number {
+        return this.id;
     }
 
     getVoornaam(): string {
@@ -91,30 +79,25 @@ export class User {
     }
 
     getBeoordelingen(): Beoordeling[] {
-        //toegevoegd
         return this.beoordelingen;
     }
 
     addBeoordelingToUser(Beoordeling: Beoordeling) {
-        //toegevoegd
         this.beoordelingen.push(Beoordeling);
     }
 
     getPanden(): Pand[] {
-        //toegevoegd
         return this.panden;
     }
 
     addPandToUser(pand: Pand) {
-        //toegevoegd
         this.panden.push(pand);
     }
 
     addOpdrachtToUser(opdracht: Opdracht) {
-        this.opdrachten.push(opdracht); // Voeg nieuwe opdracht toe aan de user
+        this.opdrachten.push(opdracht);
     }
 
-    // Getter voor de opdrachten van de user
     getOpdrachten(): Opdracht[] {
         return this.opdrachten;
     }

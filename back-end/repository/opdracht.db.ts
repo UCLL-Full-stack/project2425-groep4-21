@@ -1,7 +1,7 @@
 import { Opdracht } from '../model/opdracht';
 import { Media } from '../model/media';
 
-const opdrachten = [
+const opdrachten: Opdracht[] = [
     new Opdracht({
         opdrachtnummer: 1,
         datum: new Date(),
@@ -15,6 +15,8 @@ const opdrachten = [
                 uploadDatum: new Date(),
             }),
         ],
+        realtorId: 1,
+        pilotId: 1,
     }),
     new Opdracht({
         opdrachtnummer: 2,
@@ -29,6 +31,8 @@ const opdrachten = [
                 uploadDatum: new Date(),
             }),
         ],
+        realtorId: 2,
+
     }),
     new Opdracht({
         opdrachtnummer: 3,
@@ -43,6 +47,8 @@ const opdrachten = [
                 uploadDatum: new Date(),
             }),
         ],
+        realtorId: 3,
+        pilotId: 3,
     }),
 ];
 
@@ -50,15 +56,21 @@ const getAllOpdrachten = (): Opdracht[] => {
     return opdrachten;
 };
 
-const getOpdrachtById = (id: number): Opdracht | null => {
-    const opdracht = opdrachten.find((o) => o.getOpdrachtnummer() === id);
-    return opdracht || null;
+const getOpdrachtById = async (id: number): Promise<Opdracht | null> => {
+    const opdrachtData = opdrachten.find((o) => o.opdrachtnummer === id);
+    if (opdrachtData) {
+        return new Opdracht(opdrachtData);
+    } else {
+        return null;
+    }
 };
 
-const createOpdracht = (newOpdracht: Opdracht): Opdracht => {
+const createOpdracht = (newOpdrachtData: any): Opdracht => {
+    const newOpdracht = new Opdracht(newOpdrachtData);
     opdrachten.push(newOpdracht);
     return newOpdracht;
 };
+
 
 const deleteOpdrachtById = (id: number): boolean => {
     const opdrachtIndex = opdrachten.findIndex((o) => o.getOpdrachtnummer() === id);
@@ -69,9 +81,29 @@ const deleteOpdrachtById = (id: number): boolean => {
     return false;
 };
 
+const getOpdrachtenByRealtorId = (realtorId: number): Opdracht[] => {
+    return opdrachten.filter(opdracht => opdracht.realtorId === realtorId);
+};
+
+const getCompletedOpdrachtenByPilotId = (pilotId: number): Opdracht[] => {
+    return opdrachten.filter(opdracht => opdracht.pilotId === pilotId && opdracht.status === 'Afgerond');
+};
+
+const updateOpdracht = (updatedOpdracht: Opdracht): Opdracht => {
+    const index = opdrachten.findIndex((o) => o.opdrachtnummer === updatedOpdracht.getOpdrachtnummer());
+    if (index !== -1) {
+        opdrachten[index] = updatedOpdracht;
+    }
+    return updatedOpdracht;
+};
+
+
 export default {
     getAllOpdrachten,
     getOpdrachtById,
     createOpdracht,
     deleteOpdrachtById,
+    getOpdrachtenByRealtorId,
+    getCompletedOpdrachtenByPilotId,
+    updateOpdracht
 };

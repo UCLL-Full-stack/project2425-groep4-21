@@ -1,6 +1,6 @@
 export class Beoordeling {
     private beoordelingId?: number;
-    private score: number;
+    public score: number;
     private opmerkingen: string;
     private userId: number;
 

@@ -2,10 +2,11 @@ import { User } from '../model/user';
 
 const users = [
     new User({
+        id: 0,
         voornaam: 'Jan',
         naam: 'Jansen',
         gebruikersnaam: 'jjansen',
-        rol: 'admin',
+        rol: 'pilot',
         emailadres: 'jan.jansen@example.com',
         portfolio: 'https://portfolio.jansen.com',
         niveau: 'junior',
@@ -14,10 +15,11 @@ const users = [
         panden: [],
     }),
     new User({
+        id: 1,
         voornaam: 'Pieter',
         naam: 'Pieters',
         gebruikersnaam: 'ppieters',
-        rol: 'user',
+        rol: 'pilot',
         emailadres: 'pieter.pieters@example.com',
         portfolio: 'https://portfolio.pieters.com',
         niveau: 'senior',
@@ -26,10 +28,11 @@ const users = [
         panden: [],
     }),
     new User({
+        id: 3,
         voornaam: 'Karin',
         naam: 'Karels',
         gebruikersnaam: 'kkarels',
-        rol: 'guest',
+        rol: 'pilot',
         emailadres: 'karin.karels@example.com',
         portfolio: 'https://portfolio.karels.com',
         niveau: 'intermediate',
@@ -62,9 +65,19 @@ const deleteUserById = (id: number): boolean => {
     return false;
 };
 
+const getUsersByRoleAndRating = (role: string, rating: number): User[] => {
+    return users.filter(user => user.getRol() === role && user.getBeoordelingen().some(b => b.score >= rating));
+};
+
+const getUsersByIdsAndRole = (ids: number[], role: string): User[] => {
+    return users.filter(user => ids.includes(user.id) && user.getRol() === role);
+};
+
 export default {
     getAllUsers,
     getUserById,
     createUser,
     deleteUserById,
+    getUsersByRoleAndRating,
+    getUsersByIdsAndRole,
 };

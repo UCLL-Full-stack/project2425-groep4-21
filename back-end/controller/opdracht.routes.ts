@@ -1,5 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { OpdrachtService } from '../service/opdracht.service';
+import '../types/index';
+
 
 const opdrachtRouter = express.Router();
 
@@ -65,6 +67,51 @@ opdrachtRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
         next(error);
     }
 });
+
+
+
+/**
+ * @swagger
+ * /opdrachten/hired-pilots:
+ *   get:
+ *     summary: Get all hired drone pilots for a realtor
+ *     tags:
+ *       - Opdrachten
+ *     responses:
+ *       200:
+ *         description: List of hired drone pilots
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   rating:
+ *                     type: number
+ *       500:
+ *         description: Server error
+ */
+opdrachtRouter.get('/hired-pilots', async (req: Request, res: Response, next: NextFunction) => {
+    // needs also jwt token
+    try {
+        //temporarily hardcoded realtorId
+        const realtorId = 3; // Replace with the realtorId you want to test
+        const pilots = await OpdrachtService.getHiredPilots(realtorId);
+        if (pilots && pilots.length > 0) {
+            res.status(200).json(pilots);
+        } else {
+            res.status(404).json({ message: 'No hired pilots found' });
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 /**
  * @swagger
@@ -166,6 +213,84 @@ opdrachtRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) 
         } else {
             res.status(404).json({ message: 'Opdracht not found' });
         }
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /opdrachten/book:
+ *   post:
+ *     summary: Book a drone pilot
+ *     tags:
+ *       - Opdrachten
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pilotId:
+ *                 type: integer
+ *                 description: ID of the drone pilot to book
+ *               opdrachtnummer:
+ *                 type: integer
+ *                 description: ID of the assignment
+ *     responses:
+ *       201:
+ *         description: Drone pilot booked successfully
+ *       500:
+ *         description: Server error
+ */
+opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { pilotId, opdrachtnummer } = req.body;
+        const opdracht = await OpdrachtService.bookDronePilot({ pilotId, opdrachtnummer });
+        res.status(201).json(opdracht);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+/**
+ * @swagger
+ * /opdrachten/completed-assignments:
+ *   get:
+ *     summary: Get completed assignments and reviews for a drone pilot
+ *     tags:
+ *       - Opdrachten
+ *     responses:
+ *       200:
+ *         description: List of completed assignments and reviews
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   opdrachtDetails:
+ *                     type: object
+ *                   review:
+ *                     type: string
+ *                   points:
+ *                     type: number
+ *       500:
+ *         description: Server error
+ */
+opdrachtRouter.get('/completed-assignments', async (req: Request, res: Response, next: NextFunction) => {
+    // zonder jwt token gaat dit niet werken
+    try {
+        if (!req.user) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const assignments = await OpdrachtService.getCompletedAssignments(req.user.id);
+        res.status(200).json(assignments);
     } catch (error) {
         next(error);
     }

@@ -1,12 +1,14 @@
 import { Media } from './media';
 
 export class Opdracht {
-    private opdrachtnummer?: number;
-    private datum: Date;
-    private beoordeling: string;
-    private puntentotaal: number;
-    private status: string;
-    private medias: Media[]; //toevoegen om media aan opdracht te kunnen toevoegen
+    opdrachtnummer?: number;
+    public datum: Date;
+    public beoordeling: string;
+    public puntentotaal: number;
+    public status: string;
+    public medias: Media[]; //toevoegen om media aan opdracht te kunnen toevoegen
+    public realtorId: number;
+    public pilotId?: number;
 
     constructor(opdracht: {
         opdrachtnummer?: number;
@@ -15,6 +17,8 @@ export class Opdracht {
         puntentotaal: number;
         status: string;
         medias: Media[]; //toevoegen om media aan opdracht te kunnen toevoegen
+        realtorId: number;
+        pilotId?: number;
     }) {
         this.opdrachtnummer = opdracht.opdrachtnummer;
         this.datum = opdracht.datum;
@@ -22,6 +26,8 @@ export class Opdracht {
         this.puntentotaal = opdracht.puntentotaal;
         this.status = opdracht.status;
         this.medias = opdracht.medias;
+        this.realtorId = opdracht.realtorId;
+        this.pilotId = opdracht.pilotId;
     }
 
     equals(opdracht: Opdracht): boolean {
