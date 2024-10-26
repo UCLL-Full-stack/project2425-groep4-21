@@ -70,9 +70,6 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-
-//Todo endpoints:
-// GET /users/pilots: Haal een lijst op van alle piloten, met mogelijkheid tot filtering.
 /**
  * @swagger
  * /users/pilots:
