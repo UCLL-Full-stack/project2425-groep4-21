@@ -65,11 +65,6 @@ export class Pand {
         if (beschrijving.length > 1000) {
             throw new Error('Description must not exceed 1000 characters.');
         }
-
-        // At least one assignment is required if the property is being managed.
-        if (opdrachten.length === 0) {
-            throw new Error('At least one assignment is required for the property.');
-        }
     }
     equals(pand: Pand): boolean {
         return (

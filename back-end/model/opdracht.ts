@@ -64,12 +64,12 @@ export class Opdracht {
             throw new Error('Media must be a valid array of Media instances.');
         }
 
-        if (realtorId !== undefined && (!Number.isInteger(realtorId) || realtorId <= 0)) {
-            throw new Error('Realtor ID, if provided, must be a positive integer.');
+        if (realtorId !== undefined && (!Number.isInteger(realtorId) || realtorId < 0)) {
+            throw new Error('Realtor ID, if provided, must be zero or a positive integer.');
         }
 
-        if (pilotId !== undefined && (!Number.isInteger(pilotId) || pilotId <= 0)) {
-            throw new Error('Pilot ID, if provided, must be a positive integer.');
+        if (pilotId !== undefined && (!Number.isInteger(pilotId) || pilotId < 0)) {
+            throw new Error('Pilot ID, if provided, must be zero or a positive integer.');
         }
     }
 

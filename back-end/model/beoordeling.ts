@@ -1,7 +1,7 @@
 export class Beoordeling {
-    private beoordelingId?: number;
+    beoordelingId?: number;
     public score: number;
-    private opmerkingen: string;
+    opmerkingen: string;
     public userId: number;
 
     constructor(beoordeling: {
@@ -28,11 +28,11 @@ export class Beoordeling {
         if (isNaN(score)) {
             throw new Error('Score must be a number.');
         }
-        if (score < 1 || score > 10) {
-            throw new Error('Score must be between 1 and 10.');
+        if (score < 0 || score > 10) {
+            throw new Error('Score must be between 0 and 10.');
         }
         if (opmerkingen.trim().length === 0) {
-            throw new Error('Comments cannot be empty.');
+            throw new Error('Opmerkingen must be a non-empty string..');
         }
         if (opmerkingen.length > 500) {
             throw new Error('Comments cannot exceed 500 characters.');

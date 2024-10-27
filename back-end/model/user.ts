@@ -139,11 +139,6 @@ export class User {
         if (gebruikersnaam.trim().length < 3) {
             throw new Error('Username must be at least 3 characters long.');
         }
-
-        // Realtors must have at least one property.
-        if (rol === 'realtor' && panden.length === 0) {
-            throw new Error('A realtor must have at least one property.');
-        }
     }
 
     // Getters

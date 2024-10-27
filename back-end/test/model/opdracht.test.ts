@@ -1,24 +1,40 @@
 import { Opdracht } from '../../model/opdracht';
 import { Media } from '../../model/media';
+import { Beoordeling } from '../../model/beoordeling';
 
-// Dummy data
+const beoordeling = new Beoordeling({
+    beoordelingId: 1,
+    score: 9,
+    opmerkingen: 'Goed uitgevoerd',
+    userId: 1,
+});
+
 const media = new Media({
     type: 'video',
     bestandslocatie: 'https://example.com/video.mp4',
     uploadDatum: new Date(),
+    opdrachtId: 101,
+});
+
+const newMedia = new Media({
+    type: 'image',
+    bestandslocatie: 'https://example.com/image.jpg',
+    uploadDatum: new Date(),
+    opdrachtId: 101,
 });
 
 const opdrachtData = {
     opdrachtnummer: 101,
     datum: new Date(),
-    beoordeling: 'Goed uitgevoerd',
+    beoordeling: beoordeling,
     puntentotaal: 95,
-    status: 'Afgerond',
+    status: 'Completed',
     medias: [media],
+    realtorId: 1,
+    pilotId: 2,
 };
 
-// Opdracht testen
-
+// Opdracht tests
 test('given: valid opdracht data, when: opdracht is created, then: opdracht has the correct properties', () => {
     // given
     const opdracht = new Opdracht(opdrachtData);
@@ -35,11 +51,6 @@ test('given: valid opdracht data, when: opdracht is created, then: opdracht has 
 test('given: an existing opdracht, when: adding a media, then: media is added to opdracht', () => {
     // given
     const opdracht = new Opdracht(opdrachtData);
-    const newMedia = new Media({
-        type: 'image',
-        bestandslocatie: 'https://example.com/image.jpg',
-        uploadDatum: new Date(),
-    });
 
     // when
     opdracht.addMediaToOpdracht(newMedia);
@@ -58,4 +69,20 @@ test('given: two identical opdrachten, when: comparing them, then: equals return
 
     // then
     expect(areEqual).toBe(true);
+});
+
+test('given: opdrachten with different properties, when: comparing them, then: equals returns false', () => {
+    // given
+    const opdracht1 = new Opdracht(opdrachtData);
+    const differentOpdrachtData = {
+        ...opdrachtData,
+        puntentotaal: 80,
+    };
+    const opdracht2 = new Opdracht(differentOpdrachtData);
+
+    // when
+    const areEqual = opdracht1.equals(opdracht2);
+
+    // then
+    expect(areEqual).toBe(false);
 });

@@ -7,7 +7,7 @@ class PandService {
     }
 
     static async getPandById(id: number): Promise<Pand | null> {
-        const pand = pandDb.getPandById(id);
+        const pand = await pandDb.getPandById(id);
         if (!pand) {
             throw new Error(`Pand ${id} not found`);
         }

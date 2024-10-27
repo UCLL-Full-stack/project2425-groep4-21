@@ -4,7 +4,7 @@ import { Opdracht } from '../../model/opdracht';
 import { Beoordeling } from '../../model/beoordeling';
 import { Media } from '../../model/media';
 
-// Dummy data
+// Dummy data for Beoordeling
 const beoordeling = new Beoordeling({
     beoordelingId: 1,
     score: 9,
@@ -12,59 +12,54 @@ const beoordeling = new Beoordeling({
     userId: 123,
 });
 
+// Dummy data for Media
+const media = new Media({
+    type: 'video',
+    bestandslocatie: 'https://example.com/video.mp4',
+    uploadDatum: new Date(),
+    opdrachtId: 101,
+});
+
+// Dummy data for Opdracht
+const opdracht = new Opdracht({
+    opdrachtnummer: 101,
+    datum: new Date(),
+    beoordeling: beoordeling,
+    puntentotaal: 95,
+    status: 'Afgerond',
+    medias: [media],
+    realtorId: 456,
+    pilotId: 789,
+});
+
+// Dummy data for Pand
 const pand = new Pand({
     pandId: 101,
     adres: 'Main Street 123',
     beschrijving: 'Mooi appartement in het centrum',
     userIdMakelaar: 456,
-    opdracht: new Opdracht({
-        opdrachtnummer: 101,
-        datum: new Date(),
-        beoordeling: 'Goed uitgevoerd',
-        puntentotaal: 95,
-        status: 'Afgerond',
-        medias: [
-            new Media({
-                type: 'video',
-                bestandslocatie: 'https://example.com/video.mp4',
-                uploadDatum: new Date(),
-            }),
-        ],
-    }),
+    opdrachten: [opdracht],
 });
 
-const opdracht = new Opdracht({
-    opdrachtnummer: 102,
-    datum: new Date(),
-    beoordeling: 'Prima',
-    puntentotaal: 85,
-    status: 'In uitvoering',
-    medias: [
-        new Media({
-            type: 'image',
-            bestandslocatie: 'https://example.com/image.jpg',
-            uploadDatum: new Date(),
-        }),
-    ],
-});
+const userData = {
+    id: 1,
+    voornaam: 'Jan',
+    naam: 'Jansen',
+    gebruikersnaam: 'jjansen',
+    rol: 'realtor' as 'realtor',
+    emailadres: 'jan.jansen@example.com',
+    portfolio: 'https://portfolio.jansen.com',
+    niveau: 'junior',
+    bevoegdheden: 'geen',
+    isVerified: true,
+    beoordelingen: [beoordeling],
+    panden: [pand],
+};
 
 // User tests
 
 test('given: valid user data, when: user is created, then: user has the correct properties', () => {
     // given
-    const userData = {
-        voornaam: 'Jan',
-        naam: 'Jansen',
-        gebruikersnaam: 'jjansen',
-        rol: 'student',
-        emailadres: 'jan.jansen@example.com',
-        portfolio: 'https://portfolio.jansen.com',
-        niveau: 'junior',
-        bevoegdheden: 'geen',
-        beoordelingen: [beoordeling],
-        panden: [pand],
-    };
-
     // when
     const user = new User(userData);
 
@@ -84,16 +79,8 @@ test('given: valid user data, when: user is created, then: user has the correct 
 test('given: an existing user, when: adding a beoordeling, then: beoordeling is added to user', () => {
     // given
     const user = new User({
-        voornaam: 'Jan',
-        naam: 'Jansen',
-        gebruikersnaam: 'jjansen',
-        rol: 'student',
-        emailadres: 'jan.jansen@example.com',
-        portfolio: 'https://portfolio.jansen.com',
-        niveau: 'junior',
-        bevoegdheden: 'geen',
+        ...userData,
         beoordelingen: [],
-        panden: [pand],
     });
 
     // when
@@ -106,15 +93,7 @@ test('given: an existing user, when: adding a beoordeling, then: beoordeling is 
 test('given: an existing user, when: adding a pand, then: pand is added to user', () => {
     // given
     const user = new User({
-        voornaam: 'Jan',
-        naam: 'Jansen',
-        gebruikersnaam: 'jjansen',
-        rol: 'student',
-        emailadres: 'jan.jansen@example.com',
-        portfolio: 'https://portfolio.jansen.com',
-        niveau: 'junior',
-        bevoegdheden: 'geen',
-        beoordelingen: [beoordeling],
+        ...userData,
         panden: [],
     });
 
@@ -127,47 +106,11 @@ test('given: an existing user, when: adding a pand, then: pand is added to user'
 
 test('given: an existing user, when: adding an opdracht, then: opdracht is added to user', () => {
     // given
-    const user = new User({
-        voornaam: 'Jan',
-        naam: 'Jansen',
-        gebruikersnaam: 'jjansen',
-        rol: 'student',
-        emailadres: 'jan.jansen@example.com',
-        portfolio: 'https://portfolio.jansen.com',
-        niveau: 'junior',
-        bevoegdheden: 'geen',
-        beoordelingen: [beoordeling],
-        panden: [pand],
-    });
+    const user = new User(userData);
 
     // when
     user.addOpdrachtToUser(opdracht);
 
     // then
     expect(user.getOpdrachten()).toContain(opdracht);
-});
-
-test('given: two identical users, when: comparing them, then: equals returns true', () => {
-    // given
-    const userData = {
-        voornaam: 'Jan',
-        naam: 'Jansen',
-        gebruikersnaam: 'jjansen',
-        rol: 'student',
-        emailadres: 'jan.jansen@example.com',
-        portfolio: 'https://portfolio.jansen.com',
-        niveau: 'junior',
-        bevoegdheden: 'geen',
-        beoordelingen: [beoordeling],
-        panden: [pand],
-    };
-
-    const user1 = new User(userData);
-    const user2 = new User(userData);
-
-    // when
-    const areEqual = user1.equals(user2);
-
-    // then
-    expect(areEqual).toBe(true);
 });

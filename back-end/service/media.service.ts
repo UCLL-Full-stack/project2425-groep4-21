@@ -8,7 +8,7 @@ class MediaService {
     }
 
     static async getMediaById(id: number): Promise<Media | null> {
-        const media = mediaDb.getMediaById(id);
+        const media = await mediaDb.getMediaById(id);
         if (!media) {
             throw new Error(`Media ${id} not found`);
         }
@@ -24,7 +24,7 @@ class MediaService {
     }
 
     static async getMediaByPropertyId(propertyId: number): Promise<Media[] | null> {
-        const pand = pandDb.getPandById(propertyId);
+        const pand = await pandDb.getPandById(propertyId);
         if (!pand) {
             return null;
         }
@@ -43,7 +43,6 @@ class MediaService {
         }
         return mediaList;
     }
-
 }
 
 export { MediaService };

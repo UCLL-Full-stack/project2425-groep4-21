@@ -1,9 +1,9 @@
 export class Media {
     private mediaId?: number;
-    private type: string;
-    private bestandslocatie: string;
-    private uploadDatum: Date;
-    private opdrachtId: number;
+    type: string;
+    bestandslocatie: string;
+    uploadDatum: Date;
+    opdrachtId: number;
 
     constructor(media: {
         mediaId?: number;

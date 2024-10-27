@@ -8,7 +8,7 @@ class BeoordelingService {
     }
 
     static async getBeoordelingById(id: number): Promise<Beoordeling | null> {
-        const beoordeling = beoordelingDb.getBeoordelingById(id);
+        const beoordeling = await beoordelingDb.getBeoordelingById(id);
         if (!beoordeling) {
             throw new Error(`Beoordeling ${id} not found`);
         }

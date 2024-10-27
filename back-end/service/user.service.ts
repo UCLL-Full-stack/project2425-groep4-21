@@ -8,7 +8,7 @@ class UserService {
     }
 
     static async getUserById(id: number): Promise<User | null> {
-        const user = userDb.getUserById(id);
+        const user = await userDb.getUserById(id);
         if (!user) {
             throw new Error(`User ${id} not found`);
         }
