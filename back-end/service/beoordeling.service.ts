@@ -31,7 +31,6 @@ class BeoordelingService {
 
         return await beoordelingDb.getBeoordelingenByUserId(pilotId);
     }
-
 }
 
 export { BeoordelingService };

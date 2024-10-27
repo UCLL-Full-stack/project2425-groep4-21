@@ -26,12 +26,12 @@ class MediaService {
     static async getMediaByPropertyId(propertyId: number): Promise<Media[] | null> {
         const pand = pandDb.getPandById(propertyId);
         if (!pand) {
-            return null; // Pand niet gevonden
+            return null;
         }
 
         const opdrachten = pand.getOpdracht();
         if (!opdrachten || opdrachten.length === 0) {
-            return []; // Geen opdrachten voor dit pand
+            return [];
         }
 
         const mediaList: Media[] = [];
@@ -41,7 +41,6 @@ class MediaService {
                 mediaList.push(...medias);
             }
         }
-
         return mediaList;
     }
 

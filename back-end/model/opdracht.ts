@@ -7,7 +7,7 @@ export class Opdracht {
     public beoordeling: Beoordeling | null;
     public puntentotaal: number;
     public status: string;
-    public medias: Media[]; //toevoegen om media aan opdracht te kunnen toevoegen
+    public medias: Media[];
     public realtorId: number;
     public pilotId?: number;
 
@@ -17,7 +17,7 @@ export class Opdracht {
         beoordeling: Beoordeling | null;
         puntentotaal: number;
         status: string;
-        medias: Media[]; //toevoegen om media aan opdracht te kunnen toevoegen
+        medias: Media[];
         realtorId: number;
         pilotId?: number;
     }) {

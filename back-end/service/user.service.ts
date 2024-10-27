@@ -32,7 +32,6 @@ class UserService {
             pilot.setBeoordelingen(beoordelingen);
         }
 
-        // Pas filters toe
         if (minRating !== undefined) {
             pilots = pilots.filter(pilot => {
                 const rating = pilot.calculateRating();
