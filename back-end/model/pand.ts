@@ -3,23 +3,23 @@ import { Opdracht } from './opdracht';
 export class Pand {
     // export = public, zodat de klasse Pand door de buitenwereld kan worden
     private pandId?: number;
-    private adres: string; // zoals in het labo, allemaal privates
+    private adres: string;
     private beschrijving: string;
     private userIdMakelaar: number;
-    private opdracht: Opdracht; //toevoegen
+    private opdrachten: Opdracht[];
 
     constructor(pand: {
         pandId?: number;
         adres: string;
         beschrijving: string;
         userIdMakelaar: number;
-        opdracht: Opdracht; // toevoegen
+        opdrachten: Opdracht[];
     }) {
         this.pandId = pand.pandId;
         this.adres = pand.adres;
         this.beschrijving = pand.beschrijving;
         this.userIdMakelaar = pand.userIdMakelaar;
-        this.opdracht = pand.opdracht; //toevoegen
+        this.opdrachten = pand.opdrachten;
     }
 
     equals(pand: Pand): boolean {
@@ -28,8 +28,9 @@ export class Pand {
             this.adres === pand.getAdres() &&
             this.beschrijving === pand.getBeschrijving() &&
             this.userIdMakelaar === pand.getUserIdMakelaar() &&
-            this.opdracht.equals(pand.getOpdracht()) //toevoegen
-        );
+            this.opdrachten.every((opdracht, index) =>
+                opdracht.equals(pand.getOpdracht()[index])
+        ));
     }
 
     //getters
@@ -49,12 +50,12 @@ export class Pand {
         return this.userIdMakelaar;
     }
 
-    getOpdracht(): Opdracht {
-        //toevoegen
-        return this.opdracht;
+    getOpdracht(): Opdracht[] {
+        return this.opdrachten;
     }
 
-    addOpdrachtToPand(opdracht: Opdracht) {
-        this.opdracht = opdracht;
+    aaddOpdrachtToPand(opdracht: Opdracht) {
+        this.opdrachten.push(opdracht);
     }
+
 }

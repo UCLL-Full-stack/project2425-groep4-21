@@ -1,6 +1,7 @@
 import { Opdracht } from '../model/opdracht';
 import { Media } from '../model/media';
 import { Beoordeling } from '../model/beoordeling';
+
 const opdrachten: Opdracht[] = [
     new Opdracht({
         opdrachtnummer: 1,
@@ -18,6 +19,7 @@ const opdrachten: Opdracht[] = [
                 type: 'image',
                 bestandslocatie: 'https://example.com/image1.jpg',
                 uploadDatum: new Date(),
+                opdrachtId: 1,
             }),
         ],
         realtorId: 1,
@@ -39,6 +41,7 @@ const opdrachten: Opdracht[] = [
                 type: 'video',
                 bestandslocatie: 'https://example.com/video1.mp4',
                 uploadDatum: new Date(),
+                opdrachtId: 2,
             }),
         ],
         realtorId: 2,
@@ -60,13 +63,13 @@ const opdrachten: Opdracht[] = [
                 type: 'image',
                 bestandslocatie: 'https://example.com/image2.jpg',
                 uploadDatum: new Date(),
+                opdrachtId: 3,
             }),
         ],
         realtorId: 3,
         pilotId: 3,
     }),
 ];
-
 
 const getAllOpdrachten = (): Opdracht[] => {
     return opdrachten;
@@ -86,7 +89,6 @@ const createOpdracht = (newOpdrachtData: any): Opdracht => {
     opdrachten.push(newOpdracht);
     return newOpdracht;
 };
-
 
 const deleteOpdrachtById = (id: number): boolean => {
     const opdrachtIndex = opdrachten.findIndex((o) => o.getOpdrachtnummer() === id);

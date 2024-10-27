@@ -1,5 +1,6 @@
 import { Media } from '../model/media';
 import mediaDb from '../repository/media.db';
+import pandDb from '../repository/pand.db';
 
 class MediaService {
     static async getMedia(): Promise<Media[]> {
@@ -21,6 +22,29 @@ class MediaService {
     static deleteMediaById(id: number): boolean {
         return mediaDb.deleteMediaById(id);
     }
+
+    static async getMediaByPropertyId(propertyId: number): Promise<Media[] | null> {
+        const pand = pandDb.getPandById(propertyId);
+        if (!pand) {
+            return null; // Pand niet gevonden
+        }
+
+        const opdrachten = pand.getOpdracht();
+        if (!opdrachten || opdrachten.length === 0) {
+            return []; // Geen opdrachten voor dit pand
+        }
+
+        const mediaList: Media[] = [];
+        for (const opdracht of opdrachten) {
+            const medias = opdracht.getMedias();
+            if (medias && medias.length > 0) {
+                mediaList.push(...medias);
+            }
+        }
+
+        return mediaList;
+    }
+
 }
 
 export { MediaService };

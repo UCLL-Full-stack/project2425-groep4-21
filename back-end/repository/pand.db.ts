@@ -9,7 +9,7 @@ const panden = [
         adres: 'Main Street 123',
         beschrijving: 'Mooi appartement in het centrum',
         userIdMakelaar: 456,
-        opdracht: new Opdracht({
+        opdrachten: [new Opdracht({
             opdrachtnummer: 1,
             datum: new Date(),
             beoordeling: new Beoordeling({
@@ -25,18 +25,19 @@ const panden = [
                     type: 'image',
                     bestandslocatie: 'https://example.com/image1.jpg',
                     uploadDatum: new Date(),
+                    opdrachtId: 1,
                 }),
             ],
             realtorId: 456,
             pilotId: 1,
-        }),
+        })],
     }),
     new Pand({
         pandId: 2,
         adres: 'Baker Street 221B',
         beschrijving: 'Historical residence',
         userIdMakelaar: 789,
-        opdracht: new Opdracht({
+        opdrachten: [new Opdracht({
             opdrachtnummer: 2,
             datum: new Date(),
             beoordeling: new Beoordeling({
@@ -52,18 +53,19 @@ const panden = [
                     type: 'video',
                     bestandslocatie: 'https://example.com/video1.mp4',
                     uploadDatum: new Date(),
+                    opdrachtId: 2,
                 }),
             ],
             realtorId: 789,
             pilotId: 2,
-        }),
+        })],
     }),
     new Pand({
         pandId: 3,
         adres: 'Elm Street 13',
         beschrijving: 'Spacious house',
         userIdMakelaar: 333,
-        opdracht: new Opdracht({
+        opdrachten: [new Opdracht({
             opdrachtnummer: 3,
             datum: new Date(),
             beoordeling: new Beoordeling({
@@ -79,11 +81,12 @@ const panden = [
                     type: 'image',
                     bestandslocatie: 'https://example.com/image2.jpg',
                     uploadDatum: new Date(),
+                    opdrachtId: 3,
                 }),
             ],
             realtorId: 333,
             pilotId: 3,
-        }),
+        })],
     }),
 ];
 

@@ -159,5 +159,54 @@ mediaRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => 
         next(error);
     }
 });
+/**
+ * @swagger
+ * /media/property/{propertyId}:
+ *   get:
+ *     summary: Haal alle media van een pand op
+ *     tags:
+ *       - Media
+ *     parameters:
+ *       - in: path
+ *         name: propertyId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID van het pand
+ *     responses:
+ *       200:
+ *         description: Lijst van media van het pand
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Media'
+ *       400:
+ *         description: Ongeldig pand ID
+ *       404:
+ *         description: Pand niet gevonden of geen media beschikbaar
+ *       500:
+ *         description: Serverfout
+ */
+mediaRouter.get('/property/:propertyId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const propertyId = parseInt(req.params.propertyId, 10);
+        if (isNaN(propertyId)) {
+            return res.status(400).json({ message: 'Ongeldig pand ID' });
+        }
+
+        const mediaList = await MediaService.getMediaByPropertyId(propertyId);
+        if (mediaList === null) {
+            return res.status(404).json({ message: 'Pand niet gevonden' });
+        } else if (mediaList.length === 0) {
+            return res.status(404).json({ message: 'Geen media gevonden voor dit pand' });
+        }
+
+        res.status(200).json(mediaList);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export { mediaRouter };

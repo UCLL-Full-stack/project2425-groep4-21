@@ -1,12 +1,17 @@
 export class Media {
+    private mediaId?: number;
     private type: string;
     private bestandslocatie: string;
     private uploadDatum: Date;
+    private opdrachtId: number;
 
-    constructor(media: { type: string; bestandslocatie: string; uploadDatum: Date }) {
+    constructor(media: { mediaId?: number; type: string; bestandslocatie: string; uploadDatum: Date; opdrachtId: number;
+    }) {
+        this.mediaId = media.mediaId;
         this.type = media.type;
         this.bestandslocatie = media.bestandslocatie;
         this.uploadDatum = media.uploadDatum;
+        this.opdrachtId = media.opdrachtId;
     }
 
     equals(media: Media): boolean {
@@ -27,5 +32,9 @@ export class Media {
 
     getUploadDatum(): Date {
         return this.uploadDatum;
+    }
+
+    getOpdrachtId(): number {
+        return this.opdrachtId;
     }
 }
