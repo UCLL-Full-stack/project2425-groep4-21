@@ -2,11 +2,11 @@ import { Opdracht } from './opdracht';
 
 export class Pand {
     // export = public, zodat de klasse Pand door de buitenwereld kan worden
-    private pandId?: number;
-    private adres: string;
-    private beschrijving: string;
-    private userIdMakelaar: number;
-    private opdrachten: Opdracht[];
+    public pandId?: number;
+    public adres: string;
+    public beschrijving: string;
+    public userIdMakelaar: number;
+    public opdrachten: Opdracht[];
 
     constructor(pand: {
         pandId?: number;
@@ -54,8 +54,16 @@ export class Pand {
         return this.opdrachten;
     }
 
-    aaddOpdrachtToPand(opdracht: Opdracht) {
+    addOpdrachtToPand(opdracht: Opdracht) {
         this.opdrachten.push(opdracht);
+    }
+
+    setAdres(adres: string): void {
+        this.adres = adres;
+    }
+
+    setBeschrijving(beschrijving: string): void {
+        this.beschrijving = beschrijving;
     }
 
 }

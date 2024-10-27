@@ -165,4 +165,64 @@ pandRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+/**
+ * @swagger
+ * /panden/{id}:
+ *   put:
+ *     summary: Werk een pand bij
+ *     tags:
+ *       - Panden
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID van het pand om bij te werken
+ *     requestBody:
+ *       description: De bijgewerkte gegevens van het pand
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Pand'
+ *     responses:
+ *       200:
+ *         description: Pand succesvol bijgewerkt
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Pand'
+ *       400:
+ *         description: Ongeldig pand ID of ongeldige gegevens
+ *       401:
+ *         description: Niet geautoriseerd
+ *       404:
+ *         description: Pand niet gevonden
+ *       500:
+ *         description: Serverfout
+ */
+pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const pandId = parseInt(req.params.id, 10);
+        if (isNaN(pandId)) {
+            return res.status(400).json({ message: 'Ongeldig pand ID' });
+        }
+
+        const updatedPandData = req.body;
+
+
+        const updatedPand = await PandService.updatePand(pandId, updatedPandData);
+        if (!updatedPand) {
+            return res.status(404).json({ message: 'Pand niet gevonden' });
+        }
+
+        res.status(200).json(updatedPand);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { pandRouter };

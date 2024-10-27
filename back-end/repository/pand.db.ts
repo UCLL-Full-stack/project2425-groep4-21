@@ -113,9 +113,29 @@ const deletePandById = (id: number): boolean => {
     return false;
 };
 
+const updatePand = async (pandId: number, updatedPandData: Partial<Pand>): Promise<Pand | null> => {
+    const index = panden.findIndex((pand) => pand.getPandId() === pandId);
+    if (index === -1) {
+        return null;
+    }
+
+    const existingPand = panden[index];
+    const updatedPand = new Pand({
+        pandId: existingPand.getPandId(),
+        adres: updatedPandData.adres || existingPand.getAdres(),
+        beschrijving: updatedPandData.beschrijving || existingPand.getBeschrijving(),
+        userIdMakelaar: updatedPandData.userIdMakelaar || existingPand.getUserIdMakelaar(),
+        opdrachten: updatedPandData.opdrachten || existingPand.getOpdracht(),
+    });
+
+    panden[index] = updatedPand;
+    return updatedPand;
+};
+
 export default {
     getAllPanden,
     getPandById,
     createPand,
     deletePandById,
+    updatePand,
 };

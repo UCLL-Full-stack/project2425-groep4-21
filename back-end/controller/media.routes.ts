@@ -209,4 +209,10 @@ mediaRouter.get('/property/:propertyId', async (req: Request, res: Response, nex
     }
 });
 
+
+//Todo: - `PUT /media/:mediaId/approve`: Keur media goed (door makelaar).
+// jwt token voor nodig (later)
+//Todo - `GET /media/notifications`: Haal notificaties op voor de ingelogde piloot.
+// jwt token voor nodig (later)
+
 export { mediaRouter };
