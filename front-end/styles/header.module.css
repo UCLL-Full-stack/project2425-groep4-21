@@ -1,0 +1,36 @@
+.header {
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+    background-color: #f0f4f8;
+    background-image: linear-gradient(to right, #a0c4ff, #89d1fc);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 2.2rem;
+    display: flex;
+    justify-content: center;
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.link {
+    color: #007acc;
+    padding: 0 1.5rem;
+    font-size: 1.2rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.link:hover {
+    color: #005f99;
+    transform: translateY(-2px);
+}

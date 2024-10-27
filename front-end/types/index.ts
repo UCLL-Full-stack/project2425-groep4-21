@@ -1,0 +1,52 @@
+export type Role = 'admin' | 'piloot' | 'makelaar';
+
+export type User = {
+    id: number;
+    voornaam: string;
+    naam: string;
+    gebruikersnaam: string;
+    rol: Role;
+    emailadres: string;
+    portfolio: string;
+    niveau: string;
+    bevoegdheden: string;
+    beoordelingen: Beoordeling[];
+    panden: Pand[];
+};
+
+export type Pand = {
+    pandId?: number;
+    adres: string;
+    beschrijving: string;
+    userIdMakelaar: number;
+    opdracht: Opdracht;
+};
+
+export type Opdracht = {
+    opdrachtnummer?: number;
+    datum: string;
+    beoordeling: string;
+    puntentotaal: number;
+    status: string;
+    medias: Media[];
+};
+
+export type Media = {
+    type: 'image' | 'video';
+    bestandslocatie: string;
+    uploadDatum: string;
+};
+
+export type Beoordeling = {
+    beoordelingId?: number;
+    score: number;
+    opmerkingen: string;
+    userId: number;
+};
+
+// export type AuthenticationResponse = {
+//     token: string;
+//     username: string;
+//     fullname: string;
+//     role: Role;
+// };
