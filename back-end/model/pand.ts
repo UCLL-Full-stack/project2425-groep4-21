@@ -1,7 +1,6 @@
 import { Opdracht } from './opdracht';
 
 export class Pand {
-    // export = public, zodat de klasse Pand door de buitenwereld kan worden
     public pandId?: number;
     public adres: string;
     public beschrijving: string;
@@ -15,6 +14,9 @@ export class Pand {
         userIdMakelaar: number;
         opdrachten: Opdracht[];
     }) {
+        this.validateInput(pand);
+        this.validateBusinessRules(pand);
+
         this.pandId = pand.pandId;
         this.adres = pand.adres;
         this.beschrijving = pand.beschrijving;
@@ -22,18 +24,67 @@ export class Pand {
         this.opdrachten = pand.opdrachten;
     }
 
+    private validateInput(pand: {
+        adres: string;
+        beschrijving: string;
+        userIdMakelaar: number;
+        opdrachten: Opdracht[];
+    }): void {
+        const { adres, beschrijving, userIdMakelaar, opdrachten } = pand;
+
+        if (adres.trim().length === 0) {
+            throw new Error('Address must be a non-empty string.');
+        }
+
+        if (beschrijving.trim().length === 0) {
+            throw new Error('Description must be a non-empty string.');
+        }
+
+        if (!Number.isInteger(userIdMakelaar) || userIdMakelaar <= 0) {
+            throw new Error('Realtor ID must be a positive integer.');
+        }
+
+        if (!Array.isArray(opdrachten) || opdrachten.some(opdracht => false)) {
+            throw new Error('Assignments must be a valid array of Opdracht instances.');
+        }
+    }
+
+    private validateBusinessRules(pand: {
+        adres: string;
+        beschrijving: string;
+        opdrachten: Opdracht[];
+    }): void {
+        const { adres, beschrijving, opdrachten } = pand;
+
+        // Address must be at least 5 characters long.
+        if (adres.trim().length < 5) {
+            throw new Error('Address must be at least 5 characters long.');
+        }
+
+        //  Description should not exceed 1000 characters.
+        if (beschrijving.length > 1000) {
+            throw new Error('Description must not exceed 1000 characters.');
+        }
+
+        // At least one assignment is required if the property is being managed.
+        if (opdrachten.length === 0) {
+            throw new Error('At least one assignment is required for the property.');
+        }
+    }
     equals(pand: Pand): boolean {
         return (
             this.pandId === pand.getPandId() &&
             this.adres === pand.getAdres() &&
             this.beschrijving === pand.getBeschrijving() &&
             this.userIdMakelaar === pand.getUserIdMakelaar() &&
+            this.opdrachten.length === pand.getOpdracht().length &&
             this.opdrachten.every((opdracht, index) =>
                 opdracht.equals(pand.getOpdracht()[index])
-        ));
+            )
+        );
     }
 
-    //getters
+    // Getters
     getPandId(): number | undefined {
         return this.pandId;
     }
@@ -65,5 +116,4 @@ export class Pand {
     setBeschrijving(beschrijving: string): void {
         this.beschrijving = beschrijving;
     }
-
 }

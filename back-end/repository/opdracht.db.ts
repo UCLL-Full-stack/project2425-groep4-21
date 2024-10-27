@@ -2,6 +2,7 @@ import { Opdracht } from '../model/opdracht';
 import { Media } from '../model/media';
 import { Beoordeling } from '../model/beoordeling';
 
+
 const opdrachten: Opdracht[] = [
     new Opdracht({
         opdrachtnummer: 1,
@@ -13,7 +14,7 @@ const opdrachten: Opdracht[] = [
             userId: 1,
         }),
         puntentotaal: 95,
-        status: 'Afgerond',
+        status: 'Pending',
         medias: [
             new Media({
                 type: 'image',
@@ -35,7 +36,7 @@ const opdrachten: Opdracht[] = [
             userId: 2,
         }),
         puntentotaal: 100,
-        status: 'In Behandeling',
+        status: 'In Progress',
         medias: [
             new Media({
                 type: 'video',
@@ -57,7 +58,7 @@ const opdrachten: Opdracht[] = [
             userId: 3,
         }),
         puntentotaal: 70,
-        status: 'Open',
+        status: 'Completed',
         medias: [
             new Media({
                 type: 'image',
