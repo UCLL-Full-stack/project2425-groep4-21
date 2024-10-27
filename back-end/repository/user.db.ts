@@ -13,7 +13,7 @@ const users = [
         bevoegdheden: 'all',
         beoordelingen: [],
         panden: [],
-        isVerified: true, // Add this property
+        isVerified: true,
     }),
     new User({
         id: 1,
@@ -27,7 +27,7 @@ const users = [
         bevoegdheden: 'limited',
         beoordelingen: [],
         panden: [],
-        isVerified: true, // Add this property
+        isVerified: true,
 
     }),
     new User({
@@ -42,7 +42,7 @@ const users = [
         bevoegdheden: 'read-only',
         beoordelingen: [],
         panden: [],
-        isVerified: true, // Add this property
+        isVerified: true,
     }),
 ];
 
