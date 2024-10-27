@@ -166,7 +166,7 @@ beoordelingRouter.delete('/:id', (req: Request, res: Response, next: NextFunctio
  * @swagger
  * /beoordelingen/pilot/{pilotId}:
  *   get:
- *     summary: Haal alle beoordelingen van een specifieke piloot op
+ *     summary: Get all beoordeling for a specific pilot
  *     tags:
  *       - Beoordelingen
  *     parameters:
@@ -175,10 +175,10 @@ beoordelingRouter.delete('/:id', (req: Request, res: Response, next: NextFunctio
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID van de piloot
+ *         description: ID of the piloot
  *     responses:
  *       200:
- *         description: Lijst van beoordelingen
+ *         description: List of beoordelingen
  *         content:
  *           application/json:
  *             schema:
@@ -186,7 +186,7 @@ beoordelingRouter.delete('/:id', (req: Request, res: Response, next: NextFunctio
  *               items:
  *                 $ref: '#/components/schemas/Beoordeling'
  *       404:
- *         description: Piloot niet gevonden
+ *         description: Pilot not found
  *       500:
  *         description: Serverfout
  */
@@ -194,12 +194,12 @@ beoordelingRouter.get('/pilot/:pilotId', async (req: Request, res: Response, nex
     try {
         const pilotId = parseInt(req.params.pilotId, 10);
         if (isNaN(pilotId)) {
-            return res.status(400).json({ message: 'Ongeldig piloot ID' });
+            return res.status(400).json({ message: 'Invalid pilot ID' });
         }
 
         const beoordelingen = await BeoordelingService.getBeoordelingenByPilotId(pilotId);
         if (beoordelingen.length === 0) {
-            return res.status(404).json({ message: 'Geen beoordelingen gevonden voor deze piloot' });
+            return res.status(404).json({ message: 'No beoordelingen found for this pilot' });
         }
 
         res.status(200).json(beoordelingen);

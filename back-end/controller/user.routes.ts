@@ -74,7 +74,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  * @swagger
  * /users/pilots:
  *   get:
- *     summary: Haal een lijst op van alle piloten, met mogelijkheid tot filtering
+ *     summary: Get a list of all pilots, with filtering options
  *     tags:
  *       - Users
  *     parameters:
@@ -83,16 +83,16 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *         schema:
  *           type: number
  *         required: false
- *         description: Filter piloten op minimale rating
+ *         description: Filter pilots by minimum rating
  *       - in: query
  *         name: niveau
  *         schema:
  *           type: string
  *         required: false
- *         description: Filter piloten op niveau
+ *         description: Filter pilots by level
  *     responses:
  *       200:
- *         description: Lijst van piloten
+ *         description: List of pilots
  *         content:
  *           application/json:
  *             schema:
@@ -100,9 +100,9 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *               items:
  *                 $ref: '#/components/schemas/PilotResponse'
  *       400:
- *         description: Ongeldige queryparameters
+ *         description: Invalid query parameters
  *       500:
- *         description: Serverfout
+ *         description: Server error
  */
 userRouter.get('/pilots', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -114,8 +114,6 @@ userRouter.get('/pilots', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
-
-
 
 /**
  * @swagger

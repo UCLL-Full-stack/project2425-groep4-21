@@ -169,7 +169,7 @@ pandRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
  * @swagger
  * /panden/{id}:
  *   put:
- *     summary: Werk een pand bij
+ *     summary: Update a pand by ID
  *     tags:
  *       - Panden
  *     security:
@@ -180,9 +180,9 @@ pandRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID van het pand om bij te werken
+ *         description: ID of the property to be updated
  *     requestBody:
- *       description: De bijgewerkte gegevens van het pand
+ *       description: The updated data of the property
  *       required: true
  *       content:
  *         application/json:
@@ -190,17 +190,17 @@ pandRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
  *             $ref: '#/components/schemas/Pand'
  *     responses:
  *       200:
- *         description: Pand succesvol bijgewerkt
+ *         description: Property successfully updated
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Pand'
  *       400:
- *         description: Ongeldig pand ID of ongeldige gegevens
+ *         description: Invalid property ID or invalid data
  *       401:
- *         description: Niet geautoriseerd
+ *         description: Not authorized
  *       404:
- *         description: Pand niet gevonden
+ *         description: Pand not found
  *       500:
  *         description: Serverfout
  */
@@ -208,7 +208,7 @@ pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) =
     try {
         const pandId = parseInt(req.params.id, 10);
         if (isNaN(pandId)) {
-            return res.status(400).json({ message: 'Ongeldig pand ID' });
+            return res.status(400).json({ message: 'Invalid property ID ' });
         }
 
         const updatedPandData = req.body;
@@ -216,7 +216,7 @@ pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) =
 
         const updatedPand = await PandService.updatePand(pandId, updatedPandData);
         if (!updatedPand) {
-            return res.status(404).json({ message: 'Pand niet gevonden' });
+            return res.status(404).json({ message: 'property not found' });
         }
 
         res.status(200).json(updatedPand);

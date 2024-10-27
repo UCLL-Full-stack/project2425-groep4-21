@@ -7,7 +7,7 @@ const panden = [
     new Pand({
         pandId: 1,
         adres: 'Main Street 123',
-        beschrijving: 'Mooi appartement in het centrum',
+        beschrijving: 'Beautiful apartment in the center',
         userIdMakelaar: 456,
         opdrachten: [new Opdracht({
             opdrachtnummer: 1,
@@ -15,11 +15,11 @@ const panden = [
             beoordeling: new Beoordeling({
                 beoordelingId: 1,
                 score: 9,
-                opmerkingen: 'Goed uitgevoerd',
+                opmerkingen: 'Good work',
                 userId: 1,
             }),
             puntentotaal: 95,
-            status: 'Afgerond',
+            status: 'Done',
             medias: [
                 new Media({
                     type: 'image',
@@ -43,11 +43,11 @@ const panden = [
             beoordeling: new Beoordeling({
                 beoordelingId: 2,
                 score: 10,
-                opmerkingen: 'Uitstekend',
+                opmerkingen: 'Good work',
                 userId: 2,
             }),
             puntentotaal: 100,
-            status: 'In Behandeling',
+            status: 'In progress',
             medias: [
                 new Media({
                     type: 'video',
@@ -71,7 +71,7 @@ const panden = [
             beoordeling: new Beoordeling({
                 beoordelingId: 3,
                 score: 7,
-                opmerkingen: 'Matig',
+                opmerkingen: 'Ok work',
                 userId: 3,
             }),
             puntentotaal: 70,

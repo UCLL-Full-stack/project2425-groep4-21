@@ -163,7 +163,7 @@ mediaRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => 
  * @swagger
  * /media/property/{propertyId}:
  *   get:
- *     summary: Haal alle media van een pand op
+ *     summary: Retrieve all media from a property
  *     tags:
  *       - Media
  *     parameters:
@@ -172,10 +172,10 @@ mediaRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => 
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID van het pand
+ *         description: ID property
  *     responses:
  *       200:
- *         description: Lijst van media van het pand
+ *         description: List of media of the property
  *         content:
  *           application/json:
  *             schema:
@@ -183,9 +183,9 @@ mediaRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => 
  *               items:
  *                 $ref: '#/components/schemas/Media'
  *       400:
- *         description: Ongeldig pand ID
+ *         description: Invalid property ID
  *       404:
- *         description: Pand niet gevonden of geen media beschikbaar
+ *         description: Pand not found or no media available
  *       500:
  *         description: Serverfout
  */
@@ -193,14 +193,14 @@ mediaRouter.get('/property/:propertyId', async (req: Request, res: Response, nex
     try {
         const propertyId = parseInt(req.params.propertyId, 10);
         if (isNaN(propertyId)) {
-            return res.status(400).json({ message: 'Ongeldig pand ID' });
+            return res.status(400).json({ message: 'Invalid property ID' });
         }
 
         const mediaList = await MediaService.getMediaByPropertyId(propertyId);
         if (mediaList === null) {
-            return res.status(404).json({ message: 'Pand niet gevonden' });
+            return res.status(404).json({ message: 'Pand not found' });
         } else if (mediaList.length === 0) {
-            return res.status(404).json({ message: 'Geen media gevonden voor dit pand' });
+            return res.status(404).json({ message: 'No media found for this pand' });
         }
 
         res.status(200).json(mediaList);

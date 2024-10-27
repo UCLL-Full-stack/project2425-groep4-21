@@ -68,8 +68,6 @@ opdrachtRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
-
-
 /**
  * @swagger
  * /opdrachten/hired-pilots:
@@ -300,7 +298,7 @@ opdrachtRouter.get('/completed-assignments', async (req: Request, res: Response,
  * @swagger
  * /opdrachten/{opdrachtId}/beoordeling:
  *   get:
- *     summary: Haal de beoordeling van een specifieke opdracht op
+ *     summary: Get the assessment of a specific assignment
  *     tags:
  *       - Opdrachten
  *     parameters:
@@ -309,31 +307,32 @@ opdrachtRouter.get('/completed-assignments', async (req: Request, res: Response,
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID van de opdracht
+ *         description: ID of the opdracht
  *     responses:
  *       200:
- *         description: Beoordeling van de opdracht
+ *         description: Assignment assessment
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Beoordeling'
  *       404:
- *         description: Opdracht of beoordeling niet gevonden
+ *         description: Assignment or assessment not found
  *       400:
- *         description: Ongeldig opdracht ID
+ *         description: Invalid order ID
  *       500:
  *         description: Serverfout
  */
+
 opdrachtRouter.get('/:opdrachtId/beoordeling', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const opdrachtId = parseInt(req.params.opdrachtId, 10);
         if (isNaN(opdrachtId)) {
-            return res.status(400).json({ message: 'Ongeldig opdracht ID' });
+            return res.status(400).json({ message: 'Invalid order ID' });
         }
 
         const beoordeling = await OpdrachtService.getBeoordelingByAssignmentId(opdrachtId);
         if (!beoordeling) {
-            return res.status(404).json({ message: 'Beoordeling niet gevonden voor deze opdracht' });
+            return res.status(404).json({ message: 'Rating not found for this assignment' });
         }
 
         res.status(200).json(beoordeling);

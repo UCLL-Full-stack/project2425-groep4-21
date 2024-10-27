@@ -10,7 +10,7 @@ const opdrachten: Opdracht[] = [
         beoordeling: new Beoordeling({
             beoordelingId: 1,
             score: 9,
-            opmerkingen: 'Goed uitgevoerd',
+            opmerkingen: 'Well done',
             userId: 1,
         }),
         puntentotaal: 95,
@@ -32,7 +32,7 @@ const opdrachten: Opdracht[] = [
         beoordeling: new Beoordeling({
             beoordelingId: 2,
             score: 10,
-            opmerkingen: 'Uitstekend',
+            opmerkingen: 'Excellent',
             userId: 2,
         }),
         puntentotaal: 100,
@@ -54,7 +54,7 @@ const opdrachten: Opdracht[] = [
         beoordeling: new Beoordeling({
             beoordelingId: 3,
             score: 7,
-            opmerkingen: 'Matig',
+            opmerkingen: 'Good job',
             userId: 3,
         }),
         puntentotaal: 70,
