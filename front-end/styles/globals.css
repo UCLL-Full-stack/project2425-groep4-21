@@ -58,3 +58,55 @@ button:hover {
     margin: 0 auto;
     padding: 1rem;
 }
+
+/* Algemene styling voor tabellen */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Hoofd van de tabel */
+thead {
+    background-color: #0077cc;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+thead th {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #dddddd;
+}
+
+/* Tabellen rijen */
+tbody tr {
+    transition: background-color 0.3s ease;
+    background-color: #ffffff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #e0f2ff;
+}
+
+td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #dddddd;
+}
+
+h1,
+h2 {
+    color: #333;
+    margin-top: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
