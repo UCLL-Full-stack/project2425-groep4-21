@@ -10,12 +10,12 @@
 }
 
 body {
-    background-color: var(--background-color);
     color: var(--text-color);
     font-family: var(--font-family);
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background-color: #e0f2ff;
 }
 
 a {

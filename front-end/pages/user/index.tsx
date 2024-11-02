@@ -4,22 +4,33 @@ import UserOverviewTable from '@components/user/UserOverviewTable';
 import { User } from '@types';
 import { useState, useEffect } from 'react';
 import UserService from '@services/userService';
+import BeoordelingService from '@services/BeoordelingService';
 import BeoordelingOverviewTable from '@components/beoordeling/BeoordelingOverviewTable';
 
 const UserPage: React.FC = () => {
-    const [users, setUsers] = useState<Array<User>>([]); // props die we declareren
-    const [selectedUser, setSelectedUser] = useState<User | null>(null); // Geselecteerde gebruiker
+    const [users, setUsers] = useState<Array<User>>([]);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-    const getUsers = async () => {
-        // functie getUsers waar we de functie gaan oproepen
+    const fetchUsersAndBeoordelingen = async () => {
         const response = await UserService.getAllUsers();
-        const userData = await response.json(); // users omzetten naar JSON
-        setUsers(userData); // setter gebruiken
+        const userData = await response.json();
+
+        const updatedUsers = await Promise.all(
+            userData.map(async (user: User) => {
+                if (user.rol === 'pilot') {
+                    const beoordelingen = await BeoordelingService.getBeoordelingByPilotId(user.id);
+                    return { ...user, beoordelingen };
+                }
+                return user;
+            })
+        );
+
+        setUsers(updatedUsers);
     };
 
     useEffect(() => {
-        getUsers(); // de call naar de backend
-    }, []); // wordt nog gedetailleerder uitgelegd
+        fetchUsersAndBeoordelingen();
+    }, []);
 
     return (
         <>
@@ -32,7 +43,6 @@ const UserPage: React.FC = () => {
                 <section>
                     <h2>User overzicht</h2>
                     {users && <UserOverviewTable users={users} selectUser={setSelectedUser} />}
-                    {/* Toon beoordelingen van de geselecteerde gebruiker */}
                     {selectedUser && (
                         <>
                             <h2>

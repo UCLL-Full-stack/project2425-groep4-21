@@ -35,7 +35,7 @@ const users = [
         voornaam: 'Karin',
         naam: 'Karels',
         gebruikersnaam: 'kkarels',
-        rol: 'pilot',
+        rol: 'admin',
         emailadres: 'karin.karels@example.com',
         portfolio: 'https://portfolio.karels.com',
         niveau: 'intermediate',
