@@ -38,8 +38,6 @@ const OpdrachtPage: React.FC = () => {
                             selectOpdracht={setSelectedOpdracht} // De setSelectedOpdracht functie meegeven
                         />
                     )}
-                    {/* Render de MediaOverviewTable en BeoordelingOverviewTable alleen als een opdracht is geselecteerd */}
-                    {/* Render de media & beoordeling table */}
                     {selectedOpdracht && (
                         <>
                             <h2>Media van Opdracht {selectedOpdracht.opdrachtnummer}</h2>
@@ -47,10 +45,11 @@ const OpdrachtPage: React.FC = () => {
 
                             <h2>Beoordeling van Opdracht {selectedOpdracht.opdrachtnummer}</h2>
                             <BeoordelingOverviewTable
-                                beoordelingen={[selectedOpdracht.beoordeling]}
+                                beoordelingen={selectedOpdracht.beoordeling ? [selectedOpdracht.beoordeling] : []}
                             />
                         </>
                     )}
+
                 </section>
             </main>
         </>

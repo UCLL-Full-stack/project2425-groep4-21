@@ -25,7 +25,7 @@ export type Pand = {
 export type Opdracht = {
     opdrachtnummer?: number;
     datum: string;
-    beoordeling: string;
+    beoordeling: Beoordeling | null;
     puntentotaal: number;
     status: string;
     medias: Media[];
