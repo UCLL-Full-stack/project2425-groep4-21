@@ -12,7 +12,7 @@ const BoekingsPagina: React.FC = () => {
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    // Temporarily hardcode the realtorId
+    // Temporarily hardcode the realtorId until we have a login system
     const realtorId = 1;
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -38,7 +38,7 @@ const BoekingsPagina: React.FC = () => {
         const nieuweOpdracht = {
             datum: selectedDateTime.toISOString(),
             pilotId: parsedPilotId,
-            realtorId: realtorId, // Use the hardcoded realtorId for now until we have roles
+            realtorId: realtorId, // Use the hardcoded realtorId for now until we have roles with login system
             beoordeling: null,
             puntentotaal: 0,
             status: 'Open',
@@ -48,7 +48,6 @@ const BoekingsPagina: React.FC = () => {
         try {
             await OpdrachtService.createOpdracht(nieuweOpdracht);
             setSuccessMessage('Boeking succesvol!');
-            // Optionally, redirect or reset the form here
         } catch (err) {
             console.error(err);
             setError('Er is een fout opgetreden bij het boeken.');

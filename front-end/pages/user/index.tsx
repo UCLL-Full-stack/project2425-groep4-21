@@ -10,6 +10,7 @@ import BeoordelingOverviewTable from '@components/beoordeling/BeoordelingOvervie
 const UserPage: React.FC = () => {
     const [users, setUsers] = useState<Array<User>>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [currentUserRole, setCurrentUserRole] = useState<string>('');
 
     const fetchUsersAndBeoordelingen = async () => {
         const response = await UserService.getAllUsers();
@@ -26,6 +27,9 @@ const UserPage: React.FC = () => {
         );
 
         setUsers(updatedUsers);
+        if (updatedUsers.length > 0) {
+            setCurrentUserRole(updatedUsers[0].rol);
+        }
     };
 
     useEffect(() => {
@@ -42,7 +46,7 @@ const UserPage: React.FC = () => {
                 <h1>Users</h1>
                 <section>
                     <h2>User overzicht</h2>
-                    {users && <UserOverviewTable users={users} selectUser={setSelectedUser} />}
+                    {users && <UserOverviewTable users={users} selectUser={setSelectedUser} currentUserRole={currentUserRole} />}
                     {selectedUser && (
                         <>
                             <h2>
