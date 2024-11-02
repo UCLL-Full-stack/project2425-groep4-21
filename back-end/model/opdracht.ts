@@ -2,7 +2,8 @@ import { Beoordeling } from './beoordeling';
 import { Media } from './media';
 
 export class Opdracht {
-    public opdrachtnummer?: number;
+    private static nextOpdrachtnummer = 1;
+    public opdrachtnummer: number;
     public datum: Date;
     public beoordeling: Beoordeling | null;
     public puntentotaal: number;
@@ -24,10 +25,16 @@ export class Opdracht {
         // Convert datum to Date object if it's a string
         const datum = typeof opdracht.datum === 'string' ? new Date(opdracht.datum) : opdracht.datum;
 
+        // Geeft opdrachtnummer
+        if (opdracht.opdrachtnummer !== undefined) {
+            this.opdrachtnummer = opdracht.opdrachtnummer;
+        } else {
+            this.opdrachtnummer = Opdracht.nextOpdrachtnummer++;
+        }
+
         this.validateInput({ ...opdracht, datum });
         this.validateBusinessRules({ ...opdracht, datum });
 
-        this.opdrachtnummer = opdracht.opdrachtnummer;
         this.datum = datum;
         this.beoordeling = opdracht.beoordeling;
         this.puntentotaal = opdracht.puntentotaal;
@@ -80,12 +87,6 @@ export class Opdracht {
         medias: Media[];
     }): void {
         const { datum, status, puntentotaal, medias } = opdracht;
-
-        // The date should not be in the future.
-        const now = new Date();
-        if (datum > now) {
-            throw new Error('Date cannot be in the future.');
-        }
 
         // Total points must be between 0 and 100.
         if (puntentotaal < 0 || puntentotaal > 100) {

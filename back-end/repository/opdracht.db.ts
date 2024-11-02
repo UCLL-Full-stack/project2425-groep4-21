@@ -5,7 +5,6 @@ import { Beoordeling } from '../model/beoordeling';
 
 const opdrachten: Opdracht[] = [
     new Opdracht({
-        opdrachtnummer: 1,
         datum: new Date(),
         beoordeling: new Beoordeling({
             beoordelingId: 1,
@@ -27,7 +26,6 @@ const opdrachten: Opdracht[] = [
         pilotId: 1,
     }),
     new Opdracht({
-        opdrachtnummer: 2,
         datum: new Date(),
         beoordeling: new Beoordeling({
             beoordelingId: 2,
@@ -49,7 +47,6 @@ const opdrachten: Opdracht[] = [
         pilotId: 2,
     }),
     new Opdracht({
-        opdrachtnummer: 3,
         datum: new Date(),
         beoordeling: new Beoordeling({
             beoordelingId: 3,

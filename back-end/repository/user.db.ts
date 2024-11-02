@@ -2,7 +2,7 @@ import { User } from '../model/user';
 
 const users = [
     new User({
-        id: 0,
+        id: 1,
         voornaam: 'Jan',
         naam: 'Jansen',
         gebruikersnaam: 'jjansen',
@@ -16,7 +16,7 @@ const users = [
         isVerified: true,
     }),
     new User({
-        id: 1,
+        id: 2,
         voornaam: 'Pieter',
         naam: 'Pieters',
         gebruikersnaam: 'ppieters',
@@ -35,7 +35,7 @@ const users = [
         voornaam: 'Karin',
         naam: 'Karels',
         gebruikersnaam: 'kkarels',
-        rol: 'admin',
+        rol: 'pilot',
         emailadres: 'karin.karels@example.com',
         portfolio: 'https://portfolio.karels.com',
         niveau: 'intermediate',
