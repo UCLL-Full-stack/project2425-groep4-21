@@ -1,4 +1,6 @@
 import { Opdracht } from './opdracht';
+import { User } from './user';
+import { User as UserPrisma, Pand as PandPrisma } from '@prisma/client';
 
 export class Pand {
     public pandId?: number;
@@ -6,6 +8,7 @@ export class Pand {
     public beschrijving: string;
     public userIdMakelaar: number;
     public opdrachten: Opdracht[];
+    public user?: User; //toegevoegd
 
     constructor(pand: {
         pandId?: number;
@@ -13,6 +16,7 @@ export class Pand {
         beschrijving: string;
         userIdMakelaar: number;
         opdrachten: Opdracht[];
+        user?: User; //toegevoegd
     }) {
         this.validateInput(pand);
         this.validateBusinessRules(pand);
@@ -22,6 +26,25 @@ export class Pand {
         this.beschrijving = pand.beschrijving;
         this.userIdMakelaar = pand.userIdMakelaar;
         this.opdrachten = pand.opdrachten;
+        this.user = pand.user;
+    }
+
+    static from({
+        pandId,
+        adres,
+        beschrijving,
+        userIdMakelaar,
+        user,
+        opdrachten = [], // Voeg 'opdrachten' toe met een default lege array
+    }: PandPrisma & { user: UserPrisma; opdrachten?: Opdracht[] }) {
+        return new Pand({
+            pandId,
+            adres,
+            beschrijving,
+            userIdMakelaar,
+            user: User.from({ ...user, panden: [] }),
+            opdrachten,
+        });
     }
 
     private validateInput(pand: {
@@ -44,7 +67,7 @@ export class Pand {
             throw new Error('Realtor ID must be a positive integer.');
         }
 
-        if (!Array.isArray(opdrachten) || opdrachten.some(opdracht => false)) {
+        if (!Array.isArray(opdrachten) || opdrachten.some((opdracht) => false)) {
             throw new Error('Assignments must be a valid array of Opdracht instances.');
         }
     }
@@ -73,9 +96,7 @@ export class Pand {
             this.beschrijving === pand.getBeschrijving() &&
             this.userIdMakelaar === pand.getUserIdMakelaar() &&
             this.opdrachten.length === pand.getOpdracht().length &&
-            this.opdrachten.every((opdracht, index) =>
-                opdracht.equals(pand.getOpdracht()[index])
-            )
+            this.opdrachten.every((opdracht, index) => opdracht.equals(pand.getOpdracht()[index]))
         );
     }
 

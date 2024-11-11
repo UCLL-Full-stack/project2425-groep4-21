@@ -189,26 +189,25 @@ mediaRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => 
  *       500:
  *         description: Serverfout
  */
-mediaRouter.get('/property/:propertyId', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const propertyId = parseInt(req.params.propertyId, 10);
-        if (isNaN(propertyId)) {
-            return res.status(400).json({ message: 'Invalid property ID' });
-        }
+// mediaRouter.get('/property/:propertyId', async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const propertyId = parseInt(req.params.propertyId, 10);
+//         if (isNaN(propertyId)) {
+//             return res.status(400).json({ message: 'Invalid property ID' });
+//         }
 
-        const mediaList = await MediaService.getMediaByPropertyId(propertyId);
-        if (mediaList === null) {
-            return res.status(404).json({ message: 'Pand not found' });
-        } else if (mediaList.length === 0) {
-            return res.status(404).json({ message: 'No media found for this pand' });
-        }
+//         const mediaList = await MediaService.getMediaByPropertyId(propertyId);
+//         if (mediaList === null) {
+//             return res.status(404).json({ message: 'Pand not found' });
+//         } else if (mediaList.length === 0) {
+//             return res.status(404).json({ message: 'No media found for this pand' });
+//         }
 
-        res.status(200).json(mediaList);
-    } catch (error) {
-        next(error);
-    }
-});
-
+//         res.status(200).json(mediaList);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 //Todo: - `PUT /media/:mediaId/approve`: Keur media goed (door makelaar).
 // jwt token voor nodig (later)

@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  admin
+  piloot
+  makelaar
+}
 
 model User {
   id             Int      @id @default(autoincrement())
@@ -17,13 +22,16 @@ model User {
   emailadres     String   @unique
   portfolio      String
   niveau         String
+  isVerified     Boolean  @default(false)
   bevoegdheden   String
+  panden         Pand[]   @relation("UserPanden") 
 }
 
 model Pand {
-  pandId        Int      @id @default(autoincrement())
-  adres         String
-  beschrijving  String
+  pandId         Int      @id @default(autoincrement())
+  adres          String
+  beschrijving   String
+  user           User     @relation("UserPanden", fields: [userIdMakelaar], references: [id]) 
   userIdMakelaar Int
 }
 

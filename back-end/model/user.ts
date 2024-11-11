@@ -1,6 +1,7 @@
 import { Beoordeling } from './beoordeling';
 import { Opdracht } from './opdracht';
 import { Pand } from './pand';
+import { User as UserPrisma } from '@prisma/client';
 
 export class User {
     public id: number;
@@ -12,7 +13,7 @@ export class User {
     private portfolio: string;
     private niveau: string;
     private bevoegdheden: string;
-    private panden: Pand[];
+    private panden: Pand[] = []; // toegevoegd
     private opdrachten: Opdracht[] = [];
     public isVerified: boolean;
     beoordelingen: Beoordeling[] = [];
@@ -27,12 +28,12 @@ export class User {
         portfolio: string;
         niveau: string;
         bevoegdheden: string;
-        panden: Pand[];
+        panden?: Pand[]; //toegevoegd
         isVerified: boolean;
         beoordelingen?: Beoordeling[];
     }) {
-        this.validateInput(user);
-        this.validateBusinessRules(user);
+        //this.validateInput(user);
+        //this.validateBusinessRules(user);
 
         this.id = user.id;
         this.voornaam = user.voornaam;
@@ -43,9 +44,37 @@ export class User {
         this.portfolio = user.portfolio;
         this.niveau = user.niveau;
         this.bevoegdheden = user.bevoegdheden;
-        this.panden = user.panden;
+        this.panden = user.panden || []; //toegevoegd
         this.isVerified = user.isVerified;
         this.beoordelingen = user.beoordelingen || [];
+    }
+
+    static from({
+        id,
+        voornaam,
+        naam,
+        gebruikersnaam,
+        rol,
+        emailadres,
+        portfolio,
+        niveau,
+        bevoegdheden,
+        panden = [],
+        isVerified,
+    }: UserPrisma & { panden?: Pand[] }) {
+        return new User({
+            id,
+            voornaam,
+            naam,
+            gebruikersnaam,
+            rol: rol as 'pilot' | 'realtor' | 'admin',
+            emailadres,
+            portfolio,
+            niveau,
+            bevoegdheden,
+            panden,
+            isVerified: isVerified ?? false,
+        });
     }
 
     private validateInput(user: {
@@ -111,7 +140,7 @@ export class User {
             throw new Error('Permissions must be a non-empty string.');
         }
 
-        if (!Array.isArray(panden) || panden.some(pand => false)) {
+        if (!Array.isArray(panden) || panden.some((pand) => false)) {
             throw new Error('Properties must be a valid array of Pand instances.');
         }
     }
@@ -166,7 +195,10 @@ export class User {
         if (this.beoordelingen.length === 0) {
             return undefined;
         }
-        const totalScore = this.beoordelingen.reduce((sum, beoordeling) => sum + beoordeling.getScore(), 0);
+        const totalScore = this.beoordelingen.reduce(
+            (sum, beoordeling) => sum + beoordeling.getScore(),
+            0
+        );
         return totalScore / this.beoordelingen.length;
     }
 
