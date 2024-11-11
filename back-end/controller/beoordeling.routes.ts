@@ -190,23 +190,25 @@ beoordelingRouter.delete('/:id', (req: Request, res: Response, next: NextFunctio
  *       500:
  *         description: Serverfout
  */
-beoordelingRouter.get('/pilot/:pilotId', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const pilotId = parseInt(req.params.pilotId, 10);
-        if (isNaN(pilotId)) {
-            return res.status(400).json({ message: 'Invalid pilot ID' });
-        }
+beoordelingRouter.get(
+    '/pilot/:pilotId',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const pilotId = parseInt(req.params.pilotId, 10);
+            if (isNaN(pilotId)) {
+                return res.status(400).json({ message: 'Invalid pilot ID' });
+            }
 
-        const beoordelingen = await BeoordelingService.getBeoordelingenByPilotId(pilotId);
-        if (beoordelingen.length === 0) {
-            return res.status(404).json({ message: 'No beoordelingen found for this pilot' });
-        }
+            const beoordelingen = await BeoordelingService.getBeoordelingenByPilotId(pilotId);
+            if (beoordelingen.length === 0) {
+                return res.status(404).json({ message: 'No beoordelingen found for this pilot' });
+            }
 
-        res.status(200).json(beoordelingen);
-    } catch (error) {
-        next(error);
+            res.status(200).json(beoordelingen);
+        } catch (error) {
+            next(error);
+        }
     }
-});
-
+);
 
 export { beoordelingRouter };

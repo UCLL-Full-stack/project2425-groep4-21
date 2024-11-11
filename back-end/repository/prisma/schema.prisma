@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id             Int      @id @default(autoincrement())
+  voornaam       String
+  naam           String
+  gebruikersnaam String   @unique
+  rol            Role
+  emailadres     String   @unique
+  portfolio      String
+  niveau         String
+  bevoegdheden   String
+}
+
+model Pand {
+  pandId        Int      @id @default(autoincrement())
+  adres         String
+  beschrijving  String
+  userIdMakelaar Int
+}
+
+model Opdracht {
+  opdrachtnummer Int      @id @default(autoincrement())
+  datum          DateTime
+  beoordeling    String
+  puntentotaal   Int
+  status         String
+}
+
+model Media {
+  id             Int      @id @default(autoincrement())
+  type           String
+  bestandslocatie String
+  uploadDatum    DateTime
+}
+
+model Beoordeling {
+  beoordelingId Int      @id @default(autoincrement())
+  score         Int
+  opmerkingen   String
+  userId        Int
+}
