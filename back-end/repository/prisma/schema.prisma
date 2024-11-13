@@ -24,7 +24,8 @@ model User {
   niveau         String
   isVerified     Boolean  @default(false)
   bevoegdheden   String
-  panden         Pand[]   @relation("UserPanden") 
+  panden         Pand[]   @relation("UserPanden")
+  opdrachten     Opdracht[] @relation("UserOpdrachten")
 }
 
 model Pand {
@@ -41,6 +42,9 @@ model Opdracht {
   beoordeling    String
   puntentotaal   Int
   status         String
+  medias         Media[]   @relation("OpdrachtMedias") 
+  user           User      @relation("UserOpdrachten", fields: [userId], references: [id])
+  userId         Int
 }
 
 model Media {
@@ -48,6 +52,8 @@ model Media {
   type           String
   bestandslocatie String
   uploadDatum    DateTime
+  opdracht       Opdracht @relation("OpdrachtMedias", fields: [opdrachtId], references: [opdrachtnummer])
+  opdrachtId     Int
 }
 
 model Beoordeling {
