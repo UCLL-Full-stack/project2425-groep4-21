@@ -1,4 +1,5 @@
 import { User } from '../model/user';
+import database from '../util/database';
 
 const users = [
     new User({
@@ -28,7 +29,6 @@ const users = [
         beoordelingen: [],
         panden: [],
         isVerified: true,
-
     }),
     new User({
         id: 3,
@@ -46,8 +46,17 @@ const users = [
     }),
 ];
 
-const getAllUsers = (): User[] => {
-    return users;
+const getAllUsers = async (): Promise<User[]> => {
+    // Haal alle gebruikers op uit de database inclusief panden en opdrachten
+    const usersPrisma = await database.user.findMany({
+        include: {
+            panden: true, // Inclusief de panden van de gebruiker
+            opdrachten: true, // Inclusief de opdrachten van de gebruiker
+        },
+    });
+
+    // Map de Prisma data naar je User model met de `from` methode
+    return usersPrisma.map((userPrisma) => User.from(userPrisma));
 };
 
 const getUserById = (id: number): User | null => {
@@ -70,15 +79,17 @@ const deleteUserById = (id: number): boolean => {
 };
 
 const getUsersByRoleAndRating = (role: string, rating: number): User[] => {
-    return users.filter(user => user.getRol() === role && user.getBeoordelingen().some(b => b.score >= rating));
+    return users.filter(
+        (user) => user.getRol() === role && user.getBeoordelingen().some((b) => b.score >= rating)
+    );
 };
 
 const getUsersByIdsAndRole = (ids: number[], role: string): User[] => {
-    return users.filter(user => ids.includes(user.id) && user.getRol() === role);
+    return users.filter((user) => ids.includes(user.id) && user.getRol() === role);
 };
 
 const getUsersByRole = async (role: 'pilot' | 'realtor' | 'admin'): Promise<User[]> => {
-    return users.filter(user => user.getRol() === role);
+    return users.filter((user) => user.getRol() === role);
 };
 
 export default {
@@ -88,5 +99,5 @@ export default {
     deleteUserById,
     getUsersByRoleAndRating,
     getUsersByIdsAndRole,
-    getUsersByRole
+    getUsersByRole,
 };

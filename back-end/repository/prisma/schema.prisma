@@ -34,6 +34,7 @@ model Pand {
   beschrijving   String
   user           User     @relation("UserPanden", fields: [userIdMakelaar], references: [id]) 
   userIdMakelaar Int
+  opdracht       Opdracht? @relation("PandOpdracht")
 }
 
 model Opdracht {
@@ -45,6 +46,9 @@ model Opdracht {
   medias         Media[]   @relation("OpdrachtMedias") 
   user           User      @relation("UserOpdrachten", fields: [userId], references: [id])
   userId         Int
+  pand           Pand?     @relation("PandOpdracht", fields: [pandId], references: [pandId])
+  pandId         Int?      @unique
+
 }
 
 model Media {
@@ -60,5 +64,4 @@ model Beoordeling {
   beoordelingId Int      @id @default(autoincrement())
   score         Int
   opmerkingen   String
-  userId        Int
 }

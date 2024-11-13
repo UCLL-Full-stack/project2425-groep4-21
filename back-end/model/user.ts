@@ -16,7 +16,7 @@ export class User {
     private panden: Pand[] = []; // toegevoegd
     private opdrachten: Opdracht[] = [];
     public isVerified: boolean;
-    beoordelingen: Beoordeling[] = [];
+    public beoordelingen: Beoordeling[] = [];
 
     constructor(user: {
         id: number;
@@ -60,8 +60,9 @@ export class User {
         niveau,
         bevoegdheden,
         panden = [],
+        opdrachten = [],
         isVerified,
-    }: UserPrisma & { panden?: Pand[] }) {
+    }: UserPrisma & { panden?: Pand[]; opdrachten?: Opdracht[] }) {
         return new User({
             id,
             voornaam,
@@ -72,7 +73,9 @@ export class User {
             portfolio,
             niveau,
             bevoegdheden,
-            panden,
+            panden: panden.map((pand) => Pand.from(pand)),
+            opdrachten: opdrachten.map((opdracht) => Opdracht.from(opdracht)),
+            //opdrachten zorgen dat included is
             isVerified: isVerified ?? false,
         });
     }

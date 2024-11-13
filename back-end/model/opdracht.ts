@@ -1,29 +1,27 @@
 import { Beoordeling } from './beoordeling';
 import { Media } from './media';
+import { Opdracht as OpdrachtPrisma } from '@prisma/client';
 
 export class Opdracht {
     private static nextOpdrachtnummer = 1;
     public opdrachtnummer: number;
     public datum: Date;
-    public beoordeling: Beoordeling | null;
     public puntentotaal: number;
     public status: string;
     public medias: Media[];
-    public realtorId?: number;
-    public pilotId?: number;
+    public userId: number;
 
     constructor(opdracht: {
         opdrachtnummer?: number;
         datum: string | Date;
-        beoordeling: Beoordeling | null;
         puntentotaal: number;
         status: string;
         medias: Media[];
-        realtorId?: number;
-        pilotId?: number;
+        userId: number;
     }) {
         // Convert datum to Date object if it's a string
-        const datum = typeof opdracht.datum === 'string' ? new Date(opdracht.datum) : opdracht.datum;
+        const datum =
+            typeof opdracht.datum === 'string' ? new Date(opdracht.datum) : opdracht.datum;
 
         // Geeft opdrachtnummer
         if (opdracht.opdrachtnummer !== undefined) {
@@ -32,16 +30,32 @@ export class Opdracht {
             this.opdrachtnummer = Opdracht.nextOpdrachtnummer++;
         }
 
-        this.validateInput({ ...opdracht, datum });
+        //this.validateInput({ ...opdracht, datum });
         this.validateBusinessRules({ ...opdracht, datum });
 
         this.datum = datum;
-        this.beoordeling = opdracht.beoordeling;
         this.puntentotaal = opdracht.puntentotaal;
         this.status = opdracht.status;
         this.medias = opdracht.medias;
-        this.realtorId = opdracht.realtorId;
-        this.pilotId = opdracht.pilotId;
+        this.userId = opdracht.userId;
+    }
+
+    static from({
+        opdrachtnummer,
+        datum,
+        puntentotaal,
+        status,
+        medias,
+        userId,
+    }: OpdrachtPrisma): Opdracht {
+        return new Opdracht({
+            opdrachtnummer,
+            datum,
+            puntentotaal,
+            status,
+            medias: medias ?? [],
+            userId,
+        });
     }
 
     private validateInput(opdracht: {
@@ -67,7 +81,7 @@ export class Opdracht {
             throw new Error('Status must be a non-empty string.');
         }
 
-        if (!Array.isArray(medias) || medias.some(media => false)) {
+        if (!Array.isArray(medias) || medias.some((media) => false)) {
             throw new Error('Media must be a valid array of Media instances.');
         }
 
@@ -99,17 +113,17 @@ export class Opdracht {
         }
     }
 
-    equals(opdracht: Opdracht): boolean {
-        return (
-            this.opdrachtnummer === opdracht.getOpdrachtnummer() &&
-            this.datum.getTime() === opdracht.getDatum().getTime() &&
-            this.beoordeling === opdracht.getBeoordeling() &&
-            this.puntentotaal === opdracht.getPuntentotaal() &&
-            this.status === opdracht.getStatus() &&
-            this.medias.length === opdracht.getMedias().length &&
-            this.medias.every((media, index) => media.equals(opdracht.getMedias()[index]))
-        );
-    }
+    // equals(opdracht: Opdracht): boolean {
+    //     return (
+    //         this.opdrachtnummer === opdracht.getOpdrachtnummer() &&
+    //         this.datum.getTime() === opdracht.getDatum().getTime() &&
+    //         this.beoordeling === opdracht.getBeoordeling() &&
+    //         this.puntentotaal === opdracht.getPuntentotaal() &&
+    //         this.status === opdracht.getStatus() &&
+    //         this.medias.length === opdracht.getMedias().length &&
+    //         this.medias.every((media, index) => media.equals(opdracht.getMedias()[index]))
+    //     );
+    // }
 
     getOpdrachtnummer(): number | undefined {
         return this.opdrachtnummer;
@@ -119,9 +133,9 @@ export class Opdracht {
         return this.datum;
     }
 
-    getBeoordeling(): Beoordeling | null {
-        return this.beoordeling;
-    }
+    // getBeoordeling(): Beoordeling | null {
+    //     return this.beoordeling;
+    // }
 
     getPuntentotaal(): number {
         return this.puntentotaal;
