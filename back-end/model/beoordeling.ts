@@ -1,7 +1,9 @@
+import { Beoordeling as BeoordelingPrisma } from '@prisma/client';
+
 export class Beoordeling {
-    beoordelingId?: number;
+    public beoordelingId?: number;
     public score: number;
-    opmerkingen: string;
+    public opmerkingen: string;
     public userId: number;
 
     constructor(beoordeling: {
@@ -16,6 +18,15 @@ export class Beoordeling {
         this.score = beoordeling.score;
         this.opmerkingen = beoordeling.opmerkingen;
         this.userId = beoordeling.userId;
+    }
+
+    static from({ beoordelingId, score, opmerkingen, userId }: BeoordelingPrisma): Beoordeling {
+        return new Beoordeling({
+            beoordelingId,
+            score,
+            opmerkingen,
+            userId,
+        });
     }
 
     private validateInput(beoordeling: {

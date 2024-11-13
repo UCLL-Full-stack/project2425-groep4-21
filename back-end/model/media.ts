@@ -1,12 +1,13 @@
+import { Media as MediaPrisma } from '@prisma/client';
 export class Media {
-    private mediaId?: number;
-    type: string;
-    bestandslocatie: string;
-    uploadDatum: Date;
-    opdrachtId: number;
+    public id?: number;
+    public type: string;
+    public bestandslocatie: string;
+    public uploadDatum: Date;
+    public opdrachtId: number;
 
     constructor(media: {
-        mediaId?: number;
+        id?: number;
         type: string;
         bestandslocatie: string;
         uploadDatum: Date;
@@ -15,11 +16,21 @@ export class Media {
         this.validateInput(media);
         this.validateBusinessRules(media);
 
-        this.mediaId = media.mediaId;
+        this.id = media.id;
         this.type = media.type;
         this.bestandslocatie = media.bestandslocatie;
         this.uploadDatum = media.uploadDatum;
         this.opdrachtId = media.opdrachtId;
+    }
+
+    static from({ id, type, bestandslocatie, uploadDatum, opdrachtId }: MediaPrisma): Media {
+        return new Media({
+            id,
+            type,
+            bestandslocatie,
+            uploadDatum,
+            opdrachtId,
+        });
     }
 
     private validateInput(media: {
