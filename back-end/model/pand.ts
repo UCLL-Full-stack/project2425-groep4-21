@@ -3,7 +3,7 @@ import { User } from './user';
 import { User as UserPrisma, Pand as PandPrisma } from '@prisma/client';
 
 export class Pand {
-    public pandId?: number;
+    public id?: number;
     public adres: string;
     public beschrijving: string;
     public userIdMakelaar: number;
@@ -11,7 +11,7 @@ export class Pand {
     public user?: User; //toegevoegd
 
     constructor(pand: {
-        pandId?: number;
+        id?: number;
         adres: string;
         beschrijving: string;
         userIdMakelaar: number;
@@ -21,7 +21,7 @@ export class Pand {
         this.validateInput(pand);
         this.validateBusinessRules(pand);
 
-        this.pandId = pand.pandId;
+        this.id = pand.id;
         this.adres = pand.adres;
         this.beschrijving = pand.beschrijving;
         this.userIdMakelaar = pand.userIdMakelaar;
@@ -38,7 +38,7 @@ export class Pand {
         opdrachten = [], // Voeg 'opdrachten' toe met een default lege array
     }: PandPrisma & { user: UserPrisma; opdrachten?: Opdracht[] }) {
         return new Pand({
-            pandId,
+            id: pandId,
             adres,
             beschrijving,
             userIdMakelaar,
@@ -91,7 +91,7 @@ export class Pand {
     }
     equals(pand: Pand): boolean {
         return (
-            this.pandId === pand.getPandId() &&
+            this.id === pand.getPandId() &&
             this.adres === pand.getAdres() &&
             this.beschrijving === pand.getBeschrijving() &&
             this.userIdMakelaar === pand.getUserIdMakelaar() &&
@@ -102,7 +102,7 @@ export class Pand {
 
     // Getters
     getPandId(): number | undefined {
-        return this.pandId;
+        return this.id;
     }
 
     getAdres(): string {

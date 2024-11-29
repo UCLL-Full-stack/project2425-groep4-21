@@ -1,6 +1,7 @@
 import { Beoordeling } from './beoordeling';
 import { Media } from './media';
 
+
 export class Opdracht {
     private static nextOpdrachtnummer = 1;
     public opdrachtnummer: number;

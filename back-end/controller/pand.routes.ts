@@ -86,19 +86,19 @@ pandRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *       500:
  *         description: Server error
  */
-// pandRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const id = parseInt(req.params.id, 10);
-//         const pand = await PandService.getPandById(id);
-//         if (pand) {
-//             res.status(200).json(pand);
-//         } else {
-//             res.status(404).json({ message: 'Pand not found' });
-//         }
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+pandRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        const pand = await PandService.getPandById(id);
+        if (pand) {
+            res.status(200).json(pand);
+        } else {
+            res.status(404).json({ message: 'Pand not found' });
+        }
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -119,15 +119,15 @@ pandRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *       500:
  *         description: Server error
  */
-// pandRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const newPand = req.body;
-//         const pand = await PandService.createPand(newPand);
-//         res.status(200).json(pand);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+pandRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const newPand = req.body;
+        const pand = await PandService.createPand(newPand);
+        res.status(200).json(pand);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -151,19 +151,19 @@ pandRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *       500:
  *         description: Server error
  */
-// pandRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const id = parseInt(req.params.id, 10);
-//         const success = await PandService.deletePandById(id);
-//         if (success) {
-//             res.status(200).json({ message: 'Pand deleted successfully' });
-//         } else {
-//             res.status(404).json({ message: 'Pand not found' });
-//         }
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+pandRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        const success = await PandService.deletePandById(id);
+        if (success) {
+            res.status(200).json({ message: 'Pand deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'Pand not found' });
+        }
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -204,24 +204,24 @@ pandRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *       500:
  *         description: Serverfout
  */
-// pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const pandId = parseInt(req.params.id, 10);
-//         if (isNaN(pandId)) {
-//             return res.status(400).json({ message: 'Invalid property ID ' });
-//         }
+pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const pandId = parseInt(req.params.id, 10);
+        if (isNaN(pandId)) {
+            return res.status(400).json({ message: 'Invalid property ID ' });
+        }
 
-//         const updatedPandData = req.body;
+        const updatedPandData = req.body;
 
-//         const updatedPand = await PandService.updatePand(pandId, updatedPandData);
-//         if (!updatedPand) {
-//             return res.status(404).json({ message: 'property not found' });
-//         }
+        const updatedPand = await PandService.updatePand(pandId, updatedPandData);
+        if (!updatedPand) {
+            return res.status(404).json({ message: 'property not found' });
+        }
 
-//         res.status(200).json(updatedPand);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+        res.status(200).json(updatedPand);
+    } catch (error) {
+        next(error);
+    }
+ });
 
 export { pandRouter };
