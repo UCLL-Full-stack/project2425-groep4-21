@@ -1,13 +1,13 @@
 import { Media as MediaPrisma } from '@prisma/client';
 export class Media {
-    public id?: number;
-    public type: string;
-    public bestandslocatie: string;
-    public uploadDatum: Date;
-    public opdrachtId: number;
+    private mediaId?: number;
+    private type: string;
+    private bestandslocatie: string;
+    private uploadDatum: Date;
+    private opdrachtId: number;
 
     constructor(media: {
-        id?: number;
+        mediaId?: number;
         type: string;
         bestandslocatie: string;
         uploadDatum: Date;
@@ -16,7 +16,7 @@ export class Media {
         this.validateInput(media);
         this.validateBusinessRules(media);
 
-        this.id = media.id;
+        this.mediaId = media.mediaId;
         this.type = media.type;
         this.bestandslocatie = media.bestandslocatie;
         this.uploadDatum = media.uploadDatum;
@@ -25,7 +25,7 @@ export class Media {
 
     static from({ id, type, bestandslocatie, uploadDatum, opdrachtId }: MediaPrisma): Media {
         return new Media({
-            id,
+            mediaId: id,
             type,
             bestandslocatie,
             uploadDatum,

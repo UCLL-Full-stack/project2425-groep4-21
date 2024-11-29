@@ -32,6 +32,7 @@ type OpdrachtInput = {
 };
 
 type MediaInput = {
+    mediaId?: number;
     type: 'image' | 'video';
     bestandslocatie: string;
     uploadDatum: Date;
