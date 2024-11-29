@@ -94,6 +94,8 @@ import database from '../util/database';
 
 const getAllPanden = async (): Promise<Pand[]> => {
     //async & promise omdat ge nu met een database werkt
+    console.log('DATABASE_URL:', process.env.DATABASE_URL);
+
     const pandenPrisma = await database.pand.findMany({
         //findmany staat voor vind alles
         include: {
