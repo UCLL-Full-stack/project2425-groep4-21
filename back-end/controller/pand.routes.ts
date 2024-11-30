@@ -204,24 +204,28 @@ pandRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
  *       500:
  *         description: Serverfout
  */
-// pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const pandId = parseInt(req.params.id, 10);
-//         if (isNaN(pandId)) {
-//             return res.status(400).json({ message: 'Invalid property ID ' });
-//         }
-//
-//         const updatedPandData = req.body;
-//
-//         const updatedPand = await PandService.updatePand(pandId, updatedPandData);
-//         if (!updatedPand) {
-//             return res.status(404).json({ message: 'property not found' });
-//         }
-//
-//         res.status(200).json(updatedPand);
-//     } catch (error) {
-//         next(error);
-//     }
-//  });
+pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const pandId = parseInt(req.params.id, 10);
+        if (isNaN(pandId)) {
+            return res.status(400).json({ message: 'Invalid property ID' });
+        }
+
+        console.log(`Updating Pand with ID: ${pandId}`); // Debugging
+
+        const updatedPandData = req.body;
+
+        const updatedPand = await PandService.updatePand(pandId, updatedPandData);
+        res.status(200).json(updatedPand);
+    } catch (error) {
+        console.error('Error in PUT /panden/:id:', error); // Debugging
+        if (error instanceof Error && error.message.includes('not found')) {
+            res.status(404).json({ message: error.message });
+        } else {
+            next(error);
+        }
+    }
+});
+
 
 export { pandRouter };

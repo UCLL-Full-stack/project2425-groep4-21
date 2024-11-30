@@ -6,7 +6,6 @@ import database from '../util/database';
 
 
 const getAllPanden = async (): Promise<Pand[]> => {
-    //async & promise omdat ge nu met een database werkt
     console.log('DATABASE_URL:', process.env.DATABASE_URL);
 
     const pandenPrisma = await database.pand.findMany({
@@ -48,7 +47,6 @@ const getPandById = async (id: number): Promise<Pand | null> => {
 
 const createPand = async (newPandData: any): Promise<Pand> => {
     const newPand = new Pand({
-        id: newPandData.pandId,
         adres: newPandData.adres,
         beschrijving: newPandData.beschrijving,
         userIdMakelaar: newPandData.userIdMakelaar,
@@ -110,29 +108,41 @@ const deletePandById = async (id: number): Promise<boolean> => {
     }
 };
 
-// const updatePand = async (pandId: number, updatedPandData: Partial<Pand>): Promise<Pand | null> => {
-//     const index = panden.findIndex((pand) => pand.getPandId() === pandId);
-//     if (index === -1) {
-//         return null;
-//     }
-//
-//     const existingPand = panden[index];
-//     const updatedPand = new Pand({
-//         id: existingPand.getPandId(),
-//         adres: updatedPandData.adres || existingPand.getAdres(),
-//         beschrijving: updatedPandData.beschrijving || existingPand.getBeschrijving(),
-//         userIdMakelaar: updatedPandData.userIdMakelaar || existingPand.getUserIdMakelaar(),
-//         opdrachten: updatedPandData.opdrachten || existingPand.getOpdracht(),
-//     });
-//
-//     panden[index] = updatedPand;
-//     return updatedPand;
-// };
+//TODO fix update pand problem with userIdmakelaar
+const updatePand = async (pandId: number, updatedPandData: any): Promise<Pand | null> => {
+    try {
+        const updatedPandPrisma = await database.pand.update({
+            where: { id: pandId },
+            data: {
+                adres: updatedPandData.adres,
+                beschrijving: updatedPandData.beschrijving,
+                userIdMakelaar: updatedPandData.userIdMakelaar,
+            },
+            include: {
+                user: true,
+                opdrachten: true,
+            },
+        });
+
+        return new Pand({
+            id: updatedPandPrisma.id,
+            adres: updatedPandPrisma.adres,
+            beschrijving: updatedPandPrisma.beschrijving,
+            userIdMakelaar: updatedPandPrisma.userIdMakelaar,
+            opdrachten: updatedPandPrisma.opdrachten.map(
+                (opdrachtPrisma) => new Opdracht(opdrachtPrisma)
+            ),
+        });
+    } catch (error) {
+        console.error('Error updating Pand:', error);
+        return null;
+    }
+};
 
 export default {
     getAllPanden,
     getPandById,
     createPand,
     deletePandById,
-  //  updatePand,
+   updatePand,
 };

@@ -22,14 +22,16 @@ class PandService {
         return pandDb.deletePandById(id);
     }
 
-//     static async updatePand(pandId: number, updatedPandData: Partial<Pand>): Promise<Pand | null> {
-//         const existingPand = await pandDb.getPandById(pandId);
-//         if (!existingPand) {
-//             return null;
-//         }
-//
-//         return await pandDb.updatePand(pandId, updatedPandData);
-//     }
- }
+    static async updatePand(pandId: number, updatedPandData: any): Promise<Pand | null> {
+        console.log(`PandService: Updating Pand with ID ${pandId}`); // Debugging
+        const existingPand = await pandDb.getPandById(pandId);
+        if (!existingPand) {
+            console.error(`Pand with ID ${pandId} not found`); // Debugging
+            throw new Error(`Pand with ID ${pandId} not found`);
+        }
 
-export { PandService };
+        return await pandDb.updatePand(pandId, updatedPandData);
+    }
+}
+
+    export { PandService };
