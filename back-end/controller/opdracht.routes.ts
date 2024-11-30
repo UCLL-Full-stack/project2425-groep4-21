@@ -323,22 +323,22 @@ opdrachtRouter.get('/completed-assignments', async (req: Request, res: Response,
  *         description: Serverfout
  */
 
-opdrachtRouter.get('/:opdrachtId/beoordeling', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const opdrachtId = parseInt(req.params.opdrachtId, 10);
-        if (isNaN(opdrachtId)) {
-            return res.status(400).json({ message: 'Invalid order ID' });
-        }
-
-        const beoordeling = await OpdrachtService.getBeoordelingByAssignmentId(opdrachtId);
-        if (!beoordeling) {
-            return res.status(404).json({ message: 'Rating not found for this assignment' });
-        }
-
-        res.status(200).json(beoordeling);
-    } catch (error) {
-        next(error);
-    }
-});
+// opdrachtRouter.get('/:opdrachtId/beoordeling', async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const opdrachtId = parseInt(req.params.opdrachtId, 10);
+//         if (isNaN(opdrachtId)) {
+//             return res.status(400).json({ message: 'Invalid order ID' });
+//         }
+//
+//         const beoordeling = await OpdrachtService.getBeoordelingByAssignmentId(opdrachtId);
+//         if (!beoordeling) {
+//             return res.status(404).json({ message: 'Rating not found for this assignment' });
+//         }
+//
+//         res.status(200).json(beoordeling);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 export { opdrachtRouter };

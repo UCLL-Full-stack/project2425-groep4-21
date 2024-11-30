@@ -3,12 +3,12 @@ import { User } from './user';
 import { User as UserPrisma, Pand as PandPrisma } from '@prisma/client';
 
 export class Pand {
-    public id?: number;
-    public adres: string;
-    public beschrijving: string;
-    public userIdMakelaar: number;
-    public opdrachten: Opdracht[];
-    public user?: User; //toegevoegd
+    private id?: number;
+    private adres: string;
+    private beschrijving: string;
+    private userIdMakelaar: number;
+    private opdrachten: Opdracht[];
+    private user?: User; //toegevoegd
 
     constructor(pand: {
         id?: number;
@@ -30,7 +30,7 @@ export class Pand {
     }
 
     static from({
-        pandId,
+        id,
         adres,
         beschrijving,
         userIdMakelaar,
@@ -38,7 +38,7 @@ export class Pand {
         opdrachten = [], // Voeg 'opdrachten' toe met een default lege array
     }: PandPrisma & { user: UserPrisma; opdrachten?: Opdracht[] }) {
         return new Pand({
-            id: pandId,
+            id: id,
             adres,
             beschrijving,
             userIdMakelaar,

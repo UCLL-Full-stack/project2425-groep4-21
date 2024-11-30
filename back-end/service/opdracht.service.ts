@@ -43,7 +43,7 @@ class OpdrachtService {
     }
 
     static async getHiredPilots(realtorId: number): Promise<User[]> {
-        const opdrachten = await opdrachtDb.getOpdrachtenByRealtorId(realtorId);
+        const opdrachten = opdrachtDb.getOpdrachtenByRealtorId(realtorId);
         const pilotIds = opdrachten.map(opdracht => opdracht.pilotId).filter((id): id is number => id !== undefined);
         return userDb.getUsersByIdsAndRole(pilotIds, 'pilot');
     }
@@ -52,19 +52,19 @@ class OpdrachtService {
         return opdrachtDb.getCompletedOpdrachtenByPilotId(pilotId);
     }
 
-    static async getBeoordelingByAssignmentId(assignmentId: number): Promise<string | null> {
-        const assignment = await opdrachtDb.getAssignmentById(assignmentId);
-        if (!assignment) {
-            throw new Error('Opdracht niet gevonden');
-        }
-
-        const beoordeling = assignment.getBeoordeling();
-        if (beoordeling) {
-            return beoordeling.getOpmerkingen();
-        } else {
-            return null;
-        }
-    }
+    // static async getBeoordelingByAssignmentId(assignmentId: number): Promise<string | null> {
+    //     const assignment = await opdrachtDb.getAssignmentById(assignmentId);
+    //     if (!assignment) {
+    //         throw new Error('Opdracht niet gevonden');
+    //     }
+    //
+    //     const beoordeling = assignment.getBeoordeling();
+    //     if (beoordeling) {
+    //         return beoordeling.getOpmerkingen();
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
 }
 

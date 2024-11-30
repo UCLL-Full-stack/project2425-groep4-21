@@ -13,12 +13,12 @@ const panden = [
         opdrachten: [new Opdracht({
             opdrachtnummer: 1,
             datum: new Date(),
-            beoordeling: new Beoordeling({
-                beoordelingId: 1,
-                score: 9,
-                opmerkingen: 'Good work',
-                userId: 1,
-            }),
+            // beoordeling: new Beoordeling({
+            //     beoordelingId: 1,
+            //     score: 9,
+            //     opmerkingen: 'Good work',
+            //     userId: 1,
+            // }),
             puntentotaal: 95,
             status: 'Done',
             medias: [
@@ -41,12 +41,12 @@ const panden = [
         opdrachten: [new Opdracht({
             opdrachtnummer: 2,
             datum: new Date(),
-            beoordeling: new Beoordeling({
-                beoordelingId: 2,
-                score: 10,
-                opmerkingen: 'Good work',
-                userId: 2,
-            }),
+            // beoordeling: new Beoordeling({
+            //     beoordelingId: 2,
+            //     score: 10,
+            //     opmerkingen: 'Good work',
+            //     userId: 2,
+            // }),
             puntentotaal: 100,
             status: 'In progress',
             medias: [
@@ -69,12 +69,12 @@ const panden = [
         opdrachten: [new Opdracht({
             opdrachtnummer: 3,
             datum: new Date(),
-            beoordeling: new Beoordeling({
-                beoordelingId: 3,
-                score: 7,
-                opmerkingen: 'Ok work',
-                userId: 3,
-            }),
+            // beoordeling: new Beoordeling({
+            //     beoordelingId: 3,
+            //     score: 7,
+            //     opmerkingen: 'Ok work',
+            //     userId: 3,
+            // }),
             puntentotaal: 70,
             status: 'Open',
             medias: [
@@ -109,20 +109,60 @@ const getPandById = (id: number): Pand | null => {
     return pand || null;
 };
 
-const createPand = async (newPand: Pand): Promise<Pand> => {
+const createPand = async (newPandData: any): Promise<Pand> => {
+    // Transform newPandData into a Pand instance
+    const newPand = new Pand({
+        id: newPandData.pandId,
+        adres: newPandData.adres,
+        beschrijving: newPandData.beschrijving,
+        userIdMakelaar: newPandData.userIdMakelaar,
+        opdrachten: newPandData.opdrachten?.map(
+            (opdrachtData: any) =>
+                new Opdracht({
+                    opdrachtnummer: opdrachtData.opdrachtnummer,
+                    datum: opdrachtData.datum,
+                    puntentotaal: opdrachtData.puntentotaal,
+                    status: opdrachtData.status,
+                    medias: opdrachtData.medias?.map(
+                        (mediaData: any) =>
+                            new Media({
+                                type: mediaData.type,
+                                bestandslocatie: mediaData.bestandslocatie,
+                                uploadDatum: new Date(mediaData.uploadDatum),
+                                opdrachtId: opdrachtData.opdrachtnummer,
+                            })
+                    ),
+                    realtorId: opdrachtData.realtorId,
+                    pilotId: opdrachtData.pilotId,
+                })
+        ) || [],
+    });
+
     const createdPandPrisma = await database.pand.create({
         data: {
-            adres: newPand.adres,
-            beschrijving: newPand.beschrijving,
-            userIdMakelaar: newPand.userIdMakelaar,
+            adres: newPand.getAdres(),
+            beschrijving: newPand.getBeschrijving(),
+            userIdMakelaar: newPand.getUserIdMakelaar(),
         },
         include: {
             user: true,
+            opdrachten: true,
         },
     });
 
-    return Pand.from(createdPandPrisma);
+    return new Pand({
+        id: createdPandPrisma.id,
+        adres: createdPandPrisma.adres,
+        beschrijving: createdPandPrisma.beschrijving,
+        userIdMakelaar: createdPandPrisma.userIdMakelaar,
+        opdrachten: createdPandPrisma.opdrachten.map(
+            (opdrachtPrisma) => new Opdracht(opdrachtPrisma)
+        ),
+    });
 };
+
+
+
 
 const deletePandById = (id: number): boolean => {
     const pandIndex = panden.findIndex((p) => p.getPandId() === id);
@@ -133,29 +173,29 @@ const deletePandById = (id: number): boolean => {
     return false;
 };
 
-const updatePand = async (pandId: number, updatedPandData: Partial<Pand>): Promise<Pand | null> => {
-    const index = panden.findIndex((pand) => pand.getPandId() === pandId);
-    if (index === -1) {
-        return null;
-    }
-
-    const existingPand = panden[index];
-    const updatedPand = new Pand({
-        id: existingPand.getPandId(),
-        adres: updatedPandData.adres || existingPand.getAdres(),
-        beschrijving: updatedPandData.beschrijving || existingPand.getBeschrijving(),
-        userIdMakelaar: updatedPandData.userIdMakelaar || existingPand.getUserIdMakelaar(),
-        opdrachten: updatedPandData.opdrachten || existingPand.getOpdracht(),
-    });
-
-    panden[index] = updatedPand;
-    return updatedPand;
-};
+// const updatePand = async (pandId: number, updatedPandData: Partial<Pand>): Promise<Pand | null> => {
+//     const index = panden.findIndex((pand) => pand.getPandId() === pandId);
+//     if (index === -1) {
+//         return null;
+//     }
+//
+//     const existingPand = panden[index];
+//     const updatedPand = new Pand({
+//         id: existingPand.getPandId(),
+//         adres: updatedPandData.adres || existingPand.getAdres(),
+//         beschrijving: updatedPandData.beschrijving || existingPand.getBeschrijving(),
+//         userIdMakelaar: updatedPandData.userIdMakelaar || existingPand.getUserIdMakelaar(),
+//         opdrachten: updatedPandData.opdrachten || existingPand.getOpdracht(),
+//     });
+//
+//     panden[index] = updatedPand;
+//     return updatedPand;
+// };
 
 export default {
     getAllPanden,
     getPandById,
     createPand,
     deletePandById,
-    updatePand,
+  //  updatePand,
 };

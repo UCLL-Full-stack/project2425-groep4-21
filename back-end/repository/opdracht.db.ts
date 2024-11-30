@@ -6,12 +6,6 @@ import { Beoordeling } from '../model/beoordeling';
 const opdrachten: Opdracht[] = [
     new Opdracht({
         datum: new Date(),
-        beoordeling: new Beoordeling({
-            beoordelingId: 1,
-            score: 9,
-            opmerkingen: 'Well done',
-            userId: 1,
-        }),
         puntentotaal: 95,
         status: 'Pending',
         medias: [
@@ -27,12 +21,6 @@ const opdrachten: Opdracht[] = [
     }),
     new Opdracht({
         datum: new Date(),
-        beoordeling: new Beoordeling({
-            beoordelingId: 2,
-            score: 10,
-            opmerkingen: 'Excellent',
-            userId: 2,
-        }),
         puntentotaal: 100,
         status: 'In Progress',
         medias: [
@@ -48,12 +36,6 @@ const opdrachten: Opdracht[] = [
     }),
     new Opdracht({
         datum: new Date(),
-        beoordeling: new Beoordeling({
-            beoordelingId: 3,
-            score: 7,
-            opmerkingen: 'Good job',
-            userId: 3,
-        }),
         puntentotaal: 70,
         status: 'Completed',
         medias: [
@@ -73,14 +55,11 @@ const getAllOpdrachten = (): Opdracht[] => {
     return opdrachten;
 };
 
-const getOpdrachtById = async (id: number): Promise<Opdracht | null> => {
-    const opdrachtData = opdrachten.find((o) => o.opdrachtnummer === id);
-    if (opdrachtData) {
-        return new Opdracht(opdrachtData);
-    } else {
-        return null;
-    }
+const getOpdrachtById = (id: number): Opdracht | null => {
+    return opdrachten.find((opdracht) => opdracht.getOpdrachtnummer() === id) || null;
 };
+
+
 
 const createOpdracht = (newOpdrachtData: any): Opdracht => {
     const newOpdracht = new Opdracht(newOpdrachtData);
@@ -98,15 +77,15 @@ const deleteOpdrachtById = (id: number): boolean => {
 };
 
 const getOpdrachtenByRealtorId = (realtorId: number): Opdracht[] => {
-    return opdrachten.filter(opdracht => opdracht.realtorId === realtorId);
+    return opdrachten.filter(opdracht => opdracht.getRealtorId() === realtorId);
 };
 
 const getCompletedOpdrachtenByPilotId = (pilotId: number): Opdracht[] => {
-    return opdrachten.filter(opdracht => opdracht.pilotId === pilotId && opdracht.status === 'Afgerond');
+    return opdrachten.filter(opdracht => opdracht.pilotId === pilotId && opdracht.getStatus() === 'Afgerond');
 };
 
 const updateOpdracht = (updatedOpdracht: Opdracht): Opdracht => {
-    const index = opdrachten.findIndex((o) => o.opdrachtnummer === updatedOpdracht.getOpdrachtnummer());
+    const index = opdrachten.findIndex((o) => o.getOpdrachtnummer() === updatedOpdracht.getOpdrachtnummer());
     if (index !== -1) {
         opdrachten[index] = updatedOpdracht;
     }

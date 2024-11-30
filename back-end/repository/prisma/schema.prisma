@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -29,24 +30,24 @@ model User {
 }
 
 model Pand {
-  pandId         Int        @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   adres          String
   beschrijving   String
   user           User       @relation("UserPanden", fields: [userIdMakelaar], references: [id])
   userIdMakelaar Int
-  opdrachten     Opdracht[] @relation("PandOpdrachten")
+  opdrachten     Opdracht[]
 }
 
 model Opdracht {
   opdrachtnummer Int      @id @default(autoincrement())
   datum          DateTime
-  beoordeling    String
+  // beoordeling    String // Waarom in opdracht beoordeling?
   puntentotaal   Int
   status         String
   medias         Media[]  @relation("OpdrachtMedias")
   user           User     @relation("UserOpdrachten", fields: [userId], references: [id])
   userId         Int
-  pand           Pand     @relation("PandOpdrachten", fields: [pandId], references: [pandId], onDelete: Cascade)
+  pand           Pand     @relation(fields: [pandId], references: [id], onDelete: Cascade)
   pandId         Int
 }
 
