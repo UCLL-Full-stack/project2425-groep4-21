@@ -79,12 +79,10 @@ export class Pand {
     }): void {
         const { adres, beschrijving, opdrachten } = pand;
 
-        // Address must be at least 5 characters long.
         if (adres.trim().length < 5) {
             throw new Error('Address must be at least 5 characters long.');
         }
 
-        //  Description should not exceed 1000 characters.
         if (beschrijving.length > 1000) {
             throw new Error('Description must not exceed 1000 characters.');
         }

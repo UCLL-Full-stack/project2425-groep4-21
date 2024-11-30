@@ -23,7 +23,6 @@ export class Opdracht {
         pilotId?: number;
     }) {
 
-        // Convert datum to Date object if it's a string
         const datum = typeof opdracht.datum === 'string' ? new Date(opdracht.datum) : opdracht.datum;
 
         if (opdracht.opdrachtnummer !== undefined) {
