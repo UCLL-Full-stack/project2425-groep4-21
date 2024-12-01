@@ -48,8 +48,8 @@ model Opdracht {
   userId         Int
   pand           Pand     @relation(fields: [pandId], references: [id], onDelete: Cascade)
   pandId         Int
-  realtorId      Int
-  pilotId        Int
+  realtorId      Int?
+  pilotId        Int?
 }
 
 model Media {

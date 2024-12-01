@@ -9,7 +9,7 @@ export class Opdracht {
     private puntentotaal: number;
     private status: string;
     private medias: Media[];
-    private realtorId?: number;
+    private realtorId: number | null | undefined;
     private pilotId?: number | null | undefined;
 
     constructor(opdracht: {
@@ -18,8 +18,8 @@ export class Opdracht {
         puntentotaal: number;
         status: string;
         medias?: Media[];
-        realtorId?: number;
-        pilotId?: number | null | undefined;
+        realtorId?: number | null;
+        pilotId?: number | null;
     }) {
         const datum = typeof opdracht.datum === 'string' ? new Date(opdracht.datum) : opdracht.datum;
 
@@ -41,25 +41,18 @@ export class Opdracht {
         this.pilotId = opdracht.pilotId;
     }
 
-    static from({
-                    opdrachtnummer,
-                    datum,
-                    puntentotaal,
-                    status,
-                    medias = [],
-                    realtorId,
-                    pilotId,
-                }: OpdrachtPrisma & { medias?: MediaPrisma[], realtorId?: number, pilotId?: number | null | undefined }) {
+    static from(opdrachtPrisma: OpdrachtPrisma & { medias?: MediaPrisma[] }) {
         return new Opdracht({
-            opdrachtnummer,
-            datum,
-            puntentotaal,
-            status,
-            medias: medias.map((media) => Media.from(media)),
-            realtorId,
-            pilotId,
+            opdrachtnummer: opdrachtPrisma.opdrachtnummer,
+            datum: opdrachtPrisma.datum,
+            puntentotaal: opdrachtPrisma.puntentotaal,
+            status: opdrachtPrisma.status,
+            medias: opdrachtPrisma.medias?.map(Media.from) || [],
+            realtorId: opdrachtPrisma.realtorId,
+            pilotId: opdrachtPrisma.pilotId,
         });
     }
+
 
     private validateBusinessRules(opdracht: {
         datum: Date;
@@ -93,7 +86,7 @@ export class Opdracht {
         return this.opdrachtnummer;
     }
 
-    getRealtorId(): number | undefined {
+    getRealtorId(): number | null | undefined {
         return this.realtorId;
     }
 

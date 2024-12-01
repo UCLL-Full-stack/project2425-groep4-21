@@ -34,6 +34,18 @@ const opdrachtRouter = express.Router();
  *            status:
  *              type: string
  *              description: Current status of the opdracht.
+ *            realtorId:
+ *              type: number
+ *              description: ID of the realtor who created the opdracht.
+ *            pilotId:
+ *              type: number
+ *              description: ID of the pilot who accepted the opdracht.
+ *            userId:
+ *              type: number
+ *              description: ID of the user who created the opdracht.
+ *            pandId:
+ *              type: number
+ *              description: ID of the pand for which the opdracht is created.
  *            medias:
  *              type: array
  *              items:

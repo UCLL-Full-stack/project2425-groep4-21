@@ -20,8 +20,8 @@ class OpdrachtService {
         return opdracht;
     }
 
-    static createOpdracht(newOpdracht: Opdracht): Opdracht {
-        return opdrachtDb.createOpdracht(newOpdracht);
+    static async createOpdracht(newOpdracht: Opdracht): Promise<Opdracht> {
+        return await opdrachtDb.createOpdracht(newOpdracht);
     }
 
     static async deleteOpdrachtById(id: number): Promise<boolean> {
