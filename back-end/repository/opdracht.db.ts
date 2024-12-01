@@ -82,13 +82,16 @@ const createOpdracht = (newOpdrachtData: any): Opdracht => {
     return newOpdracht;
 };
 
-const deleteOpdrachtById = (id: number): boolean => {
-    const opdrachtIndex = opdrachten.findIndex((o) => o.getOpdrachtnummer() === id);
-    if (opdrachtIndex !== -1) {
-        opdrachten.splice(opdrachtIndex, 1);
+const deleteOpdrachtById = async (id: number): Promise<boolean> => {
+    try {
+        await database.opdracht.delete({
+            where: { opdrachtnummer: id },
+        });
         return true;
+    } catch (error) {
+        console.error('Error deleting Opdracht:', error);
+        return false;
     }
-    return false;
 };
 
 const getOpdrachtenByRealtorId = (realtorId: number): Opdracht[] => {

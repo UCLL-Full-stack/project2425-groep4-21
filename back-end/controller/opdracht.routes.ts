@@ -202,14 +202,14 @@ opdrachtRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
  *       500:
  *         description: Server error
  */
-opdrachtRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+opdrachtRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id, 10);
-        const success = OpdrachtService.deleteOpdrachtById(id);
+        const success = await OpdrachtService.deleteOpdrachtById(id);
         if (success) {
-            res.status(200).json({ message: 'Opdracht deleted successfully' });
+            res.status(200).json({message: 'Opdracht deleted successfully'});
         } else {
-            res.status(404).json({ message: 'Opdracht not found' });
+            res.status(404).json({message: 'Opdracht not found'});
         }
     } catch (error) {
         next(error);

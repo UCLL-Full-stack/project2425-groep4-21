@@ -24,8 +24,8 @@ class OpdrachtService {
         return opdrachtDb.createOpdracht(newOpdracht);
     }
 
-    static deleteOpdrachtById(id: number): boolean {
-        return opdrachtDb.deleteOpdrachtById(id);
+    static async deleteOpdrachtById(id: number): Promise<boolean> {
+        return await opdrachtDb.deleteOpdrachtById(id);
     }
 
     // static async bookDronePilot(details: { pilotId: number, opdrachtnummer: number }): Promise<Opdracht> {
