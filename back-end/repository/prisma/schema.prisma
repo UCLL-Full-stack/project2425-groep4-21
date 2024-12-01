@@ -41,7 +41,6 @@ model Pand {
 model Opdracht {
   opdrachtnummer Int      @id @default(autoincrement())
   datum          DateTime
-  // beoordeling    String // Waarom in opdracht beoordeling?
   puntentotaal   Int
   status         String
   medias         Media[]  @relation("OpdrachtMedias")
@@ -49,6 +48,8 @@ model Opdracht {
   userId         Int
   pand           Pand     @relation(fields: [pandId], references: [id], onDelete: Cascade)
   pandId         Int
+  realtorId      Int
+  pilotId        Int
 }
 
 model Media {

@@ -1,28 +1,26 @@
 import { Beoordeling } from './beoordeling';
 import { Media } from './media';
+import { Opdracht as OpdrachtPrisma, Media as MediaPrisma } from '@prisma/client';
 
 export class Opdracht {
     private static nextOpdrachtnummer = 1;
     private opdrachtnummer: number;
     private datum: Date;
-    // private beoordeling: Beoordeling | null;
     private puntentotaal: number;
     private status: string;
     private medias: Media[];
     private realtorId?: number;
-    pilotId?: number;
+    private pilotId?: number | null | undefined;
 
     constructor(opdracht: {
         opdrachtnummer?: number;
         datum: string | Date;
-        // beoordeling: Beoordeling | null;
         puntentotaal: number;
         status: string;
         medias?: Media[];
         realtorId?: number;
-        pilotId?: number;
+        pilotId?: number | null | undefined;
     }) {
-
         const datum = typeof opdracht.datum === 'string' ? new Date(opdracht.datum) : opdracht.datum;
 
         if (opdracht.opdrachtnummer !== undefined) {
@@ -33,11 +31,9 @@ export class Opdracht {
 
         const medias = opdracht.medias || [];
 
-        //this.validateInput({ ...opdracht, datum, medias });
         this.validateBusinessRules({ ...opdracht, datum, medias });
 
         this.datum = datum;
-        // this.beoordeling = opdracht.beoordeling;
         this.puntentotaal = opdracht.puntentotaal;
         this.status = opdracht.status;
         this.medias = medias;
@@ -45,40 +41,24 @@ export class Opdracht {
         this.pilotId = opdracht.pilotId;
     }
 
-    private validateInput(opdracht: {
-        datum: Date;
-        beoordeling: Beoordeling | null;
-        puntentotaal: number;
-        status: string;
-        medias: Media[];
-        realtorId?: number;
-        pilotId?: number;
-    }): void {
-        const { datum, beoordeling, puntentotaal, status, medias, realtorId, pilotId } = opdracht;
-
-        if (isNaN(datum.getTime())) {
-            throw new Error('Date must be a valid date.');
-        }
-
-        if (isNaN(puntentotaal)) {
-            throw new Error('Total points must be a valid number.');
-        }
-
-        if (status.trim().length === 0) {
-            throw new Error('Status must be a non-empty string.');
-        }
-
-        if (medias.some((media) => false)) {
-            throw new Error('Media must be a valid array of Media instances.');
-        }
-
-        if (realtorId !== undefined && (!Number.isInteger(realtorId) || realtorId < 0)) {
-            throw new Error('Realtor ID, if provided, must be zero or a positive integer.');
-        }
-
-        if (pilotId !== undefined && (!Number.isInteger(pilotId) || pilotId < 0)) {
-            throw new Error('Pilot ID, if provided, must be zero or a positive integer.');
-        }
+    static from({
+                    opdrachtnummer,
+                    datum,
+                    puntentotaal,
+                    status,
+                    medias = [],
+                    realtorId,
+                    pilotId,
+                }: OpdrachtPrisma & { medias?: MediaPrisma[], realtorId?: number, pilotId?: number | null | undefined }) {
+        return new Opdracht({
+            opdrachtnummer,
+            datum,
+            puntentotaal,
+            status,
+            medias: medias.map((media) => Media.from(media)),
+            realtorId,
+            pilotId,
+        });
     }
 
     private validateBusinessRules(opdracht: {
@@ -102,7 +82,6 @@ export class Opdracht {
         return (
             this.opdrachtnummer === opdracht.getOpdrachtnummer() &&
             this.datum.getTime() === opdracht.getDatum().getTime() &&
-            // this.beoordeling === opdracht.getBeoordeling() &&
             this.puntentotaal === opdracht.getPuntentotaal() &&
             this.status === opdracht.getStatus() &&
             this.medias.length === opdracht.getMedias().length &&
@@ -118,13 +97,13 @@ export class Opdracht {
         return this.realtorId;
     }
 
+    getPilotId(): number | null | undefined {
+        return this.pilotId;
+    }
+
     getDatum(): Date {
         return this.datum;
     }
-
-    //getBeoordeling(): Beoordeling | null {
-      //  return this.beoordeling;
-    //}
 
     getPuntentotaal(): number {
         return this.puntentotaal;

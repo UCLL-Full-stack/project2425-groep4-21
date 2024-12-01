@@ -22,7 +22,11 @@ const getPandById = async (id: number): Promise<Pand | null> => {
             where: { id: id },
             include: {
                 user: true,
-                opdrachten: true,
+                opdrachten: {
+                    include: {
+                        medias: true,
+                    },
+                },
             },
         });
 
@@ -36,7 +40,22 @@ const getPandById = async (id: number): Promise<Pand | null> => {
             beschrijving: pandPrisma.beschrijving,
             userIdMakelaar: pandPrisma.userIdMakelaar,
             opdrachten: pandPrisma.opdrachten.map(
-                (opdrachtPrisma) => new Opdracht(opdrachtPrisma)
+                (opdrachtPrisma) => new Opdracht({
+                    opdrachtnummer: opdrachtPrisma.opdrachtnummer,
+                    datum: opdrachtPrisma.datum,
+                    puntentotaal: opdrachtPrisma.puntentotaal,
+                    status: opdrachtPrisma.status,
+                    medias: opdrachtPrisma.medias.map(
+                        (mediaPrisma) => new Media({
+                            type: mediaPrisma.type,
+                            bestandslocatie: mediaPrisma.bestandslocatie,
+                            uploadDatum: mediaPrisma.uploadDatum,
+                            opdrachtId: mediaPrisma.opdrachtId,
+                        })
+                    ),
+                    realtorId: opdrachtPrisma.realtorId,
+                    pilotId: opdrachtPrisma.pilotId,
+                })
             ),
         });
     } catch (error) {
@@ -44,7 +63,6 @@ const getPandById = async (id: number): Promise<Pand | null> => {
         return null;
     }
 };
-
 const createPand = async (newPandData: any): Promise<Pand> => {
     const newPand = new Pand({
         adres: newPandData.adres,
@@ -80,7 +98,11 @@ const createPand = async (newPandData: any): Promise<Pand> => {
         },
         include: {
             user: true,
-            opdrachten: true,
+            opdrachten: {
+                include: {
+                    medias: true,
+                },
+            },
         },
     });
 
@@ -90,7 +112,22 @@ const createPand = async (newPandData: any): Promise<Pand> => {
         beschrijving: createdPandPrisma.beschrijving,
         userIdMakelaar: createdPandPrisma.userIdMakelaar,
         opdrachten: createdPandPrisma.opdrachten.map(
-            (opdrachtPrisma) => new Opdracht(opdrachtPrisma)
+            (opdrachtPrisma) => new Opdracht({
+                opdrachtnummer: opdrachtPrisma.opdrachtnummer,
+                datum: opdrachtPrisma.datum,
+                puntentotaal: opdrachtPrisma.puntentotaal,
+                status: opdrachtPrisma.status,
+                medias: opdrachtPrisma.medias.map(
+                    (mediaPrisma) => new Media({
+                        type: mediaPrisma.type,
+                        bestandslocatie: mediaPrisma.bestandslocatie,
+                        uploadDatum: mediaPrisma.uploadDatum,
+                        opdrachtId: mediaPrisma.opdrachtId,
+                    })
+                ),
+                realtorId: opdrachtPrisma.realtorId,
+                pilotId: opdrachtPrisma.pilotId,
+            })
         ),
     });
 };

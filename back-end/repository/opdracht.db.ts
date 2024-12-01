@@ -1,7 +1,7 @@
 import { Opdracht } from '../model/opdracht';
 import { Media } from '../model/media';
 import { Beoordeling } from '../model/beoordeling';
-
+import database from "../util/database";
 
 const opdrachten: Opdracht[] = [
     new Opdracht({
@@ -51,9 +51,15 @@ const opdrachten: Opdracht[] = [
     }),
 ];
 
-const getAllOpdrachten = (): Opdracht[] => {
-    return opdrachten;
-};
+const getAllOpdrachten = async (): Promise<Opdracht[]> => {
+    const opdrachtenPrisma = await database.opdracht.findMany({
+        include: {
+            medias: true,
+        },
+    });
+    return opdrachtenPrisma.map((opdrachtPrisma) => Opdracht.from(opdrachtPrisma));
+}
+
 
 const getOpdrachtById = (id: number): Opdracht | null => {
     return opdrachten.find((opdracht) => opdracht.getOpdrachtnummer() === id) || null;
@@ -80,10 +86,18 @@ const getOpdrachtenByRealtorId = (realtorId: number): Opdracht[] => {
     return opdrachten.filter(opdracht => opdracht.getRealtorId() === realtorId);
 };
 
-const getCompletedOpdrachtenByPilotId = (pilotId: number): Opdracht[] => {
-    return opdrachten.filter(opdracht => opdracht.pilotId === pilotId && opdracht.getStatus() === 'Afgerond');
+const getCompletedOpdrachtenByPilotId = async (pilotId: number): Promise<Opdracht[]> => {
+    const opdrachtenPrisma = await database.opdracht.findMany({
+        where: {
+            pilotId: pilotId,
+            status: 'Completed',
+        },
+        include: {
+            medias: true,
+        },
+    });
+    return opdrachtenPrisma.map((opdrachtPrisma) => Opdracht.from(opdrachtPrisma));
 };
-
 const updateOpdracht = (updatedOpdracht: Opdracht): Opdracht => {
     const index = opdrachten.findIndex((o) => o.getOpdrachtnummer() === updatedOpdracht.getOpdrachtnummer());
     if (index !== -1) {

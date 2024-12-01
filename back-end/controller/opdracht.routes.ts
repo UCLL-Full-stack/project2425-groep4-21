@@ -242,15 +242,15 @@ opdrachtRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) 
  *       500:
  *         description: Server error
  */
-opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { pilotId, opdrachtnummer } = req.body;
-        const opdracht = await OpdrachtService.bookDronePilot({ pilotId, opdrachtnummer });
-        res.status(201).json(opdracht);
-    } catch (error) {
-        next(error);
-    }
-});
+// opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const { pilotId, opdrachtnummer } = req.body;
+//         const opdracht = await OpdrachtService.bookDronePilot({ pilotId, opdrachtnummer });
+//         res.status(201).json(opdracht);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 
 /**

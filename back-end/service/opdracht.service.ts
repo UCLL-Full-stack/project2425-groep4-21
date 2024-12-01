@@ -28,15 +28,15 @@ class OpdrachtService {
         return opdrachtDb.deleteOpdrachtById(id);
     }
 
-    static async bookDronePilot(details: { pilotId: number, opdrachtnummer: number }): Promise<Opdracht> {
-        const { pilotId, opdrachtnummer } = details;
-        const opdracht = await this.getOpdrachtById(opdrachtnummer);
-        if (!opdracht) {
-            throw new Error(`Opdracht ${opdrachtnummer} not found`);
-        }
-        opdracht.pilotId = pilotId;
-        return opdrachtDb.updateOpdracht(opdracht);
-    }
+    // static async bookDronePilot(details: { pilotId: number, opdrachtnummer: number }): Promise<Opdracht> {
+    //     const { pilotId, opdrachtnummer } = details;
+    //     const opdracht = await this.getOpdrachtById(opdrachtnummer);
+    //     if (!opdracht) {
+    //         throw new Error(`Opdracht ${opdrachtnummer} not found`);
+    //     }
+    //     opdracht.getPilotId() = pilotId;
+    //     return opdrachtDb.updateOpdracht(opdracht);
+    // }
 
     static async filterPilotsByRating(rating: number): Promise<User[]> {
         return userDb.getUsersByRoleAndRating('pilot', rating);
@@ -44,7 +44,7 @@ class OpdrachtService {
 
     static async getHiredPilots(realtorId: number): Promise<User[]> {
         const opdrachten = opdrachtDb.getOpdrachtenByRealtorId(realtorId);
-        const pilotIds = opdrachten.map(opdracht => opdracht.pilotId).filter((id): id is number => id !== undefined);
+        const pilotIds = opdrachten.map(opdracht => opdracht.getPilotId()).filter((id): id is number => id !== undefined);
         return userDb.getUsersByIdsAndRole(pilotIds, 'pilot');
     }
 
