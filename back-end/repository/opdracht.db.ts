@@ -61,8 +61,17 @@ const getAllOpdrachten = async (): Promise<Opdracht[]> => {
 }
 
 
-const getOpdrachtById = (id: number): Opdracht | null => {
-    return opdrachten.find((opdracht) => opdracht.getOpdrachtnummer() === id) || null;
+const getOpdrachtById = async (id: number): Promise<Opdracht | null> => {
+    const opdrachtPrisma = await database.opdracht.findUnique({
+        where: { opdrachtnummer: id },
+        include: { medias: true },
+    });
+
+    if (!opdrachtPrisma) {
+        return null;
+    }
+
+    return Opdracht.from(opdrachtPrisma);
 };
 
 
