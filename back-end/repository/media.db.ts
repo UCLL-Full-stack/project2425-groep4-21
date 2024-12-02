@@ -37,9 +37,22 @@ const getAllMedia = async (): Promise<Media[]> => {
     }));
 };
 
-const getMediaById = (id: number): Media | null => {
-    const media = medias[id];
-    return media || null;
+const getMediaById = async (id: number): Promise<Media | null> => {
+    const mediaPrisma = await database.media.findUnique({
+        where: { id: id },
+    });
+
+    if (!mediaPrisma) {
+        return null;
+    }
+
+    return new Media({
+        mediaId: mediaPrisma.id,
+        type: mediaPrisma.type,
+        bestandslocatie: mediaPrisma.bestandslocatie,
+        uploadDatum: mediaPrisma.uploadDatum,
+        opdrachtId: mediaPrisma.opdrachtId,
+    });
 };
 
 const createMedia = (newMedia: Media): Media => {
