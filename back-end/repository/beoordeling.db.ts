@@ -31,11 +31,29 @@ const getAllBeoordelingen = async (): Promise<Beoordeling[]> => {
 
 
 
-const getBeoordelingById = (id: number): Beoordeling | null => {
-    const beoordeling = beoordelingen.find((b) => b.getBeoordelingId() === id);
-    return beoordeling || null;
-};
+const getBeoordelingById = async (id: number): Promise<Beoordeling | null> => {
+    const beoordelingPrisma = await database.beoordeling.findUnique({
+        where: { beoordelingId: id },
+        include: {
+            userBeoordeling: {
+                include: {
+                    user: true,
+                },
+            },
+        },
+    });
 
+    if (!beoordelingPrisma) {
+        return null;
+    }
+
+    return new Beoordeling({
+        beoordelingId: beoordelingPrisma.beoordelingId,
+        score: beoordelingPrisma.score,
+        opmerkingen: beoordelingPrisma.opmerkingen,
+        userId: beoordelingPrisma.userBeoordeling.length > 0 ? beoordelingPrisma.userBeoordeling[0].userId : 0,
+    });
+};
 const createBeoordeling = (newBeoordeling: Beoordeling): Beoordeling => {
     beoordelingen.push(newBeoordeling);
     return newBeoordeling;
