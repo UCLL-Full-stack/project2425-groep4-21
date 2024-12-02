@@ -110,6 +110,10 @@ export class Opdracht {
         return this.medias;
     }
 
+    setPilotId(pilotId: number) {
+        this.pilotId = pilotId;
+    }
+
     addMediaToOpdracht(media: Media) {
         this.medias.push(media);
     }

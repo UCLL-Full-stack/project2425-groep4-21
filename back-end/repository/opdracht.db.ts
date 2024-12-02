@@ -157,6 +157,7 @@ const deleteOpdrachtById = async (id: number): Promise<boolean> => {
     }
 };
 
+//TODO what is this? still have to implement this
 const getOpdrachtenByRealtorId = (realtorId: number): Opdracht[] => {
     return opdrachten.filter(opdracht => opdracht.getRealtorId() === realtorId);
 };
@@ -174,12 +175,47 @@ const getCompletedOpdrachtenByPilotId = async (pilotId: number): Promise<Opdrach
     });
     return opdrachtenPrisma.map((opdrachtPrisma) => Opdracht.from(opdrachtPrisma));
 };
-const updateOpdracht = (updatedOpdracht: Opdracht): Opdracht => {
-    const index = opdrachten.findIndex((o) => o.getOpdrachtnummer() === updatedOpdracht.getOpdrachtnummer());
-    if (index !== -1) {
-        opdrachten[index] = updatedOpdracht;
-    }
-    return updatedOpdracht;
+
+const updateOpdracht = async (updatedOpdracht: Opdracht): Promise<Opdracht> => {
+    const updatedOpdrachtPrisma = await database.opdracht.update({
+        where: { opdrachtnummer: updatedOpdracht.getOpdrachtnummer() },
+        data: {
+            datum: updatedOpdracht.getDatum(),
+            puntentotaal: updatedOpdracht.getPuntentotaal(),
+            status: updatedOpdracht.getStatus(),
+            realtorId: updatedOpdracht.getRealtorId()!,
+            pilotId: updatedOpdracht.getPilotId()!,
+            medias: {
+                update: updatedOpdracht.getMedias().map((media) => ({
+                    where: { id: media.getMediaId() },
+                    data: {
+                        type: media.getType(),
+                        bestandslocatie: media.getBestandslocatie(),
+                        uploadDatum: media.getUploadDatum(),
+                    },
+                })),
+            },
+        },
+        include: {
+            medias: true,
+        },
+    });
+
+    return new Opdracht({
+        opdrachtnummer: updatedOpdrachtPrisma.opdrachtnummer,
+        datum: updatedOpdrachtPrisma.datum,
+        puntentotaal: updatedOpdrachtPrisma.puntentotaal,
+        status: updatedOpdrachtPrisma.status,
+        medias: updatedOpdrachtPrisma.medias.map((mediaPrisma: any) => new Media({
+            mediaId: mediaPrisma.id,
+            type: mediaPrisma.type,
+            bestandslocatie: mediaPrisma.bestandslocatie,
+            uploadDatum: mediaPrisma.uploadDatum,
+            opdrachtId: mediaPrisma.opdrachtId,
+        })),
+        realtorId: updatedOpdrachtPrisma.realtorId,
+        pilotId: updatedOpdrachtPrisma.pilotId,
+    });
 };
 
 const getAssignmentById = async (OpdrachtId: number): Promise<Opdracht | null> => {

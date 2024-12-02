@@ -122,7 +122,6 @@ opdrachtRouter.get('/hired-pilots', async (req: Request, res: Response, next: Ne
     }
 });
 
-
 /**
  * @swagger
  * /opdrachten/{id}:
@@ -254,15 +253,15 @@ opdrachtRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
  *       500:
  *         description: Server error
  */
-// opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const { pilotId, opdrachtnummer } = req.body;
-//         const opdracht = await OpdrachtService.bookDronePilot({ pilotId, opdrachtnummer });
-//         res.status(201).json(opdracht);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
+opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { pilotId, opdrachtnummer } = req.body;
+        const opdracht = await OpdrachtService.bookDronePilot({ pilotId, opdrachtnummer });
+        res.status(201).json(opdracht);
+    } catch (error) {
+        next(error);
+    }
+});
 
 
 /**
@@ -306,34 +305,37 @@ opdrachtRouter.get('/completed-assignments', async (req: Request, res: Response,
     }
 });
 
-/**
- * @swagger
- * /opdrachten/{opdrachtId}/beoordeling:
- *   get:
- *     summary: Get the assessment of a specific assignment
- *     tags:
- *       - Opdrachten
- *     parameters:
- *       - in: path
- *         name: opdrachtId
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID of the opdracht
- *     responses:
- *       200:
- *         description: Assignment assessment
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Beoordeling'
- *       404:
- *         description: Assignment or assessment not found
- *       400:
- *         description: Invalid order ID
- *       500:
- *         description: Serverfout
- */
+//TODO do we still iplement this? beoordeling or not?
+//
+// /**
+//  * @swagger
+//  * /opdrachten/{opdrachtId}/beoordeling:
+//  *   get:
+//  *     summary: Get the assessment of a specific assignment
+//  *     tags:
+//  *       - Opdrachten
+//  *     parameters:
+//  *       - in: path
+//  *         name: opdrachtId
+//  *         schema:
+//  *           type: integer
+//  *         required: true
+//  *         description: ID of the opdracht
+//  *     responses:
+//  *       200:
+//  *         description: Assignment assessment
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               $ref: '#/components/schemas/Beoordeling'
+//  *       404:
+//  *         description: Assignment or assessment not found
+//  *       400:
+//  *         description: Invalid order ID
+//  *       500:
+//  *         description: Serverfout
+//  */
+
 
 // opdrachtRouter.get('/:opdrachtId/beoordeling', async (req: Request, res: Response, next: NextFunction) => {
 //     try {

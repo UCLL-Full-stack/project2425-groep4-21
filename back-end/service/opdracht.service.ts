@@ -28,15 +28,15 @@ class OpdrachtService {
         return await opdrachtDb.deleteOpdrachtById(id);
     }
 
-    // static async bookDronePilot(details: { pilotId: number, opdrachtnummer: number }): Promise<Opdracht> {
-    //     const { pilotId, opdrachtnummer } = details;
-    //     const opdracht = await this.getOpdrachtById(opdrachtnummer);
-    //     if (!opdracht) {
-    //         throw new Error(`Opdracht ${opdrachtnummer} not found`);
-    //     }
-    //     opdracht.getPilotId() = pilotId;
-    //     return opdrachtDb.updateOpdracht(opdracht);
-    // }
+    static async bookDronePilot(details: { pilotId: number, opdrachtnummer: number }): Promise<Opdracht> {
+        const { pilotId, opdrachtnummer } = details;
+        const opdracht = await this.getOpdrachtById(opdrachtnummer);
+        if (!opdracht) {
+            throw new Error(`Opdracht ${opdrachtnummer} not found`);
+        }
+        opdracht.setPilotId(pilotId);
+        return opdrachtDb.updateOpdracht(opdracht);
+    }
 
     static async filterPilotsByRating(rating: number): Promise<User[]> {
         return userDb.getUsersByRoleAndRating('pilot', rating);
@@ -52,6 +52,7 @@ class OpdrachtService {
         return opdrachtDb.getCompletedOpdrachtenByPilotId(pilotId);
     }
 
+    //TODO do we still implement this? beoordeling or not?
     // static async getBeoordelingByAssignmentId(assignmentId: number): Promise<string | null> {
     //     const assignment = await opdrachtDb.getAssignmentById(assignmentId);
     //     if (!assignment) {

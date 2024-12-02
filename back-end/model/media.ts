@@ -98,4 +98,8 @@ export class Media {
     getOpdrachtId(): number {
         return this.opdrachtId;
     }
+
+    getMediaId(): number | undefined {
+        return this.mediaId;
+    }
 }
