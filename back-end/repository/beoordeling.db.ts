@@ -1,4 +1,5 @@
 import { Beoordeling } from '../model/beoordeling';
+import database from "../util/database";
 
 const beoordelingen = [
     new Beoordeling({ beoordelingId: 1, score: 8, opmerkingen: 'Good work', userId: 0 }),
@@ -9,9 +10,26 @@ const beoordelingen = [
     new Beoordeling({ beoordelingId: 6, score: 9, opmerkingen: 'Above expectations', userId: 3 }),
 ];
 
-const getAllBeoordelingen = (): Beoordeling[] => {
-    return beoordelingen;
+const getAllBeoordelingen = async (): Promise<Beoordeling[]> => {
+    const beoordelingenPrisma = await database.beoordeling.findMany({
+        include: {
+            userBeoordeling: {
+                include: {
+                    user: true,
+                },
+            },
+        },
+    });
+
+    return beoordelingenPrisma.map(beoordelingPrisma => new Beoordeling({
+        beoordelingId: beoordelingPrisma.beoordelingId,
+        score: beoordelingPrisma.score,
+        opmerkingen: beoordelingPrisma.opmerkingen,
+        userId: beoordelingPrisma.userId,
+    }));
 };
+
+
 
 const getBeoordelingById = (id: number): Beoordeling | null => {
     const beoordeling = beoordelingen.find((b) => b.getBeoordelingId() === id);

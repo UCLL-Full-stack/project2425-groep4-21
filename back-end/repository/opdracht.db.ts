@@ -12,7 +12,6 @@ const getAllOpdrachten = async (): Promise<Opdracht[]> => {
     return opdrachtenPrisma.map((opdrachtPrisma) => Opdracht.from(opdrachtPrisma));
 }
 
-
 const getOpdrachtById = async (id: number): Promise<Opdracht | null> => {
     const opdrachtPrisma = await database.opdracht.findUnique({
         where: { opdrachtnummer: id },
