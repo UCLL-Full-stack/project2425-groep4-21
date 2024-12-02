@@ -82,7 +82,16 @@ const deleteBeoordelingById = async (id: number): Promise<boolean> => {
     }
 };
 const getBeoordelingenByUserId = async (userId: number): Promise<Beoordeling[]> => {
-    return beoordelingen.filter(beoordeling => beoordeling.getUserId() === userId);
+    const beoordelingenPrisma = await database.beoordeling.findMany({
+        where: { userId: userId },
+    });
+
+    return beoordelingenPrisma.map(beoordelingPrisma => new Beoordeling({
+        beoordelingId: beoordelingPrisma.beoordelingId,
+        score: beoordelingPrisma.score,
+        opmerkingen: beoordelingPrisma.opmerkingen,
+        userId: beoordelingPrisma.userId,
+    }));
 };
 
 export default {
