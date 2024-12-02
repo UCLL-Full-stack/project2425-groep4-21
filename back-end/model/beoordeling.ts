@@ -1,10 +1,10 @@
 import { Beoordeling as BeoordelingPrisma } from '@prisma/client';
 
 export class Beoordeling {
-    public beoordelingId?: number;
-    public score: number;
-    public opmerkingen: string;
-    public userId: number;
+    private beoordelingId?: number;
+    private score: number;
+    private opmerkingen: string;
+    private userId: number;
 
     constructor(beoordeling: {
         beoordelingId?: number;
@@ -49,7 +49,6 @@ export class Beoordeling {
             throw new Error('Comments cannot exceed 500 characters.');
         }
         if (!Number.isInteger(userId) || userId < 0) {
-            console.log((userId))
             throw new Error('User ID must be a non-negative integer.');
         }
     }

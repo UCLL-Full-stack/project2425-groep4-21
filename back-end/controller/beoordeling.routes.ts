@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { BeoordelingService } from '../service/beoordeling.service';
+import {Beoordeling} from "../model/beoordeling";
 
 const beoordelingRouter = express.Router();
 
@@ -116,10 +117,18 @@ beoordelingRouter.get('/:id', async (req: Request, res: Response, next: NextFunc
  *       500:
  *         description: Server error
  */
-beoordelingRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+beoordelingRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newBeoordeling = req.body;
-        const beoordeling = BeoordelingService.createBeoordeling(newBeoordeling);
+        const newBeoordeling = new Beoordeling({
+            beoordelingId: req.body.beoordelingId,
+            score: req.body.score,
+            opmerkingen: req.body.opmerkingen,
+            userId: req.body.userId,
+        });
+
+        const beoordeling = await BeoordelingService.createBeoordeling(newBeoordeling);
+
+        // Respond with the created beoordeling
         res.status(200).json(beoordeling);
     } catch (error) {
         next(error);

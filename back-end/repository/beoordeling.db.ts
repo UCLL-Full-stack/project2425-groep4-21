@@ -29,8 +29,6 @@ const getAllBeoordelingen = async (): Promise<Beoordeling[]> => {
     }));
 };
 
-
-
 const getBeoordelingById = async (id: number): Promise<Beoordeling | null> => {
     const beoordelingPrisma = await database.beoordeling.findUnique({
         where: { beoordelingId: id },
@@ -54,9 +52,22 @@ const getBeoordelingById = async (id: number): Promise<Beoordeling | null> => {
         userId: beoordelingPrisma.userBeoordeling.length > 0 ? beoordelingPrisma.userBeoordeling[0].userId : 0,
     });
 };
-const createBeoordeling = (newBeoordeling: Beoordeling): Beoordeling => {
-    beoordelingen.push(newBeoordeling);
-    return newBeoordeling;
+
+const createBeoordeling = async (newBeoordeling: Beoordeling): Promise<Beoordeling> => {
+    const createdBeoordeling = await database.beoordeling.create({
+        data: {
+            score: newBeoordeling.getScore(),
+            opmerkingen: newBeoordeling.getOpmerkingen(),
+            userId: newBeoordeling.getUserId(),
+        },
+    });
+
+    return new Beoordeling({
+        beoordelingId: createdBeoordeling.beoordelingId,
+        score: createdBeoordeling.score,
+        opmerkingen: createdBeoordeling.opmerkingen,
+        userId: createdBeoordeling.userId,
+    });
 };
 
 const deleteBeoordelingById = async (id: number): Promise<boolean> => {

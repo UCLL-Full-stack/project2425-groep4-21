@@ -70,7 +70,7 @@ const deleteUserById = (id: number): boolean => {
 };
 
 const getUsersByRoleAndRating = (role: string, rating: number): User[] => {
-    return users.filter(user => user.getRol() === role && user.getBeoordelingen().some(b => b.score >= rating));
+    return users.filter(user => user.getRol() === role && user.getBeoordelingen().some(b => b.getScore() >= rating));
 };
 
 const getUsersByIdsAndRole = (ids: number[], role: string): User[] => {

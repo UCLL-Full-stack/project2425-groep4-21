@@ -15,8 +15,8 @@ class BeoordelingService {
         return beoordeling;
     }
 
-    static createBeoordeling(newBeoordeling: Beoordeling): Beoordeling {
-        return beoordelingDb.createBeoordeling(newBeoordeling);
+    static async createBeoordeling(newBeoordeling: Beoordeling): Promise<Beoordeling> {
+        return await beoordelingDb.createBeoordeling(newBeoordeling);
     }
 
     static async deleteBeoordelingById(id: number): Promise<boolean> {
