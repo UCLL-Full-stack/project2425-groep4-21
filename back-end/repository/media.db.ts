@@ -1,4 +1,5 @@
 import { Media } from '../model/media';
+import database from "../util/database";
 
 const medias = [
     new Media({
@@ -24,8 +25,16 @@ const medias = [
     }),
 ];
 
-const getAllMedia = (): Media[] => {
-    return medias;
+const getAllMedia = async (): Promise<Media[]> => {
+    const mediasPrisma = await database.media.findMany();
+
+    return mediasPrisma.map(mediaPrisma => new Media({
+        mediaId: mediaPrisma.id,
+        type: mediaPrisma.type,
+        bestandslocatie: mediaPrisma.bestandslocatie,
+        uploadDatum: mediaPrisma.uploadDatum,
+        opdrachtId: mediaPrisma.opdrachtId,
+    }));
 };
 
 const getMediaById = (id: number): Media | null => {
