@@ -59,15 +59,17 @@ const createBeoordeling = (newBeoordeling: Beoordeling): Beoordeling => {
     return newBeoordeling;
 };
 
-const deleteBeoordelingById = (id: number): boolean => {
-    const beoordelingIndex = beoordelingen.findIndex((b) => b.getBeoordelingId() === id);
-    if (beoordelingIndex !== -1) {
-        beoordelingen.splice(beoordelingIndex, 1);
+const deleteBeoordelingById = async (id: number): Promise<boolean> => {
+    try {
+        await database.beoordeling.delete({
+            where: { beoordelingId: id },
+        });
         return true;
+    } catch (error) {
+        console.error(error);
+        return false;
     }
-    return false;
 };
-
 const getBeoordelingenByUserId = async (userId: number): Promise<Beoordeling[]> => {
     return beoordelingen.filter(beoordeling => beoordeling.getUserId() === userId);
 };

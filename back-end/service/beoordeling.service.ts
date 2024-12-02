@@ -19,8 +19,8 @@ class BeoordelingService {
         return beoordelingDb.createBeoordeling(newBeoordeling);
     }
 
-    static deleteBeoordelingById(id: number): boolean {
-        return beoordelingDb.deleteBeoordelingById(id);
+    static async deleteBeoordelingById(id: number): Promise<boolean> {
+        return await beoordelingDb.deleteBeoordelingById(id);
     }
 
     static async getBeoordelingenByPilotId(pilotId: number): Promise<Beoordeling[]> {

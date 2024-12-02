@@ -148,14 +148,14 @@ beoordelingRouter.post('/', (req: Request, res: Response, next: NextFunction) =>
  *       500:
  *         description: Server error
  */
-beoordelingRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+beoordelingRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id, 10);
-        const success = BeoordelingService.deleteBeoordelingById(id);
+        const success = await BeoordelingService.deleteBeoordelingById(id);
         if (success) {
-            res.status(200).json({ message: 'Beoordeling deleted successfully' });
+            res.status(200).json({message: 'Beoordeling deleted successfully'});
         } else {
-            res.status(404).json({ message: 'Beoordeling not found' });
+            res.status(404).json({message: 'Beoordeling not found'});
         }
     } catch (error) {
         next(error);
