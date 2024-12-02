@@ -43,7 +43,7 @@ class OpdrachtService {
     }
 
     static async getHiredPilots(realtorId: number): Promise<User[]> {
-        const opdrachten = opdrachtDb.getOpdrachtenByRealtorId(realtorId);
+        const opdrachten = await opdrachtDb.getOpdrachtenByRealtorId(realtorId);
         const pilotIds = opdrachten.map(opdracht => opdracht.getPilotId()).filter((id): id is number => id !== undefined);
         return userDb.getUsersByIdsAndRole(pilotIds, 'pilot');
     }

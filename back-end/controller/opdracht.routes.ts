@@ -263,7 +263,6 @@ opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunct
     }
 });
 
-
 /**
  * @swagger
  * /opdrachten/completed-assignments:

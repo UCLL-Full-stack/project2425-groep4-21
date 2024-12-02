@@ -3,54 +3,6 @@ import { Media } from '../model/media';
 import { Beoordeling } from '../model/beoordeling';
 import database from "../util/database";
 
-const opdrachten: Opdracht[] = [
-    new Opdracht({
-        datum: new Date(),
-        puntentotaal: 95,
-        status: 'Pending',
-        medias: [
-            new Media({
-                type: 'image',
-                bestandslocatie: 'https://example.com/image1.jpg',
-                uploadDatum: new Date(),
-                opdrachtId: 1,
-            }),
-        ],
-        realtorId: 1,
-        pilotId: 1,
-    }),
-    new Opdracht({
-        datum: new Date(),
-        puntentotaal: 100,
-        status: 'In Progress',
-        medias: [
-            new Media({
-                type: 'video',
-                bestandslocatie: 'https://example.com/video1.mp4',
-                uploadDatum: new Date(),
-                opdrachtId: 2,
-            }),
-        ],
-        realtorId: 2,
-        pilotId: 2,
-    }),
-    new Opdracht({
-        datum: new Date(),
-        puntentotaal: 70,
-        status: 'Completed',
-        medias: [
-            new Media({
-                type: 'image',
-                bestandslocatie: 'https://example.com/image2.jpg',
-                uploadDatum: new Date(),
-                opdrachtId: 3,
-            }),
-        ],
-        realtorId: 3,
-        pilotId: 3,
-    }),
-];
-
 const getAllOpdrachten = async (): Promise<Opdracht[]> => {
     const opdrachtenPrisma = await database.opdracht.findMany({
         include: {
@@ -157,9 +109,13 @@ const deleteOpdrachtById = async (id: number): Promise<boolean> => {
     }
 };
 
-//TODO what is this? still have to implement this
-const getOpdrachtenByRealtorId = (realtorId: number): Opdracht[] => {
-    return opdrachten.filter(opdracht => opdracht.getRealtorId() === realtorId);
+const getOpdrachtenByRealtorId = async (realtorId: number): Promise<Opdracht[]> => {
+    const opdrachtenPrisma = await database.opdracht.findMany({
+        where: { realtorId: realtorId },
+        include: { medias: true },
+    });
+
+    return opdrachtenPrisma.map((opdrachtPrisma) => Opdracht.from(opdrachtPrisma));
 };
 
 //TODO: fix this
@@ -217,11 +173,11 @@ const updateOpdracht = async (updatedOpdracht: Opdracht): Promise<Opdracht> => {
         pilotId: updatedOpdrachtPrisma.pilotId,
     });
 };
-
-const getAssignmentById = async (OpdrachtId: number): Promise<Opdracht | null> => {
-    const opdracht = opdrachten.find(a => a.getOpdrachtnummer() === OpdrachtId);
-    return opdracht || null;
-};
+//TODO for later maybe?
+// const getAssignmentById = async (OpdrachtId: number): Promise<Opdracht | null> => {
+//     const opdracht = opdrachten.find(a => a.getOpdrachtnummer() === OpdrachtId);
+//     return opdracht || null;
+// };
 
 export default {
     getAllOpdrachten,
@@ -231,5 +187,5 @@ export default {
     getOpdrachtenByRealtorId,
     getCompletedOpdrachtenByPilotId,
     updateOpdracht,
-    getAssignmentById
+    //getAssignmentById
 };
