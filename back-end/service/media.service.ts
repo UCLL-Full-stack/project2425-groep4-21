@@ -19,8 +19,8 @@ class MediaService {
         return mediaDb.createMedia(newMedia);
     }
 
-    static deleteMediaById(id: number): boolean {
-        return mediaDb.deleteMediaById(id);
+    static async deleteMediaById(id: number): Promise<boolean> {
+        return await mediaDb.deleteMediaById(id);
     }
 
     // static async getMediaByPropertyId(propertyId: number): Promise<Media[] | null> {

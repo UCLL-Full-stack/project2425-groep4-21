@@ -146,14 +146,14 @@ mediaRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
  *       500:
  *         description: Server error
  */
-mediaRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+mediaRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = parseInt(req.params.id, 10);
-        const success = MediaService.deleteMediaById(id);
+        const success = await MediaService.deleteMediaById(id);
         if (success) {
-            res.status(200).json({ message: 'Media deleted successfully' });
+            res.status(200).json({message: 'Media deleted successfully'});
         } else {
-            res.status(404).json({ message: 'Media not found' });
+            res.status(404).json({message: 'Media not found'});
         }
     } catch (error) {
         next(error);

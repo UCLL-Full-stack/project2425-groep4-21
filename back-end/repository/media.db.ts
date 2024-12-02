@@ -60,12 +60,16 @@ const createMedia = (newMedia: Media): Media => {
     return newMedia;
 };
 
-const deleteMediaById = (id: number): boolean => {
-    if (id >= 0 && id < medias.length) {
-        medias.splice(id, 1);
+const deleteMediaById = async (id: number): Promise<boolean> => {
+    try {
+        await database.media.delete({
+            where: { id: id },
+        });
         return true;
+    } catch (error) {
+        console.error(error);
+        return false;
     }
-    return false;
 };
 
 const getMediaByOpdrachtId = async (opdrachtId: number): Promise<Media[]> => {
