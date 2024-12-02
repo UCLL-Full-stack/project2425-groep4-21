@@ -1,15 +1,6 @@
 import { Beoordeling } from '../model/beoordeling';
 import database from "../util/database";
 
-const beoordelingen = [
-    new Beoordeling({ beoordelingId: 1, score: 8, opmerkingen: 'Good work', userId: 0 }),
-    new Beoordeling({ beoordelingId: 2, score: 9, opmerkingen: 'Fast and efficient', userId: 0 }),
-    new Beoordeling({ beoordelingId: 3, score: 7, opmerkingen: 'Friendly service', userId: 1 }),
-    new Beoordeling({ beoordelingId: 4, score: 8, opmerkingen: 'Professional', userId: 1 }),
-    new Beoordeling({ beoordelingId: 5, score: 10, opmerkingen: 'Excellent', userId: 3 }),
-    new Beoordeling({ beoordelingId: 6, score: 9, opmerkingen: 'Above expectations', userId: 3 }),
-];
-
 const getAllBeoordelingen = async (): Promise<Beoordeling[]> => {
     const beoordelingenPrisma = await database.beoordeling.findMany({
         include: {
