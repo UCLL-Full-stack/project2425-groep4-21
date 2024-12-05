@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { MediaService } from '../service/media.service';
+import {Media} from "../model/media";
 
 const mediaRouter = express.Router();
 
@@ -25,6 +26,9 @@ const mediaRouter = express.Router();
  *              type: string
  *              format: date-time
  *              description: The upload date of the media.
+ *            opdrachtId:
+ *              type: integer
+ *              description: ID of the assignment to which the media belongs.
  */
 
 /**
@@ -114,10 +118,26 @@ mediaRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
  *       500:
  *         description: Server error
  */
-mediaRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+mediaRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newMedia = req.body;
-        const media = MediaService.createMedia(newMedia);
+        const { mediaId, type, bestandslocatie, uploadDatum, opdrachtId } = req.body;
+
+        const parsedUploadDatum = new Date(uploadDatum);
+
+        if (isNaN(parsedUploadDatum.getTime())) {
+            return res.status(400).json({ message: 'Invalid uploadDatum format' });
+        }
+
+        const newMedia = new Media({
+            mediaId: mediaId,
+            type: type,
+            bestandslocatie: bestandslocatie,
+            uploadDatum: parsedUploadDatum,
+            opdrachtId: opdrachtId,
+        });
+
+        const media = await MediaService.createMedia(newMedia);
+
         res.status(200).json(media);
     } catch (error) {
         next(error);

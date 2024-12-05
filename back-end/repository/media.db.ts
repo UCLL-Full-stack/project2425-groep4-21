@@ -55,9 +55,23 @@ const getMediaById = async (id: number): Promise<Media | null> => {
     });
 };
 
-const createMedia = (newMedia: Media): Media => {
-    medias.push(newMedia);
-    return newMedia;
+const createMedia = async (newMedia: Media): Promise<Media> => {
+    const createdMedia = await database.media.create({
+        data: {
+            type: newMedia.getType(),
+            bestandslocatie: newMedia.getBestandslocatie(),
+            uploadDatum: newMedia.getUploadDatum(),
+            opdrachtId: newMedia.getOpdrachtId(),
+        },
+    });
+
+    return new Media({
+        mediaId: createdMedia.id,
+        type: createdMedia.type,
+        bestandslocatie: createdMedia.bestandslocatie,
+        uploadDatum: createdMedia.uploadDatum,
+        opdrachtId: createdMedia.opdrachtId,
+    });
 };
 
 const deleteMediaById = async (id: number): Promise<boolean> => {
@@ -75,9 +89,6 @@ const deleteMediaById = async (id: number): Promise<boolean> => {
 const getMediaByOpdrachtId = async (opdrachtId: number): Promise<Media[]> => {
     return medias.filter((media) => media.getOpdrachtId() === opdrachtId);
 };
-
-
-
 
 export default {
     getAllMedia,
