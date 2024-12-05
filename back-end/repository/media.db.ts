@@ -1,30 +1,6 @@
 import { Media } from '../model/media';
 import database from "../util/database";
 
-const medias = [
-    new Media({
-        mediaId: 1,
-        type: 'image',
-        bestandslocatie: 'https://example.com/image1.jpg',
-        uploadDatum: new Date(),
-        opdrachtId: 1,
-    }),
-    new Media({
-        mediaId: 2,
-        type: 'video',
-        bestandslocatie: 'https://example.com/video1.mp4',
-        uploadDatum: new Date(),
-        opdrachtId: 1,
-    }),
-    new Media({
-        mediaId: 3,
-        type: 'image',
-        bestandslocatie: 'https://example.com/image2.jpg',
-        uploadDatum: new Date(),
-        opdrachtId: 2,
-    }),
-];
-
 const getAllMedia = async (): Promise<Media[]> => {
     const mediasPrisma = await database.media.findMany();
 
@@ -87,7 +63,17 @@ const deleteMediaById = async (id: number): Promise<boolean> => {
 };
 
 const getMediaByOpdrachtId = async (opdrachtId: number): Promise<Media[]> => {
-    return medias.filter((media) => media.getOpdrachtId() === opdrachtId);
+    const mediasPrisma = await database.media.findMany({
+        where: { opdrachtId: opdrachtId },
+    });
+
+    return mediasPrisma.map(mediaPrisma => new Media({
+        mediaId: mediaPrisma.id,
+        type: mediaPrisma.type,
+        bestandslocatie: mediaPrisma.bestandslocatie,
+        uploadDatum: mediaPrisma.uploadDatum,
+        opdrachtId: mediaPrisma.opdrachtId,
+    }));
 };
 
 export default {
