@@ -1,6 +1,8 @@
 import { User } from '../model/user';
 import database from "../util/database";
 import { User as UserPrisma } from '@prisma/client';
+import {Pand} from "../model/pand";
+import {Opdracht} from "../model/opdracht";
 
 
 const users = [
@@ -65,9 +67,37 @@ const getAllUsers = async (): Promise<User[]> => {
     return usersPrisma.map(userPrisma => User.from(userPrisma));
 };
 
-const getUserById = (id: number): User | null => {
-    const user = users.find((u, index) => index === id);
-    return user || null;
+const getUserById = async (id: number): Promise<User | null> => {
+    const userPrisma = await database.user.findUnique({
+        where: { id: id },
+        include: {
+            panden: {
+                include: {
+                    opdrachten: true
+                }
+            },
+            opdrachten: true,
+            userBeoordeling: {
+                include: {
+                    beoordeling: true
+                }
+            },
+        },
+    });
+
+    if (!userPrisma) {
+        return null;
+    }
+
+    const panden = userPrisma.panden.map(pand => new Pand({
+        ...pand,
+        opdrachten: pand.opdrachten.map(opdracht => new Opdracht(opdracht))
+    }));
+
+    return User.from({
+        ...userPrisma,
+        panden
+    });
 };
 
 const createUser = (newUser: User): User => {

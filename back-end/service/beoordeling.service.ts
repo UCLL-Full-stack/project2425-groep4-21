@@ -24,7 +24,7 @@ class BeoordelingService {
     }
 
     static async getBeoordelingenByPilotId(pilotId: number): Promise<Beoordeling[]> {
-        const pilot = userDb.getUserById(pilotId);
+        const pilot = await userDb.getUserById(pilotId);
         if (!pilot || pilot.getRol() !== 'pilot') {
             throw new Error('Piloot niet gevonden');
         }
