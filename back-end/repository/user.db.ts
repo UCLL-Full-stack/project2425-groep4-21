@@ -100,6 +100,7 @@ const getUserById = async (id: number): Promise<User | null> => {
     });
 };
 
+
 const createUser = async (newUser: User): Promise<User> => {
     const createdUser = await database.user.create({
         data: {
@@ -139,7 +140,34 @@ const getUsersByIdsAndRole = (ids: number[], role: string): User[] => {
 };
 
 const getUsersByRole = async (role: 'pilot' | 'realtor' | 'admin'): Promise<User[]> => {
-    return users.filter(user => user.getRol() === role);
+    const usersPrisma = await database.user.findMany({
+        where: { rol: role },
+        include: {
+            panden: {
+                include: {
+                    opdrachten: true
+                }
+            },
+            opdrachten: true,
+            userBeoordeling: {
+                include: {
+                    beoordeling: true
+                }
+            },
+        },
+    });
+
+    return usersPrisma.map(userPrisma => {
+        const panden = userPrisma.panden.map(pand => new Pand({
+            ...pand,
+            opdrachten: pand.opdrachten.map(opdracht => new Opdracht(opdracht))
+        }));
+
+        return User.from({
+            ...userPrisma,
+            panden
+        });
+    });
 };
 
 export default {
