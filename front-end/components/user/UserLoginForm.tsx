@@ -87,7 +87,6 @@ const UserLoginForm: React.FC = () => {
                 </button>
             </form>
 
-            <p className="mt-3 text-sm text-gray-600">Name: {name}</p>
         </>
     );
 };
