@@ -1,7 +1,20 @@
 import Link from 'next/link';
 import styles from '@styles/header.module.css';
+import {useEffect, useState} from "react";
 
 const Header: React.FC = () => {
+    const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+
+    useEffect(() => {
+        const user = sessionStorage.getItem("loggedInUser");
+        setLoggedInUser(user);
+    }, []);
+
+    const handleLogout = () => {
+        sessionStorage.removeItem("loggedInUser");
+        setLoggedInUser(null);
+    };
+
     return (
         <header className={styles.header}>
             <a className={styles.title}>Drone360 App</a>
@@ -24,9 +37,26 @@ const Header: React.FC = () => {
                 <Link href="/user" className={styles.link}>
                     User
                 </Link>
-                <Link href="/login" className={styles.link}>
-                    Login
-                </Link>
+                {loggedInUser ? (
+                    <>
+                        <a
+                            onClick={handleLogout}
+                            className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer"
+                        >
+                            Logout
+                        </a>
+                        <div className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer">
+                            Welcome, {loggedInUser}!
+                        </div>
+                    </>
+                ) : (
+                    <Link
+                        href="/login"
+                        className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer"
+                    >
+                        Login
+                    </Link>
+                )}
             </nav>
         </header>
     );

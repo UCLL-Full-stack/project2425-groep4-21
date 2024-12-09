@@ -74,7 +74,7 @@ const UserLoginForm: React.FC = () => {
                         type="text"
                         value={name}
                         onChange={(event) => setName(event.target.value)}
-                        className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue:500 block w-full p-2.5"
+                        className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     />
                     {nameError && <p className="text-red-800 mt-1">{nameError}</p>}
                 </div>
