@@ -105,14 +105,18 @@ const createUser = (newUser: User): User => {
     return newUser;
 };
 
-const deleteUserById = (id: number): boolean => {
-    const userIndex = users.findIndex((u, index) => index === id);
-    if (userIndex !== -1) {
-        users.splice(userIndex, 1);
+const deleteUserById = async (id: number): Promise<boolean> => {
+    try {
+        await database.user.delete({
+            where: { id: id },
+        });
         return true;
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        return false;
     }
-    return false;
 };
+
 
 const getUsersByRoleAndRating = (role: string, rating: number): User[] => {
     return users.filter(user => user.getRol() === role && user.getBeoordelingen().some(b => b.getScore() >= rating));
