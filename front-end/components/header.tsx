@@ -24,6 +24,9 @@ const Header: React.FC = () => {
                 <Link href="/user" className={styles.link}>
                     User
                 </Link>
+                <Link href="/login" className={styles.link}>
+                    Login
+                </Link>
             </nav>
         </header>
     );

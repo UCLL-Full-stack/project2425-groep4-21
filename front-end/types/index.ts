@@ -44,6 +44,11 @@ export type Beoordeling = {
     userId: number;
 };
 
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
+};
+
 // export type AuthenticationResponse = {
 //     token: string;
 //     username: string;
