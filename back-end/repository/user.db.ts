@@ -1,4 +1,7 @@
 import { User } from '../model/user';
+import database from "../util/database";
+import { User as UserPrisma } from '@prisma/client';
+
 
 const users = [
     new User({
@@ -46,8 +49,20 @@ const users = [
     }),
 ];
 
-const getAllUsers = (): User[] => {
-    return users;
+const getAllUsers = async (): Promise<User[]> => {
+    const usersPrisma: UserPrisma[] = await database.user.findMany({
+        include: {
+            panden: true,
+            opdrachten: true,
+            userBeoordeling: {
+                include: {
+                    beoordeling: true
+                }
+            },
+        },
+    });
+
+    return usersPrisma.map(userPrisma => User.from(userPrisma));
 };
 
 const getUserById = (id: number): User | null => {

@@ -50,18 +50,22 @@ export class User {
     }
 
     static from({
-        id,
-        voornaam,
-        naam,
-        gebruikersnaam,
-        rol,
-        emailadres,
-        portfolio,
-        niveau,
-        bevoegdheden,
-        panden = [],
-        isVerified,
-    }: UserPrisma & { panden?: Pand[] }) {
+                    id,
+                    voornaam,
+                    naam,
+                    gebruikersnaam,
+                    rol,
+                    emailadres,
+                    portfolio,
+                    niveau,
+                    bevoegdheden,
+                    panden = [],
+                    isVerified,
+                }: UserPrisma & { panden?: Pand[] }) {
+        if (!['pilot', 'realtor', 'admin'].includes(rol)) {
+            throw new Error(`Invalid role: ${rol}`);
+        }
+
         return new User({
             id,
             voornaam,
