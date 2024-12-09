@@ -13,7 +13,7 @@ export class User {
     private portfolio: string;
     private niveau: string;
     private bevoegdheden: string;
-    private panden: Pand[] = []; // toegevoegd
+    private panden: Pand[] = [];
     private opdrachten: Opdracht[] = [];
     public isVerified: boolean;
     beoordelingen: Beoordeling[] = [];

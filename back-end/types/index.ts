@@ -1,4 +1,4 @@
-type Role = 'admin' | 'piloot' | 'makelaar';
+type Role = 'admin' | 'pilot' | 'realtor';
 
 type UserInput = {
     id: number;

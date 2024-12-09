@@ -100,9 +100,22 @@ const getUserById = async (id: number): Promise<User | null> => {
     });
 };
 
-const createUser = (newUser: User): User => {
-    users.push(newUser);
-    return newUser;
+const createUser = async (newUser: User): Promise<User> => {
+    const createdUser = await database.user.create({
+        data: {
+            voornaam: newUser.getVoornaam(),
+            naam: newUser.getNaam(),
+            gebruikersnaam: newUser.getGebruikersnaam(),
+            rol: newUser.getRol(),
+            emailadres: newUser.getEmailadres(),
+            portfolio: newUser.getPortfolio(),
+            niveau: newUser.getNiveau() || '',
+            bevoegdheden: newUser.getBevoegdheden(),
+            isVerified: newUser.isVerified,
+        },
+    });
+
+    return User.from(createdUser);
 };
 
 const deleteUserById = async (id: number): Promise<boolean> => {

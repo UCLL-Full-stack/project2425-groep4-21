@@ -1,6 +1,7 @@
 // Controller - UserController.ts
 import express, { NextFunction, Request, Response } from 'express';
 import { UserService } from '../service/user.service';
+import {User} from "../model/user";
 
 const userRouter = express.Router();
 
@@ -176,9 +177,9 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  */
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newUser = req.body;
+        const newUser = new User(req.body);
         const user = await UserService.createUser(newUser);
-        res.status(200).json(user);
+        res.status(201).json(user);
     } catch (error) {
         next(error);
     }
