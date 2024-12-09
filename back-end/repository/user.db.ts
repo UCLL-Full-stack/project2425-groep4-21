@@ -117,7 +117,6 @@ const deleteUserById = async (id: number): Promise<boolean> => {
     }
 };
 
-
 const getUsersByRoleAndRating = (role: string, rating: number): User[] => {
     return users.filter(user => user.getRol() === role && user.getBeoordelingen().some(b => b.getScore() >= rating));
 };
