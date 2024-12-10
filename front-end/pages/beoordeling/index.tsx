@@ -9,15 +9,14 @@ const BeoordelingPage: React.FC = () => {
     const [beoordelingen, setBeoordelingen] = useState<Array<Beoordeling>>([]); // props die we declareren
 
     const getBeoordelingen = async () => {
-        // functie getBeoordelingen waar we de functie gaan oproepen
         const response = await BeoordelingService.getAllBeoordelingen();
-        const beoordelingData = await response.json(); // beoordelingen omzetten naar JSON
-        setBeoordelingen(beoordelingData); // setter gebruiken
+        const beoordelingData = await response.json();
+        setBeoordelingen(beoordelingData);
     };
 
     useEffect(() => {
-        getBeoordelingen(); // de call naar de backend
-    }, []); // wordt nog gedetailleerder uitgelegd
+        getBeoordelingen();
+    }, []);
 
     return (
         <>
@@ -30,7 +29,6 @@ const BeoordelingPage: React.FC = () => {
                 <section>
                     <h2>Beoordeling overzicht</h2>
                     {beoordelingen && <BeoordelingOverviewTable beoordelingen={beoordelingen} />}
-                    {/* inline if statement, als er beoordelingen zijn, dan BeoordelingOverviewTable renderen */}
                 </section>
             </main>
         </>
