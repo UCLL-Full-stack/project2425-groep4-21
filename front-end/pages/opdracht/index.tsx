@@ -8,19 +8,18 @@ import MediaOverviewTable from '@components/media/MediaOverviewTable';
 import BeoordelingOverviewTable from '@components/beoordeling/BeoordelingOverviewTable';
 
 const OpdrachtPage: React.FC = () => {
-    const [opdrachten, setOpdrachten] = useState<Array<Opdracht>>([]); // props die we declareren
-    const [selectedOpdracht, setSelectedOpdracht] = useState<Opdracht | null>(null); // nieuwe state voor geselecteerde opdracht
+    const [opdrachten, setOpdrachten] = useState<Array<Opdracht>>([]);
+    const [selectedOpdracht, setSelectedOpdracht] = useState<Opdracht | null>(null);
 
     const getOpdrachten = async () => {
-        // functie getOpdrachten waar we de functie gaan oproepen
         const response = await OpdrachtService.getAllOpdrachten();
-        const opdrachtData = await response.json(); // opdrachten omzetten naar JSON
-        setOpdrachten(opdrachtData); // setter gebruiken
+        const opdrachtData = await response.json();
+        setOpdrachten(opdrachtData);
     };
 
     useEffect(() => {
-        getOpdrachten(); // de call naar de backend
-    }, []); // wordt nog gedetailleerder uitgelegd
+        getOpdrachten();
+    }, []);
 
     return (
         <>
@@ -35,7 +34,7 @@ const OpdrachtPage: React.FC = () => {
                     {opdrachten && (
                         <OpdrachtOverviewTable
                             opdrachten={opdrachten}
-                            selectOpdracht={setSelectedOpdracht} // De setSelectedOpdracht functie meegeven
+                            selectOpdracht={setSelectedOpdracht}
                         />
                     )}
                     {selectedOpdracht && (
