@@ -2,24 +2,23 @@ import Head from 'next/head';
 import Header from '@components/header';
 import OpdrachtOverviewTable from '@components/opdracht/OpdrachtOverviewTable';
 import { Opdracht } from '@types';
-import { useState, useEffect } from 'react';
+import useSWR from 'swr';
 import OpdrachtService from '@services/OpdrachtService';
 import MediaOverviewTable from '@components/media/MediaOverviewTable';
 import BeoordelingOverviewTable from '@components/beoordeling/BeoordelingOverviewTable';
+import {useState} from "react";
+
+const fetcher = async () => {
+    const response = await OpdrachtService.getAllOpdrachten();
+    return response.json();
+};
 
 const OpdrachtPage: React.FC = () => {
-    const [opdrachten, setOpdrachten] = useState<Array<Opdracht>>([]);
+    const { data: opdrachten, error } = useSWR<Array<Opdracht>>('/api/opdrachten', fetcher);
     const [selectedOpdracht, setSelectedOpdracht] = useState<Opdracht | null>(null);
 
-    const getOpdrachten = async () => {
-        const response = await OpdrachtService.getAllOpdrachten();
-        const opdrachtData = await response.json();
-        setOpdrachten(opdrachtData);
-    };
-
-    useEffect(() => {
-        getOpdrachten();
-    }, []);
+    if (error) return <div>Failed to load</div>;
+    if (!opdrachten) return <div>Loading...</div>;
 
     return (
         <>
@@ -28,15 +27,12 @@ const OpdrachtPage: React.FC = () => {
             </Head>
             <Header />
             <main className="d-flex flex-column justify-content-center align-items-center">
-                <h1>Opdrachten</h1>
                 <section>
                     <h2>Opdrachten overview</h2>
-                    {opdrachten && (
-                        <OpdrachtOverviewTable
-                            opdrachten={opdrachten}
-                            selectOpdracht={setSelectedOpdracht}
-                        />
-                    )}
+                    <OpdrachtOverviewTable
+                        opdrachten={opdrachten}
+                        selectOpdracht={setSelectedOpdracht}
+                    />
                     {selectedOpdracht && (
                         <>
                             <h2>Media van Opdracht {selectedOpdracht.opdrachtnummer}</h2>
@@ -48,7 +44,6 @@ const OpdrachtPage: React.FC = () => {
                             />
                         </>
                     )}
-
                 </section>
             </main>
         </>

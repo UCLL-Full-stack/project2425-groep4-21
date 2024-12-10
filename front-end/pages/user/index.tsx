@@ -2,39 +2,40 @@ import Head from 'next/head';
 import Header from '@components/header';
 import UserOverviewTable from '@components/user/UserOverviewTable';
 import { User } from '@types';
-import { useState, useEffect } from 'react';
+import useSWR from 'swr';
 import UserService from '@services/userService';
 import BeoordelingService from '@services/BeoordelingService';
 import BeoordelingOverviewTable from '@components/beoordeling/BeoordelingOverviewTable';
+import { useState } from 'react';
+
+const fetcher = async () => {
+    const response = await UserService.getAllUsers();
+    const userData = await response.json();
+
+    const updatedUsers = await Promise.all(
+        userData.map(async (user: User) => {
+            if (user.rol === 'pilot') {
+                const beoordelingen = await BeoordelingService.getBeoordelingByPilotId(user.id);
+                return { ...user, beoordelingen };
+            }
+            return user;
+        })
+    );
+
+    return updatedUsers;
+};
 
 const UserPage: React.FC = () => {
-    const [users, setUsers] = useState<Array<User>>([]);
+    const { data: users, error } = useSWR<Array<User>>('/api/users', fetcher);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [currentUserRole, setCurrentUserRole] = useState<string>('');
 
-    const fetchUsersAndBeoordelingen = async () => {
-        const response = await UserService.getAllUsers();
-        const userData = await response.json();
+    if (error) return <div>Failed to load</div>;
+    if (!users) return <div>Loading...</div>;
 
-        const updatedUsers = await Promise.all(
-            userData.map(async (user: User) => {
-                if (user.rol === 'pilot') {
-                    const beoordelingen = await BeoordelingService.getBeoordelingByPilotId(user.id);
-                    return { ...user, beoordelingen };
-                }
-                return user;
-            })
-        );
-
-        setUsers(updatedUsers);
-        if (updatedUsers.length > 0) {
-            setCurrentUserRole(updatedUsers[0].rol);
-        }
-    };
-
-    useEffect(() => {
-        fetchUsersAndBeoordelingen();
-    }, []);
+    if (users.length > 0 && currentUserRole === '') {
+        setCurrentUserRole(users[0].rol);
+    }
 
     return (
         <>
@@ -46,7 +47,7 @@ const UserPage: React.FC = () => {
                 <h1>Users</h1>
                 <section>
                     <h2>User overzicht</h2>
-                    {users && <UserOverviewTable users={users} selectUser={setSelectedUser} currentUserRole={currentUserRole} />}
+                    <UserOverviewTable users={users} selectUser={setSelectedUser} currentUserRole={currentUserRole} />
                     {selectedUser && (
                         <>
                             <h2>
