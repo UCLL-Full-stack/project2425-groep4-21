@@ -39,6 +39,7 @@ const BoekingsPagina: React.FC = () => {
             datum: selectedDateTime.toISOString(),
             pilotId: parsedPilotId,
             realtorId: realtorId, // Use the hardcoded realtorId for now until we have roles with login system
+            userId: parsedPilotId,
             beoordeling: null,
             puntentotaal: 0,
             status: 'Open',
@@ -48,6 +49,9 @@ const BoekingsPagina: React.FC = () => {
         try {
             await OpdrachtService.createOpdracht(nieuweOpdracht);
             setSuccessMessage('Boeking succesvol!');
+            setDatum('');
+            setTijd('');
+            setError('');
         } catch (err) {
             console.error(err);
             setError('Er is een fout opgetreden bij het boeken.');
@@ -57,37 +61,65 @@ const BoekingsPagina: React.FC = () => {
     return (
         <>
             <Header />
-            <div className="container">
-                <h1>Boek een drone-piloot</h1>
-                {error && <div className="alert alert-danger">{error}</div>}
-                {successMessage && <div className="alert alert-success">{successMessage}</div>}
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="datum">Datum:</label>
-                        <input
-                            type="date"
-                            id="datum"
-                            className="form-control"
-                            value={datum}
-                            onChange={(e) => setDatum(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="tijd">Tijd:</label>
-                        <input
-                            type="time"
-                            id="tijd"
-                            className="form-control"
-                            value={tijd}
-                            onChange={(e) => setTijd(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button type="submit" className="btn btn-primary">
-                        Bevestig Boeking
-                    </button>
-                </form>
+            <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 flex items-center justify-center px-4">
+                <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
+                    <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">
+                        Boek een Drone-Piloot
+                    </h1>
+
+                    {error && (
+                        <div className="bg-red-100 text-red-800 px-4 py-2 rounded-lg mb-4">
+                            {error}
+                        </div>
+                    )}
+                    {successMessage && (
+                        <div className="bg-green-100 text-green-800 px-4 py-2 rounded-lg mb-4">
+                            {successMessage}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label
+                                htmlFor="datum"
+                                className="block text-sm font-medium text-gray-700"
+                            >
+                                Datum:
+                            </label>
+                            <input
+                                type="date"
+                                id="datum"
+                                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                value={datum}
+                                onChange={(e) => setDatum(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label
+                                htmlFor="tijd"
+                                className="block text-sm font-medium text-gray-700"
+                            >
+                                Tijd:
+                            </label>
+                            <input
+                                type="time"
+                                id="tijd"
+                                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                                value={tijd}
+                                onChange={(e) => setTijd(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+                        >
+                            Bevestig Boeking
+                        </button>
+                    </form>
+                </div>
             </div>
         </>
     );
