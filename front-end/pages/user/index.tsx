@@ -44,7 +44,6 @@ const UserPage: React.FC = () => {
             </Head>
             <Header />
             <main className="d-flex flex-column justify-content-center align-items-center">
-                <h1>Users</h1>
                 <section>
                     <h2>User overzicht</h2>
                     <UserOverviewTable users={users} selectUser={setSelectedUser} currentUserRole={currentUserRole} />
