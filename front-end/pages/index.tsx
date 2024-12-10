@@ -18,13 +18,6 @@ const Home: React.FC = () => {
             <Header />
             <main className={styles.main}>
                 <span className={styles.logoTitle}>
-                    <Image
-                        src="/images/drone360.jpg"
-                        alt="Drone360 Logo"
-                        className={styles.logo}
-                        width={50}
-                        height={50}
-                    />
                     <h1 className={styles.title}>Welkom bij Drone360!</h1>
                 </span>
 
