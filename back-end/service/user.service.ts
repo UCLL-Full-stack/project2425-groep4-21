@@ -7,6 +7,14 @@ class UserService {
         return userDb.getAllUsers();
     }
 
+    const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
+        const user = await userDb.getUserByUsername({ username });
+        if (!user) {
+            throw new Error(`User with username: ${username} does not exist.`);
+        }
+        return user;
+    };
+
     static async getUserById(id: number): Promise<User | null> {
         const user = await userDb.getUserById(id);
         if (!user) {

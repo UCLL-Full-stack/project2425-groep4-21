@@ -106,21 +106,21 @@ opdrachtRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
  *       500:
  *         description: Server error
  */
-opdrachtRouter.get('/hired-pilots', async (req: Request, res: Response, next: NextFunction) => {
-    // needs also jwt token
-    try {
-        //temporarily hardcoded realtorId
-        const realtorId = 3; // Replace with the realtorId you want to test
-        const pilots = await OpdrachtService.getHiredPilots(realtorId);
-        if (pilots && pilots.length > 0) {
-            res.status(200).json(pilots);
-        } else {
-            res.status(404).json({ message: 'No hired pilots found' });
-        }
-    } catch (error) {
-        next(error);
-    }
-});
+// opdrachtRouter.get('/hired-pilots', async (req: Request, res: Response, next: NextFunction) => {
+//     // needs also jwt token
+//     try {
+//         //temporarily hardcoded realtorId
+//         const realtorId = 3; // Replace with the realtorId you want to test
+//         const pilots = await OpdrachtService.getHiredPilots(realtorId);
+//         if (pilots && pilots.length > 0) {
+//             res.status(200).json(pilots);
+//         } else {
+//             res.status(404).json({ message: 'No hired pilots found' });
+//         }
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 /**
  * @swagger

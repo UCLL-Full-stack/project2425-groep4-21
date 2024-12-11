@@ -17,6 +17,7 @@ export class User {
     private opdrachten: Opdracht[] = [];
     public isVerified: boolean;
     beoordelingen: Beoordeling[] = [];
+    private password: string
 
     constructor(user: {
         id: number;
@@ -28,12 +29,13 @@ export class User {
         portfolio: string;
         niveau: string;
         bevoegdheden: string;
-        panden?: Pand[]; //toegevoegd
+        panden?: Pand[];
         isVerified: boolean;
         beoordelingen?: Beoordeling[];
+        password: string
     }) {
         //this.validateInput(user);
-        //this.validateBusinessRules(user);
+        this.validateBusinessRules(user);
 
         this.id = user.id;
         this.voornaam = user.voornaam;
@@ -44,9 +46,10 @@ export class User {
         this.portfolio = user.portfolio;
         this.niveau = user.niveau;
         this.bevoegdheden = user.bevoegdheden;
-        this.panden = user.panden || []; //toegevoegd
+        this.panden = user.panden || [];
         this.isVerified = user.isVerified;
         this.beoordelingen = user.beoordelingen || [];
+        this.password = user.password
     }
 
     static from({
@@ -61,6 +64,7 @@ export class User {
                     bevoegdheden,
                     panden = [],
                     isVerified,
+                    password,
                 }: UserPrisma & { panden?: Pand[] }) {
         if (!['pilot', 'realtor', 'admin'].includes(rol)) {
             throw new Error(`Invalid role: ${rol}`);
@@ -78,8 +82,10 @@ export class User {
             bevoegdheden,
             panden,
             isVerified: isVerified ?? false,
+            password,
         });
     }
+
 
     private validateInput(user: {
         id: number;
@@ -93,6 +99,7 @@ export class User {
         bevoegdheden: string;
         panden: Pand[];
         beoordelingen?: Beoordeling[];
+        password: string
     }): void {
         const {
             id,
@@ -147,19 +154,29 @@ export class User {
         if (!Array.isArray(panden) || panden.some((pand) => false)) {
             throw new Error('Properties must be a valid array of Pand instances.');
         }
+
+        if (!user.password?.trim()) {
+            throw new Error('Password is required');
+        }
     }
 
     private validateBusinessRules(user: {
+        id: number;
         voornaam: string;
         naam: string;
         gebruikersnaam: string;
+        rol: "pilot" | "realtor" | "admin";
+        emailadres: string;
+        portfolio: string;
         niveau: string;
-        panden: Pand[];
-        rol: 'pilot' | 'realtor' | 'admin';
+        bevoegdheden: string;
+        panden?: Pand[];
+        isVerified: boolean;
+        beoordelingen?: Beoordeling[];
+        password: string
     }): void {
         const { voornaam, naam, gebruikersnaam, niveau, panden, rol } = user;
 
-        // First name and last name should be at least 2 characters long.
         if (voornaam.trim().length < 2) {
             throw new Error('First name must be at least 2 characters long.');
         }
@@ -168,13 +185,12 @@ export class User {
             throw new Error('Last name must be at least 2 characters long.');
         }
 
-        // Username should be at least 3 characters long.
         if (gebruikersnaam.trim().length < 3) {
             throw new Error('Username must be at least 3 characters long.');
         }
+
     }
 
-    // Getters
     getId(): number {
         return this.id;
     }
@@ -250,6 +266,9 @@ export class User {
         return this.opdrachten;
     }
 
+    getPassword(): string {
+        return this.password;
+    }
     public setBeoordelingen(beoordelingen: Beoordeling[]): void {
         this.beoordelingen = beoordelingen;
     }

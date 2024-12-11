@@ -1,55 +1,8 @@
 import { User } from '../model/user';
 import database from "../util/database";
 import { User as UserPrisma } from '@prisma/client';
-import {Pand} from "../model/pand";
-import {Opdracht} from "../model/opdracht";
-
-
-const users = [
-    new User({
-        id: 1,
-        voornaam: 'Jan',
-        naam: 'Jansen',
-        gebruikersnaam: 'jjansen',
-        rol: 'pilot',
-        emailadres: 'jan.jansen@example.com',
-        portfolio: 'https://portfolio.jansen.com',
-        niveau: 'junior',
-        bevoegdheden: 'all',
-        beoordelingen: [],
-        panden: [],
-        isVerified: true,
-    }),
-    new User({
-        id: 2,
-        voornaam: 'Pieter',
-        naam: 'Pieters',
-        gebruikersnaam: 'ppieters',
-        rol: 'pilot',
-        emailadres: 'pieter.pieters@example.com',
-        portfolio: 'https://portfolio.pieters.com',
-        niveau: 'senior',
-        bevoegdheden: 'limited',
-        beoordelingen: [],
-        panden: [],
-        isVerified: true,
-
-    }),
-    new User({
-        id: 3,
-        voornaam: 'Karin',
-        naam: 'Karels',
-        gebruikersnaam: 'kkarels',
-        rol: 'pilot',
-        emailadres: 'karin.karels@example.com',
-        portfolio: 'https://portfolio.karels.com',
-        niveau: 'intermediate',
-        bevoegdheden: 'read-only',
-        beoordelingen: [],
-        panden: [],
-        isVerified: true,
-    }),
-];
+import { Pand } from "../model/pand";
+import { Opdracht } from "../model/opdracht";
 
 const getAllUsers = async (): Promise<User[]> => {
     const usersPrisma: UserPrisma[] = await database.user.findMany({
@@ -66,6 +19,21 @@ const getAllUsers = async (): Promise<User[]> => {
 
     return usersPrisma.map(userPrisma => User.from(userPrisma));
 };
+
+const getUserByUsername = async ({ username }: { username: string }): Promise<User | null> => {
+    try {
+        const userPrisma = await database.user.findFirst({
+            where: { gebruikersnaam: username },
+        });
+
+        return userPrisma ? User.from(userPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+
 
 const getUserById = async (id: number): Promise<User | null> => {
     const userPrisma = await database.user.findUnique({
@@ -100,7 +68,6 @@ const getUserById = async (id: number): Promise<User | null> => {
     });
 };
 
-
 const createUser = async (newUser: User): Promise<User> => {
     const createdUser = await database.user.create({
         data: {
@@ -113,11 +80,13 @@ const createUser = async (newUser: User): Promise<User> => {
             niveau: newUser.getNiveau() || '',
             bevoegdheden: newUser.getBevoegdheden(),
             isVerified: newUser.isVerified,
+            password: newUser.getPassword(),
         },
     });
 
     return User.from(createdUser);
 };
+
 
 const deleteUserById = async (id: number): Promise<boolean> => {
     try {
@@ -131,13 +100,13 @@ const deleteUserById = async (id: number): Promise<boolean> => {
     }
 };
 
-const getUsersByRoleAndRating = (role: string, rating: number): User[] => {
-    return users.filter(user => user.getRol() === role && user.getBeoordelingen().some(b => b.getScore() >= rating));
-};
-
-const getUsersByIdsAndRole = (ids: number[], role: string): User[] => {
-    return users.filter(user => ids.includes(user.id) && user.getRol() === role);
-};
+// const getUsersByRoleAndRating = (role: string, rating: number): User[] => {
+//     return users.filter(user => user.getRol() === role && user.getBeoordelingen().some(b => b.getScore() >= rating));
+// };
+//
+// const getUsersByIdsAndRole = (ids: number[], role: string): User[] => {
+//     return users.filter(user => ids.includes(user.id) && user.getRol() === role);
+// };
 
 const getUsersByRole = async (role: 'pilot' | 'realtor' | 'admin'): Promise<User[]> => {
     const usersPrisma = await database.user.findMany({
@@ -175,7 +144,8 @@ export default {
     getUserById,
     createUser,
     deleteUserById,
-    getUsersByRoleAndRating,
-    getUsersByIdsAndRole,
-    getUsersByRole
+    //getUsersByRoleAndRating,
+    //getUsersByIdsAndRole,
+    getUsersByRole,
+    getUserByUsername
 };

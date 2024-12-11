@@ -28,6 +28,7 @@ model User {
   panden          Pand[]            @relation("UserPanden")
   opdrachten      Opdracht[]        @relation("UserOpdrachten")
   userBeoordeling userBeoordeling[]
+  password        String
 }
 
 model Pand {
