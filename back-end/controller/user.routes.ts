@@ -42,6 +42,9 @@ const userRouter = express.Router();
  *            bevoegdheden:
  *              type: string
  *              description: Permissions of the user.
+ *            password:
+ *              type: string
+ *              description: Password of the user.
  */
 
 /**
@@ -222,6 +225,46 @@ userRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * /users/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Server error
+ */
+userRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const newUser: UserInput = req.body;
+        const user = await UserService.createUser(newUser);
+        res.status(201).json(user);
+    } catch (error) {
+        if (error instanceof Error) {
+            if (error.message.includes('already registered')) {
+                res.status(400).json({ message: error.message });
+            } else {
+                next(error);
+            }
+        } else {
+            next(new Error('Unknown error occurred'));
+        }
+    }
+});
+
 
 //Todo endpoints jwt
 // POST /users/register: Registreer een nieuwe gebruiker.

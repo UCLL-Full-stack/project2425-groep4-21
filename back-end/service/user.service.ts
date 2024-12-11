@@ -20,6 +20,7 @@ class UserService {
     static async createUser(userInput: UserInput): Promise<User> {
         const { voornaam, naam, gebruikersnaam, rol, emailadres, portfolio, niveau, bevoegdheden, password } = userInput;
 
+
         const existingUser = await userDb.getUserByUsername({ gebruikersnaam });
         if (existingUser) {
             throw new Error(`User with username ${gebruikersnaam} is already registered.`);
