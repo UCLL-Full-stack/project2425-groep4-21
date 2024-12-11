@@ -1,5 +1,6 @@
 // seed.ts
 import { PrismaClient } from '@prisma/client';
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -12,12 +13,15 @@ async function main() {
             voornaam: 'Bjorn',
             naam: 'Thollebeke',
             gebruikersnaam: 'bjorn123',
-            rol: 'piloot',
+            rol: 'admin',
             emailadres: 'bjorn@example.com',
             portfolio: 'https://portfolio.com/bjorn',
             niveau: 'Expert',
             bevoegdheden: 'Full Access',
             isVerified: true,
+            password: await bcrypt.hash('admin123', 12),
+
+
         },
     });
 
@@ -26,12 +30,14 @@ async function main() {
             voornaam: 'Anna',
             naam: 'Smith',
             gebruikersnaam: 'anna_pilot',
-            rol: 'piloot',
+            rol: 'pilot',
             emailadres: 'anna@example.com',
             portfolio: 'https://portfolio.com/anna',
             niveau: 'Intermediate',
             bevoegdheden: 'Limited Access',
             isVerified: false,
+            password: await bcrypt.hash('pilot123', 12),
+
         },
     });
 

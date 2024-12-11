@@ -1,19 +1,13 @@
 import { User } from '../model/user';
 import userDb from '../repository/user.db';
 import beoordelingDb from '../repository/beoordeling.db';
+import bcrypt from 'bcrypt';
+import { UserInput } from '../types';
 
 class UserService {
     static async getUsers(): Promise<User[]> {
         return userDb.getAllUsers();
     }
-
-    const getUserByUsername = async ({ username }: { username: string }): Promise<User> => {
-        const user = await userDb.getUserByUsername({ username });
-        if (!user) {
-            throw new Error(`User with username: ${username} does not exist.`);
-        }
-        return user;
-    };
 
     static async getUserById(id: number): Promise<User | null> {
         const user = await userDb.getUserById(id);
@@ -23,8 +17,33 @@ class UserService {
         return user;
     }
 
-    static async createUser(newUser: User): Promise<User> {
-        return userDb.createUser(newUser);
+    static async createUser(userInput: UserInput): Promise<User> {
+        const { voornaam, naam, gebruikersnaam, rol, emailadres, portfolio, niveau, bevoegdheden, password } = userInput;
+
+        const existingUser = await userDb.getUserByUsername({ gebruikersnaam });
+        if (existingUser) {
+            throw new Error(`User with username ${gebruikersnaam} is already registered.`);
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        const user = new User({
+            id: 0,
+            voornaam,
+            naam,
+            gebruikersnaam,
+            rol,
+            emailadres,
+            portfolio,
+            niveau,
+            bevoegdheden,
+            isVerified: false,
+            password: hashedPassword,
+            panden: [],
+            beoordelingen: [],
+        });
+
+        return await userDb.createUser(user);
     }
 
     static async deleteUserById(id: number): Promise<boolean> {

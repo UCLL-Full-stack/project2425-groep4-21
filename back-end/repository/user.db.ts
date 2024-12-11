@@ -20,17 +20,12 @@ const getAllUsers = async (): Promise<User[]> => {
     return usersPrisma.map(userPrisma => User.from(userPrisma));
 };
 
-const getUserByUsername = async ({ username }: { username: string }): Promise<User | null> => {
-    try {
-        const userPrisma = await database.user.findFirst({
-            where: { gebruikersnaam: username },
-        });
+const getUserByUsername = async ({ gebruikersnaam }: { gebruikersnaam: string }): Promise<User | null> => {
+    const userPrisma = await database.user.findFirst({
+        where: { gebruikersnaam },
+    });
 
-        return userPrisma ? User.from(userPrisma) : null;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error. See server log for details.');
-    }
+    return userPrisma ? User.from(userPrisma) : null;
 };
 
 

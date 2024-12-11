@@ -12,6 +12,7 @@ type UserInput = {
     bevoegdheden: string;
     beoordelingen: BeoordelingInput[];
     panden: PandInput[];
+    password: string;
 };
 
 type PandInput = {

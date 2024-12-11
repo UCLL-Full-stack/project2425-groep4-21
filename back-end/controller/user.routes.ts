@@ -2,6 +2,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { UserService } from '../service/user.service';
 import {User} from "../model/user";
+import {UserInput} from "../types";
 
 const userRouter = express.Router();
 
@@ -175,9 +176,10 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *       500:
  *         description: Server error
  */
+
 userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newUser = new User(req.body);
+        const newUser: UserInput = req.body;
         const user = await UserService.createUser(newUser);
         res.status(201).json(user);
     } catch (error) {
