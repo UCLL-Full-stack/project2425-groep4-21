@@ -265,6 +265,68 @@ userRouter.post('/register', async (req: Request, res: Response, next: NextFunct
     }
 });
 
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary:  login a user
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               gebruikersnaam:
+ *                 type: string
+ *                 description: Username of the user
+ *                 example: johndoe
+ *               password:
+ *                 type: string
+ *                 description: Password of the user
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Authentication successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Authentication successful
+ *                 token:
+ *                   type: string
+ *                   description: JWT token
+ *                 username:
+ *                   type: string
+ *                   description: Username of the authenticated user
+ *                 fullname:
+ *                   type: string
+ *                   description: Full name of the authenticated user
+ *                 role:
+ *                   type: string
+ *                   description: Role of the authenticated user
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput: UserInput = req.body;
+        const response = await UserService.authenticate(userInput);
+        res.status(200).json({ message: 'Authentication successful', ...response });
+    } catch (error) {
+        next(error);
+    }
+});
 
 //Todo endpoints jwt
 // POST /users/login: Authenticeer een gebruiker en geef een JWT-token terug.

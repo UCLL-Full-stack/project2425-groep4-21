@@ -3,6 +3,7 @@ import userDb from '../repository/user.db';
 import beoordelingDb from '../repository/beoordeling.db';
 import bcrypt from 'bcrypt';
 import { UserInput } from '../types';
+import {generateJwtToken} from "../util/jwt";
 
 class UserService {
     static async getUsers(): Promise<User[]> {
@@ -13,6 +14,14 @@ class UserService {
         const user = await userDb.getUserById(id);
         if (!user) {
             throw new Error(`User ${id} not found`);
+        }
+        return user;
+    }
+
+    static async getUserByUsername({ gebruikersnaam }: { gebruikersnaam: string }): Promise<User> {
+        const user = await userDb.getUserByUsername({ gebruikersnaam });
+        if (!user) {
+            throw new Error(`User with username: ${gebruikersnaam} does not exist.`);
         }
         return user;
     }
@@ -83,6 +92,28 @@ class UserService {
             rating: pilot.calculateRating(),
         }));
     }
-}
+
+    static async authenticate({ gebruikersnaam, password }: UserInput): Promise<{
+        role: "admin" | "pilot" | "realtor";
+        fullname: string;
+        token: string;
+        username: string
+    }> {
+        const user = await this.getUserByUsername({ gebruikersnaam });
+
+        const isValidPassword = await bcrypt.compare(password, user.getPassword());
+
+        if (!isValidPassword) {
+            throw new Error('Incorrect password.');
+        }
+
+        return {
+            token: generateJwtToken({ username: gebruikersnaam, role: user.getRol() }),
+            username: gebruikersnaam,
+            fullname: `${user.getVoornaam()} ${user.getNaam()}`,
+            role: user.getRol(),
+        };
+    }
+};
 
 export { UserService };
