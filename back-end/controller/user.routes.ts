@@ -267,7 +267,6 @@ userRouter.post('/register', async (req: Request, res: Response, next: NextFunct
 
 
 //Todo endpoints jwt
-// POST /users/register: Registreer een nieuwe gebruiker.
 // POST /users/login: Authenticeer een gebruiker en geef een JWT-token terug.
 // GET /users/profile: Haal het profiel van de ingelogde gebruiker op.
 // PUT /users/profile: Werk het profiel van de ingelogde gebruiker bij.
