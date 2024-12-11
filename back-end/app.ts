@@ -9,10 +9,18 @@ import { mediaRouter } from './controller/media.routes';
 import { opdrachtRouter } from './controller/opdracht.routes';
 import { pandRouter } from './controller/pand.routes';
 import { userRouter } from './controller/user.routes';
+import {expressjwt} from "express-jwt";
 
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
+
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    })
+);
 
 app.use(cors());
 app.use(bodyParser.json());
