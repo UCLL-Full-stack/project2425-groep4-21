@@ -46,7 +46,7 @@ const UserLoginForm: React.FC = () => {
             return;
         }
 
-        const user = { username, password };
+        const user = { gebruikersnaam: username, password };
         const response = await userService.loginUser(user);
 
         if (response.status === 200) {

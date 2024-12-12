@@ -17,7 +17,7 @@ const getAllUsers = async () => {
     });
 };
 
-const loginUser = (user: { password: string; username: string }) => {
+const loginUser = (user: { gebruikersnaam: string; password: string }) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
         method: "POST",
         headers: {
