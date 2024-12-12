@@ -1,7 +1,7 @@
 import { StatusMessage } from "@types";
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import userService from "@services/userService";
 
 const UserLoginForm: React.FC = () => {
@@ -11,6 +11,13 @@ const UserLoginForm: React.FC = () => {
     const [usernameError, setUsernameError] = useState<string | null>(null);
     const [passwordError, setPasswordError] = useState<string | null>(null);
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
 
     const clearErrors = () => {
         setUsernameError(null);
@@ -128,7 +135,7 @@ const UserLoginForm: React.FC = () => {
                 </div>
 
                 <button
-                    className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center block w-full"
                     type="submit"
                 >
                     Login
