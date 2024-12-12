@@ -9,11 +9,19 @@ import { mediaRouter } from './controller/media.routes';
 import { opdrachtRouter } from './controller/opdracht.routes';
 import { pandRouter } from './controller/pand.routes';
 import { userRouter } from './controller/user.routes';
-import {expressjwt} from "express-jwt";
+import { expressjwt } from 'express-jwt';
+import { Request, Response, NextFunction } from 'express';
 
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
+
+// Configure CORS to allow requests from http://localhost:8080
+app.use(cors({
+    origin: 'http://localhost:8080',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(
     expressjwt({
@@ -25,26 +33,26 @@ app.use(
             /^\/api-docs\/.*/,
             '/users/login',
             '/users/signup',
+            '/users/register',
             '/status',
         ],
     })
 );
 
-app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
 });
 
-//zorgen dat endpoints correct zijn geimplementeerd
+// Ensure endpoints are correctly implemented
 app.use('/beoordelingen', beoordelingRouter);
 app.use('/media', mediaRouter);
 app.use('/opdrachten', opdrachtRouter);
 app.use('/panden', pandRouter);
 app.use('/users', userRouter);
 
-//Swagger documentatie
+// Swagger documentation
 const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
@@ -57,6 +65,24 @@ const swaggerOpts = {
 };
 const swaggerSpec = swaggerJSDoc(swaggerOpts);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({
+            status: 'unauthorized',
+            message: err.message,
+        });
+    } else if (err.name === 'MRTyperError') {
+        res.status(400).json({ status: 'domain error', message: err.message });
+    } else if (err.name === 'ValidationError') {
+        res.status(422).json({ status: 'validation error', message: err.message });
+    } else {
+        res.status(500).json({
+            status: 'application error',
+            message: err.message,
+        });
+    }
+});
 
 app.listen(port || 3000, () => {
     console.log(`Back-end is running on port ${port}.`);
