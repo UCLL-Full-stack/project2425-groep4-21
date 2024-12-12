@@ -109,7 +109,7 @@ class UserService {
 
         return {
             token: generateJwtToken({ username: gebruikersnaam, role: user.getRol() }),
-            username: gebruikersnaam,
+            username: user.getGebruikersnaam(),
             fullname: `${user.getVoornaam()} ${user.getNaam()}`,
             role: user.getRol(),
         };
