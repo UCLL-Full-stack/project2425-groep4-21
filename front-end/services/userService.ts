@@ -17,6 +17,24 @@ const getAllUsers = async () => {
     });
 };
 
+const deleteUser = async (userId: number) => {
+    const loggedInUser = sessionStorage.getItem("loggedInUser");
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+
+    if (!token) {
+        throw new Error("No token found");
+    }
+
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+};
+
+
 const loginUser = (user: { gebruikersnaam: string; password: string }) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/users/login", {
         method: "POST",
@@ -50,7 +68,8 @@ const registerUser = (user: {
 const UserService = {
     getAllUsers,
     loginUser,
-    registerUser
+    registerUser,
+    deleteUser
 };
 
 export default UserService;

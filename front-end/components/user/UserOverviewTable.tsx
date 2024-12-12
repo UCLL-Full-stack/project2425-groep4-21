@@ -1,6 +1,8 @@
 import React from 'react';
 import { User } from '@types';
 import { useRouter } from 'next/router';
+import UserService from '@services/userService';
+import { mutate } from 'swr';
 
 type Props = {
     users: Array<User>;
@@ -28,10 +30,26 @@ const UserOverviewTable: React.FC<Props> = ({ users, selectUser, currentUserRole
     const handleBoekClick = (e: React.MouseEvent, user: User) => {
         e.stopPropagation();
         console.log('Boek knop geklikt:', user);
-        console.log('Pilot ID:', user.id);
         router.push(`/user/boek/${user.id}`);
     };
 
+    const handleDeleteClick = async (e: React.MouseEvent, user: User) => {
+        e.stopPropagation();
+        console.log('Delete button clicked:', user);
+        try {
+            const response = await UserService.deleteUser(user.id);
+            if (response.ok) {
+                console.log('User deleted successfully');
+                // Revalidate the SWR data to update the user list
+                await mutate('/api/users');
+            } else {
+                const errorData = await response.json();
+                console.error('Error deleting user:', errorData.message);
+            }
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    };
 
     return (
         <>
@@ -65,14 +83,21 @@ const UserOverviewTable: React.FC<Props> = ({ users, selectUser, currentUserRole
                             <td>{user.portfolio}</td>
                             <td>{user.niveau}</td>
                             <td>
-                                {user.rol === 'pilot' && (
+                                {currentUserRole === 'admin' ? (
+                                    <button
+                                        className="btn btn-danger"
+                                        onClick={(e) => handleDeleteClick(e, user)}
+                                    >
+                                        Delete
+                                    </button>
+                                ) : currentUserRole === 'realtor' && user.rol === 'pilot' ? (
                                     <button
                                         className="btn btn-primary"
                                         onClick={(e) => handleBoekClick(e, user)}
                                     >
                                         Boek
                                     </button>
-                                )}
+                                ) : null}
                             </td>
                         </tr>
                     ))}
