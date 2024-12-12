@@ -104,7 +104,7 @@ class UserService {
         const isValidPassword = await bcrypt.compare(password, user.getPassword());
 
         if (!isValidPassword) {
-            throw new Error('Incorrect password.');
+            throw new Error('Incorrect password or username.');
         }
 
         return {
