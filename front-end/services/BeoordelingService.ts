@@ -1,8 +1,11 @@
 const getAllBeoordelingen = async () => {
+    const loggedInUser = sessionStorage.getItem("loggedInUser");
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/beoordelingen', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
         },
     });
 
