@@ -2,25 +2,26 @@ import { StatusMessage } from "@types";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import userService from "@services/userService";
 
 const UserLoginForm: React.FC = () => {
     const router = useRouter();
-    const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [nameError, setNameError] = useState<string | null>(null);
+    const [usernameError, setUsernameError] = useState<string | null>(null);
     const [passwordError, setPasswordError] = useState<string | null>(null);
     const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
 
     const clearErrors = () => {
-        setNameError(null);
+        setUsernameError(null);
         setPasswordError(null);
         setStatusMessages([]);
     };
 
     const validate = (): boolean => {
         let isValid = true;
-        if (!name.trim()) {
-            setNameError("Name is required.");
+        if (!username.trim()) {
+            setUsernameError("Username is required.");
             isValid = false;
         }
         if (!password.trim()) {
@@ -38,19 +39,41 @@ const UserLoginForm: React.FC = () => {
             return;
         }
 
-        setStatusMessages([
-            {
-                message: "Login successful. Redirecting to homepage...",
-                type: "success",
-            },
-        ]);
+        const user = { username, password };
+        const response = await userService.loginUser(user);
 
-        sessionStorage.setItem("loggedInUser", name);
-        sessionStorage.setItem("userPassword", password);
-        setTimeout(() => {
-            router.push("/");
-        }, 2000);
-    };
+        if (response.status === 200) {
+            const user = await response.json();
+            sessionStorage.setItem(
+                "loggedInUser",
+                JSON.stringify({
+                    token: user.token,
+                    username: user.username,
+                    role: user.role,
+                })
+            );
+            setStatusMessages([
+                {
+                    message: "Login successful. Redirecting to homepage...",
+                    type: "success",
+                },
+            ]);
+            setTimeout(() => {
+                router.push("/");
+            }, 2000);
+        } else {
+            const errorData = await response.json();
+
+            setStatusMessages([
+                {
+                    message:
+                        errorData.message ||
+                        "An error has occurred. Please try again later.",
+                    type: "error",
+                },
+            ]);
+        }
+    };;
 
     return (
         <>
@@ -73,18 +96,18 @@ const UserLoginForm: React.FC = () => {
                 </div>
             )}
             <form onSubmit={handleSubmit}>
-                <label htmlFor="nameInput" className="block mb-2 text-sm font-medium">
+                <label htmlFor="usernameInput" className="block mb-2 text-sm font-medium">
                     Username:
                 </label>
                 <div className="block mb-2 text-sm font-medium">
                     <input
-                        id="nameInput"
+                        id="usernameInput"
                         type="text"
-                        value={name}
-                        onChange={(event) => setName(event.target.value)}
+                        value={username}
+                        onChange={(event) => setUsername(event.target.value)}
                         className="border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     />
-                    {nameError && <p className="text-red-800 mt-1">{nameError}</p>}
+                    {usernameError && <p className="text-red-800 mt-1">{usernameError}</p>}
                 </div>
                 <label htmlFor="passwordInput" className="block mb-2 text-sm font-medium">
                     Password:
