@@ -62,18 +62,22 @@ const UserLoginForm: React.FC = () => {
                 router.push("/");
             }, 2000);
         } else {
-            const errorData = await response.json();
+            let errorMessage = "Wrong password or username";
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+            } catch (error) {
+                console.error("Error parsing JSON response:", error);
+            }
 
             setStatusMessages([
                 {
-                    message:
-                        errorData.message ||
-                        "An error has occurred. Please try again later.",
+                    message: errorMessage,
                     type: "error",
                 },
             ]);
         }
-    };;
+    };
 
     return (
         <>
