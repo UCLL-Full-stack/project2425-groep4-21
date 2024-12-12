@@ -28,14 +28,22 @@ const fetcher = async () => {
 const UserPage: React.FC = () => {
     const { data: users, error } = useSWR<Array<User>>('/api/users', fetcher);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const [currentUserRole, setCurrentUserRole] = useState<string>('');
+
+    // Read the currently logged-in user from sessionStorage
+    const loggedInUser = (typeof window !== 'undefined') ? sessionStorage.getItem('loggedInUser') : null;
+    let currentRole = '';
+    if (loggedInUser) {
+        const parsedUser = JSON.parse(loggedInUser);
+        currentRole = parsedUser.role;
+    }
 
     if (error) return <div>Failed to load</div>;
     if (!users) return <div>Loading...</div>;
 
-    if (users.length > 0 && currentUserRole === '') {
-        setCurrentUserRole(users[0].rol);
-    }
+    // Filter users based on the role
+    const filteredUsers = currentRole === 'realtor'
+        ? users.filter(user => user.rol === 'pilot')
+        : users;
 
     return (
         <>
@@ -46,12 +54,14 @@ const UserPage: React.FC = () => {
             <main className="d-flex flex-column justify-content-center align-items-center">
                 <section>
                     <h2>User overzicht</h2>
-                    <UserOverviewTable users={users} selectUser={setSelectedUser} currentUserRole={currentUserRole} />
+                    <UserOverviewTable
+                        users={filteredUsers}
+                        selectUser={setSelectedUser}
+                        currentUserRole={currentRole}
+                    />
                     {selectedUser && (
                         <>
-                            <h2>
-                                Beoordelingen van {selectedUser.voornaam} {selectedUser.naam}
-                            </h2>
+                            <h2>Beoordelingen van {selectedUser.voornaam} {selectedUser.naam}</h2>
                             <BeoordelingOverviewTable beoordelingen={selectedUser.beoordelingen} />
                         </>
                     )}
