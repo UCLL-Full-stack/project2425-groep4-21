@@ -40,7 +40,7 @@ const PandPage: React.FC = () => {
             <main className="d-flex flex-column justify-content-center align-items-center">
                 <section>
                     <h2>{headingText}</h2>
-                    <PandOverviewTable panden={filteredPanden} />
+                    <PandOverviewTable panden={filteredPanden} currentUserRole={currentRole} />
                 </section>
             </main>
         </>
