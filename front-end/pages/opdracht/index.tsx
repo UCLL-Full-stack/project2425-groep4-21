@@ -6,7 +6,7 @@ import useSWR, { mutate } from "swr";
 import OpdrachtService from "@services/OpdrachtService";
 import MediaOverviewTable from "@components/media/MediaOverviewTable";
 import BeoordelingOverviewTable from "@components/beoordeling/BeoordelingOverviewTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateOpdrachtModal from "@components/opdracht/CreateOpdrachtModal";
 
 const fetcher = async () => {
@@ -24,12 +24,21 @@ const OpdrachtPage: React.FC = () => {
     );
     const [showModal, setShowModal] = useState(false);
 
+    const [currentUserRole, setCurrentUserRole] = useState<string>('');
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const loggedInUser = sessionStorage.getItem("loggedInUser");
+            if (loggedInUser) {
+                const parsedUser = JSON.parse(loggedInUser);
+                setCurrentUserRole(parsedUser.role);
+            }
+        }
+    }, []);
+
     const handleCreateOpdracht = async (newOpdracht: Opdracht) => {
-        // Call service to save the new opdracht
         await OpdrachtService.createOpdracht(newOpdracht);
-        // Re-fetch data
         mutate("/api/opdrachten");
-        setShowModal(false); // Close the modal
+        setShowModal(false);
     };
 
     if (error) return <div>Failed to load</div>;
@@ -55,6 +64,7 @@ const OpdrachtPage: React.FC = () => {
                     <OpdrachtOverviewTable
                         opdrachten={opdrachten}
                         selectOpdracht={setSelectedOpdracht}
+                        currentUserRole={currentUserRole}
                     />
                     {selectedOpdracht && (
                         <>
