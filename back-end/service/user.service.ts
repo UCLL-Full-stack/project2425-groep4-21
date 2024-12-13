@@ -98,6 +98,7 @@ class UserService {
         fullname: string;
         token: string;
         username: string
+        userId:  number
     }> {
         const user = await this.getUserByUsername({ gebruikersnaam });
 
@@ -112,6 +113,7 @@ class UserService {
             username: user.getGebruikersnaam(),
             fullname: `${user.getVoornaam()} ${user.getNaam()}`,
             role: user.getRol(),
+            userId: user.getId(),
         };
     }
 };
