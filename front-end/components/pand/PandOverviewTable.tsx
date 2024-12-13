@@ -2,15 +2,13 @@ import React from 'react';
 import { Pand } from '@types';
 
 type Props = {
-    // Props die we definiëren
     panden: Array<Pand>;
 };
 
 const PandOverviewTable: React.FC<Props> = ({ panden }: Props) => {
-    // we geven hier mee dat we props hebben
     return (
         <>
-            {panden && ( // inline conditie, alleen als er panden zijn wordt de tabel opgebouwd
+            {panden && (
                 <table className="table table-hover">
                     <thead>
                         <tr>
@@ -23,10 +21,9 @@ const PandOverviewTable: React.FC<Props> = ({ panden }: Props) => {
                         {panden.map(
                             (
                                 pand,
-                                index // itereren en mappen over de panden
+                                index
                             ) => (
                                 <tr key={index}>
-                                    {/* unieke key, index */}
                                     <td>{pand.adres}</td>
                                     <td>{pand.beschrijving}</td>
                                     <td>{pand.userIdMakelaar}</td>
