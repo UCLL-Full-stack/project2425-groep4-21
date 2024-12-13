@@ -29,7 +29,6 @@ const UserPage: React.FC = () => {
     const { data: users, error } = useSWR<Array<User>>('/api/users', fetcher);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-    // Read the currently logged-in user from sessionStorage
     const loggedInUser = (typeof window !== 'undefined') ? sessionStorage.getItem('loggedInUser') : null;
     let currentRole = '';
     if (loggedInUser) {
