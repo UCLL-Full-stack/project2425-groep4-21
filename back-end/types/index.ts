@@ -16,7 +16,7 @@ type UserInput = {
 };
 
 type PandInput = {
-    Id?: number;
+    id?: number;
     adres: string;
     beschrijving: string;
     userIdMakelaar: number;

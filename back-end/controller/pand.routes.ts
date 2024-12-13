@@ -211,7 +211,7 @@ pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) =
             return res.status(400).json({ message: 'Invalid property ID' });
         }
 
-        console.log(`Updating Pand with ID: ${pandId}`); // Debugging
+        console.log(`Updating Pand with ID: ${pandId}`);
 
         const updatedPandData = req.body;
 
