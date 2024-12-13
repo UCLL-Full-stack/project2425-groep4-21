@@ -35,9 +35,11 @@ const Header: React.FC = () => {
                         <Link href="/beoordeling" className={styles.link}>
                             Beoordeling
                         </Link>
-                        <Link href="/media" className={styles.link}>
-                            Media
-                        </Link>
+                        {loggedInUser.role === 'admin' && (
+                            <Link href="/media" className={styles.link}>
+                                Media
+                            </Link>
+                        )}
                         <Link href="/opdracht" className={styles.link}>
                             Opdracht
                         </Link>
