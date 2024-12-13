@@ -40,7 +40,6 @@ const UserOverviewTable: React.FC<Props> = ({ users, selectUser, currentUserRole
             const response = await UserService.deleteUser(user.id);
             if (response.ok) {
                 console.log('User deleted successfully');
-                // Revalidate the SWR data to update the user list
                 await mutate('/api/users');
             } else {
                 const errorData = await response.json();

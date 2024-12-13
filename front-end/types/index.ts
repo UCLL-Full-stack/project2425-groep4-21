@@ -15,7 +15,7 @@ export type User = {
 };
 
 export type Pand = {
-    pandId?: number;
+    id?: number;
     adres: string;
     beschrijving: string;
     userIdMakelaar: number;

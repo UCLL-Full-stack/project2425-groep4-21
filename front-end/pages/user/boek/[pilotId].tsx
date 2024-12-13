@@ -12,8 +12,12 @@ const BoekingsPagina: React.FC = () => {
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    // Temporarily hardcode the realtorId until we have a login system
-    const realtorId = 1;
+    const loggedInUser = (typeof window !== 'undefined') ? sessionStorage.getItem('loggedInUser') : null;
+    let realtorId: number | null = null;
+    if (loggedInUser) {
+        const parsedUser = JSON.parse(loggedInUser);
+        realtorId = parsedUser.userId;
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -35,10 +39,15 @@ const BoekingsPagina: React.FC = () => {
             return;
         }
 
+        if (!realtorId) {
+            setError('Realtor ID niet gevonden. Log in als een makelaar.');
+            return;
+        }
+
         const nieuweOpdracht = {
             datum: selectedDateTime.toISOString(),
             pilotId: parsedPilotId,
-            realtorId: realtorId, // Use the hardcoded realtorId for now until we have roles with login system
+            realtorId: realtorId,
             userId: parsedPilotId,
             beoordeling: null,
             puntentotaal: 0,

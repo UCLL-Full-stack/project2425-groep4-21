@@ -12,11 +12,14 @@ const PandOverviewTable: React.FC<Props> = ({ panden, currentUserRole }: Props) 
 
     const handleDeleteClick = async (pandId: number | undefined, e: React.MouseEvent) => {
         e.stopPropagation();
+        if (!pandId) {
+            console.error('Pand ID is undefined');
+            return;
+        }
         try {
             const response = await PandService.deletePand(pandId);
             if (response.ok) {
                 console.log('Pand deleted successfully');
-                // Revalidate the SWR cache to refresh the list
                 await mutate('/api/panden');
             } else {
                 const errorData = await response.json();
@@ -52,7 +55,7 @@ const PandOverviewTable: React.FC<Props> = ({ panden, currentUserRole }: Props) 
                                 <td>
                                     <button
                                         className="btn btn-danger"
-                                        onClick={(e) => handleDeleteClick(pand.pandId, e)}
+                                        onClick={(e) => handleDeleteClick(pand.id, e)}
                                     >
                                         Delete
                                     </button>
