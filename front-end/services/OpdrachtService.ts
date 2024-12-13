@@ -13,10 +13,13 @@ const getAllOpdrachten = async () => {
 };
 
 const createOpdracht = async (opdrachtData: any) => {
+    const loggedInUser = sessionStorage.getItem("loggedInUser");
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/opdrachten`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(opdrachtData),
     });
