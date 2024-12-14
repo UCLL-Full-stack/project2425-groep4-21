@@ -28,6 +28,15 @@ class OpdrachtService {
         return await opdrachtDb.deleteOpdrachtById(id);
     }
 
+    static async updateOpdrachtStatus(id: number, status: string): Promise<Opdracht | null> {
+        const opdracht = await this.getOpdrachtById(id);
+        if (!opdracht) {
+            throw new Error(`Opdracht ${id} not found`);
+        }
+        opdracht.setStatus(status);
+        return opdrachtDb.updateOpdracht(opdracht);
+    }
+
     static async bookDronePilot(details: { pilotId: number, opdrachtnummer: number }): Promise<Opdracht> {
         const { pilotId, opdrachtnummer } = details;
         const opdracht = await this.getOpdrachtById(opdrachtnummer);

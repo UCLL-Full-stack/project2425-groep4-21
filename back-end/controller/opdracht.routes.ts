@@ -292,7 +292,6 @@ opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunct
  *         description: Server error
  */
 opdrachtRouter.get('/completed-assignments', async (req: Request, res: Response, next: NextFunction) => {
-    // zonder jwt token gaat dit niet werken
     try {
         if (!req.user) {
             return res.status(401).json({ message: 'Unauthorized' });
@@ -303,6 +302,55 @@ opdrachtRouter.get('/completed-assignments', async (req: Request, res: Response,
         next(error);
     }
 });
+
+/**
+ * @swagger
+ * /opdrachten/{id}/status:
+ *   put:
+ *     summary: Update the status of an opdracht
+ *     tags:
+ *       - Opdrachten
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID of the opdracht to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 description: New status of the opdracht
+ *     responses:
+ *       200:
+ *         description: Opdracht status updated successfully
+ *       404:
+ *         description: Opdracht not found
+ *       500:
+ *         description: Server error
+ */
+
+opdrachtRouter.put('/:id/status', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        const { status } = req.body;
+        const updatedOpdracht = await OpdrachtService.updateOpdrachtStatus(id, status);
+        if (updatedOpdracht) {
+            res.status(200).json(updatedOpdracht);
+        } else {
+            res.status(404).json({ message: 'Opdracht not found' });
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 //TODO do we still iplement this? beoordeling or not?
 //

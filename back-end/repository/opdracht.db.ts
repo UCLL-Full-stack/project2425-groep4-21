@@ -38,8 +38,14 @@ const createOpdracht = async (newOpdrachtData: any): Promise<Opdracht> => {
         throw new Error('pilotId is required');
     }
 
+    // Generate a unique opdrachtnummer
+    const lastOpdracht = await database.opdracht.findFirst({
+        orderBy: { opdrachtnummer: 'desc' }
+    });
+    const newOpdrachtnummer = lastOpdracht ? lastOpdracht.opdrachtnummer + 1 : 1;
+
     const newOpdracht = new Opdracht({
-        opdrachtnummer: newOpdrachtData.opdrachtnummer,
+        opdrachtnummer: newOpdrachtnummer,
         datum: newOpdrachtData.datum,
         puntentotaal: newOpdrachtData.puntentotaal,
         status: newOpdrachtData.status,
@@ -49,7 +55,7 @@ const createOpdracht = async (newOpdrachtData: any): Promise<Opdracht> => {
                     type: mediaData.type,
                     bestandslocatie: mediaData.bestandslocatie,
                     uploadDatum: new Date(mediaData.uploadDatum),
-                    opdrachtId: newOpdrachtData.opdrachtnummer,
+                    opdrachtId: newOpdrachtnummer,
                 })
         ),
         realtorId: newOpdrachtData.realtorId,

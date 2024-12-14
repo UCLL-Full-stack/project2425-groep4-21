@@ -117,4 +117,8 @@ export class Opdracht {
     addMediaToOpdracht(media: Media) {
         this.medias.push(media);
     }
+
+    setStatus(status: string) {
+        this.status = status;
+    }
 }
