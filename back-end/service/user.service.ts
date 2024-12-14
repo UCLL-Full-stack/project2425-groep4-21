@@ -60,6 +60,7 @@ class UserService {
         return userDb.deleteUserById(id);
     }
 
+
     static async getPilots(filterOptions?: { minRating?: number; niveau?: string }): Promise<any[]> {
         const { minRating, niveau } = filterOptions || {};
         let pilots = await userDb.getUsersByRole('pilot');
@@ -71,8 +72,8 @@ class UserService {
 
         if (minRating !== undefined) {
             pilots = pilots.filter(pilot => {
-                const rating = pilot.calculateRating();
-                return rating !== undefined && rating >= minRating;
+                const starRating = pilot.calculateStarRating();
+                return starRating >= minRating;
             });
         }
 
@@ -89,7 +90,7 @@ class UserService {
             emailadres: pilot.getEmailadres(),
             niveau: pilot.getNiveau(),
             isVerified: pilot.isVerified,
-            rating: pilot.calculateRating(),
+            starRating: pilot.calculateStarRating(),
         }));
     }
 

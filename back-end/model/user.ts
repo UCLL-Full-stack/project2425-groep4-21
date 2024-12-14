@@ -211,15 +211,16 @@ export class User {
         this.beoordelingen.push(beoordeling);
     }
 
-    calculateRating(): number | undefined {
+    calculateStarRating(): number {
         if (this.beoordelingen.length === 0) {
-            return undefined;
+            return 1;
         }
         const totalScore = this.beoordelingen.reduce(
             (sum, beoordeling) => sum + beoordeling.getScore(),
             0
         );
-        return totalScore / this.beoordelingen.length;
+        const averageScore = totalScore / this.beoordelingen.length;
+        return Math.max(1, Math.min(5, Math.round((averageScore / 10) * 5)));
     }
 
     getVoornaam(): string {
@@ -272,4 +273,5 @@ export class User {
     public setBeoordelingen(beoordelingen: Beoordeling[]): void {
         this.beoordelingen = beoordelingen;
     }
+
 }
