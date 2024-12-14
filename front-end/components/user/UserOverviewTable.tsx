@@ -50,6 +50,12 @@ const UserOverviewTable: React.FC<Props> = ({ users, selectUser, currentUserRole
         }
     };
 
+    const handlePortfolioClick = (e: React.MouseEvent, portfolioUrl: string) => {
+        e.stopPropagation();
+        console.log('Portfolio button clicked:', portfolioUrl);
+        window.open(portfolioUrl, '_blank', 'noopener,noreferrer');
+    };
+
     return (
         <>
             {users && (
@@ -79,7 +85,17 @@ const UserOverviewTable: React.FC<Props> = ({ users, selectUser, currentUserRole
                             <td>{user.gebruikersnaam}</td>
                             <td>{user.rol}</td>
                             <td>{user.emailadres}</td>
-                            <td>{user.portfolio}</td>
+                            <td>
+                                {user.portfolio}
+                                {currentUserRole === 'realtor' && user.rol === 'pilot' && user.portfolio ? (
+                                    <button
+                                        className="btn btn-secondary ml-2"
+                                        onClick={(e) => handlePortfolioClick(e, user.portfolio)}
+                                    >
+                                        View Portfolio
+                                    </button>
+                                ) : null}
+                            </td>
                             <td>{user.niveau}</td>
                             <td>
                                 {currentUserRole === 'admin' ? (
