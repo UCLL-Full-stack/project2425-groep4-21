@@ -85,7 +85,9 @@ const UserPage: React.FC = () => {
             <Header />
             <main className="flex flex-col items-center p-4">
                 <section className="w-full max-w-5xl mx-auto">
-                    <h2 className="text-2xl font-semibold mb-4">User Overzicht</h2>
+                    <h2 className="text-2xl font-semibold mb-4">
+                        {currentUserRole === 'realtor' ? 'Piloten Overzicht' : 'User Overzicht'}
+                    </h2>
                     {currentUserRole === 'realtor' && (
                         <div className="mb-6 flex items-center">
                             <label className="text-gray-700 font-medium mr-4">Minimum Star Rating:</label>
