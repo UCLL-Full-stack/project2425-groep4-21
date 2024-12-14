@@ -7,7 +7,6 @@ import OpdrachtService from "@services/OpdrachtService";
 import MediaOverviewTable from "@components/media/MediaOverviewTable";
 import BeoordelingOverviewTable from "@components/beoordeling/BeoordelingOverviewTable";
 import { useState, useEffect } from "react";
-import CreateOpdrachtModal from "@components/opdracht/CreateOpdrachtModal";
 
 const fetcher = async () => {
     const response = await OpdrachtService.getAllOpdrachten();
@@ -54,12 +53,6 @@ const OpdrachtPage: React.FC = () => {
                 <section className="p-6 w-full max-w-4xl">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold">Opdrachten Overview</h2>
-                        <button
-                            onClick={() => setShowModal(true)}
-                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md"
-                        >
-                            + Create New Opdracht
-                        </button>
                     </div>
                     <OpdrachtOverviewTable
                         opdrachten={opdrachten}
@@ -86,12 +79,6 @@ const OpdrachtPage: React.FC = () => {
                         </>
                     )}
                 </section>
-                {showModal && (
-                    <CreateOpdrachtModal
-                        onClose={() => setShowModal(false)}
-                        onCreate={handleCreateOpdracht}
-                    />
-                )}
             </main>
         </>
     );

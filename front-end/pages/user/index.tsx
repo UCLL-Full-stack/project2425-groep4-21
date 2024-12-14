@@ -39,7 +39,6 @@ const UserPage: React.FC = () => {
     if (error) return <div>Failed to load</div>;
     if (!users) return <div>Loading...</div>;
 
-    // Filter users based on the role
     const filteredUsers = currentRole === 'realtor'
         ? users.filter(user => user.rol === 'pilot')
         : users;
