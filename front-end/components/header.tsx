@@ -24,8 +24,15 @@ const Header: React.FC = () => {
     };
 
     return (
-        <header className={styles.header}>
-            <a className={styles.title}>Drone360 App</a>
+        <header className={`${styles.header} flex items-center justify-between px-4 py-2`}>
+            <div className="flex items-center">
+                <a className={styles.title}>Drone360 App</a>
+                {loggedInUser && (
+                    <Link href="/profile" className="ml-4 rounded-full bg-gray-200 hover:bg-gray-300 text-blue-800 flex items-center justify-center w-10 h-10">
+                        <span className="text-xl font-bold">P</span>
+                    </Link>
+                )}
+            </div>
             <nav className={styles.nav}>
                 <Link href="/" className={styles.link}>
                     Home

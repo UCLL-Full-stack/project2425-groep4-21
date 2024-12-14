@@ -39,9 +39,10 @@ const PilotProfilePage: React.FC = () => {
             </Head>
             <Header />
             <main className="flex flex-col justify-center items-center">
+                <h2> Mijn profiel </h2>
                 <section className="p-6 w-full max-w-4xl">
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-bold">Closed Opdrachten</h2>
+                        <h2 className="text-xl font-bold">Gesloten Opdrachten</h2>
                     </div>
                     <OpdrachtOverviewTable
                         opdrachten={closedOpdrachten}
