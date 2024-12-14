@@ -1,3 +1,5 @@
+// pages/users/index.tsx
+
 import Head from 'next/head';
 import Header from '@components/header';
 import UserOverviewTable from '@components/user/UserOverviewTable';
@@ -6,7 +8,8 @@ import useSWR from 'swr';
 import UserService from '@services/userService';
 import BeoordelingService from '@services/BeoordelingService';
 import BeoordelingOverviewTable from '@components/beoordeling/BeoordelingOverviewTable';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import StarRatingSelector from '@components/user/StarRatingSelector';
 
 const fetcher = async () => {
     try {
@@ -21,12 +24,16 @@ const fetcher = async () => {
                 if (user.rol === 'pilot') {
                     const beoordelingen = await BeoordelingService.getBeoordelingByPilotId(user.id);
 
+                    // Ensure beoordelingen is an array
                     if (!Array.isArray(beoordelingen)) {
                         throw new Error(`Beoordelingen for user ID ${user.id} is not an array.`);
                     }
 
+                    // Calculate totalScore and averageScore
                     const totalScore = beoordelingen.reduce((sum: number, beoordeling: any) => sum + beoordeling.score, 0);
-                    const averageScore = totalScore / beoordelingen.length;
+                    const averageScore = beoordelingen.length > 0 ? totalScore / beoordelingen.length : 0;
+
+                    // Calculate starRating (1 to 5)
                     const starRating = Math.max(1, Math.min(5, Math.round((averageScore / 10) * 5)));
 
                     return { ...user, beoordelingen, starRating };
@@ -47,17 +54,26 @@ const UserPage: React.FC = () => {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [minStarRating, setMinStarRating] = useState<number>(1);
 
-    const loggedInUser = (typeof window !== 'undefined') ? sessionStorage.getItem('loggedInUser') : null;
-    let currentRole = '';
-    if (loggedInUser) {
-        const parsedUser = JSON.parse(loggedInUser);
-        currentRole = parsedUser.role;
+    const [currentUserRole, setCurrentUserRole] = useState<string>('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                const parsedUser = JSON.parse(loggedInUser);
+                setCurrentUserRole(parsedUser.role);
+            }
+        }
+    }, []);
+
+    if (error) {
+        return <div>Failed to load users: {error.message}</div>;
+    }
+    if (!users) {
+        return <div>Loading...</div>;
     }
 
-    if (error) return <div>Failed to load</div>;
-    if (!users) return <div>Loading...</div>;
-
-    const filteredUsers = currentRole === 'realtor'
+    const filteredUsers = currentUserRole === 'realtor'
         ? users.filter(user => user.rol === 'pilot' && (user.starRating ?? 1) >= minStarRating)
         : users;
 
@@ -67,27 +83,23 @@ const UserPage: React.FC = () => {
                 <title>Users</title>
             </Head>
             <Header />
-            <main className="d-flex flex-column justify-content-center align-items-center">
-                <section>
-                    <h2>User overzicht</h2>
-                    <label>
-                        Minimum Star Rating:
-                        <select value={minStarRating} onChange={(e) => setMinStarRating(Number(e.target.value))}>
-                            <option value={1}>1 Star</option>
-                            <option value={2}>2 Stars</option>
-                            <option value={3}>3 Stars</option>
-                            <option value={4}>4 Stars</option>
-                            <option value={5}>5 Stars</option>
-                        </select>
-                    </label>
+            <main className="flex flex-col items-center p-4">
+                <section className="w-full max-w-5xl mx-auto">
+                    <h2 className="text-2xl font-semibold mb-4">User Overzicht</h2>
+                    {currentUserRole === 'realtor' && (
+                        <div className="mb-6 flex items-center">
+                            <label className="text-gray-700 font-medium mr-4">Minimum Star Rating:</label>
+                            <StarRatingSelector minRating={minStarRating} setMinRating={setMinStarRating} />
+                        </div>
+                    )}
                     <UserOverviewTable
                         users={filteredUsers}
                         selectUser={setSelectedUser}
-                        currentUserRole={currentRole}
+                        currentUserRole={currentUserRole}
                     />
                     {selectedUser && (
                         <>
-                            <h2>Beoordelingen van {selectedUser.voornaam} {selectedUser.naam}</h2>
+                            <h2 className="text-xl font-semibold mt-8 mb-4">Beoordelingen van {selectedUser.voornaam} {selectedUser.naam}</h2>
                             <BeoordelingOverviewTable beoordelingen={selectedUser.beoordelingen} />
                         </>
                     )}
