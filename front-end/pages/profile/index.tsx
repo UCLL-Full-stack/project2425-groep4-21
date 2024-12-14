@@ -1,36 +1,48 @@
 import Head from "next/head";
 import Header from "@components/header";
 import OpdrachtOverviewTable from "@components/opdracht/OpdrachtOverviewTable";
-import { Opdracht } from "@types";
+import BeoordelingOverviewTable from "@components/beoordeling/BeoordelingOverviewTable";
+import { Opdracht, Beoordeling } from "@types";
 import useSWR from "swr";
 import OpdrachtService from "@services/OpdrachtService";
+import BeoordelingService from "@services/BeoordelingService";
 import { useState, useEffect } from "react";
 
-const fetcher = async () => {
+const fetchOpdrachten = async () => {
     const response = await OpdrachtService.getAllOpdrachten();
     return response.json();
 };
 
+const fetchBeoordelingen = async () => {
+    const response = await BeoordelingService.getAllBeoordelingen();
+    return response.json();
+};
+
 const PilotProfilePage: React.FC = () => {
-    const { data: opdrachten, error } = useSWR<Array<Opdracht>>(
-        "/api/opdrachten",
-        fetcher
-    );
+    const { data: opdrachten, error: opdrachtError } = useSWR<Array<Opdracht>>("/api/opdrachten", fetchOpdrachten);
+    const { data: beoordelingen, error: beoordelingError } = useSWR<Array<Beoordeling>>("/api/beoordelingen", fetchBeoordelingen);
+
     const [currentUserRole, setCurrentUserRole] = useState<string>('');
+    const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const loggedInUser = sessionStorage.getItem("loggedInUser");
             if (loggedInUser) {
                 const parsedUser = JSON.parse(loggedInUser);
                 setCurrentUserRole(parsedUser.role);
+                setCurrentUserId(parsedUser.userId);
             }
         }
     }, []);
 
-    if (error) return <div>Failed to load</div>;
-    if (!opdrachten) return <div>Loading...</div>;
+    if (opdrachtError || beoordelingError) return <div>Failed to load</div>;
+    if (!opdrachten || !beoordelingen) return <div>Loading...</div>;
 
     const closedOpdrachten = opdrachten.filter(opdracht => opdracht.status === 'closed');
+    const filteredBeoordelingen = currentUserRole === 'admin'
+        ? beoordelingen
+        : beoordelingen.filter(beoordeling => beoordeling.userId === currentUserId);
 
     return (
         <>
@@ -39,17 +51,25 @@ const PilotProfilePage: React.FC = () => {
             </Head>
             <Header />
             <main className="flex flex-col justify-center items-center">
-                <h2> Mijn profiel </h2>
+                <h2>Mijn profiel</h2>
                 <section className="p-6 w-full max-w-4xl">
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="mb-6">
                         <h2 className="text-xl font-bold">Gesloten Opdrachten</h2>
+                        <OpdrachtOverviewTable
+                            opdrachten={closedOpdrachten}
+                            selectOpdracht={() => {}}
+                            currentUserRole={currentUserRole}
+                            closeOpdracht={() => {}}
+                        />
                     </div>
-                    <OpdrachtOverviewTable
-                        opdrachten={closedOpdrachten}
-                        selectOpdracht={() => {}}
-                        currentUserRole={currentUserRole}
-                        closeOpdracht={() => {}}
-                    />
+                    <div className="mt-6">
+                        <h2 className="text-xl font-bold">Mijn Beoordelingen</h2>
+                        {filteredBeoordelingen.length > 0 ? (
+                            <BeoordelingOverviewTable beoordelingen={filteredBeoordelingen} currentUserRole={currentUserRole} />
+                        ) : (
+                            <p>Geen beoordelingen voor deze gebruiker</p>
+                        )}
+                    </div>
                 </section>
             </main>
         </>
