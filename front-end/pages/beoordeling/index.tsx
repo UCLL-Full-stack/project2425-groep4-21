@@ -48,7 +48,7 @@ const BeoordelingPage: React.FC = () => {
                 <section>
                     <h2>{pageTitle}</h2>
                     {filteredBeoordelingen.length > 0 ? (
-                        <BeoordelingOverviewTable beoordelingen={filteredBeoordelingen} />
+                        <BeoordelingOverviewTable beoordelingen={filteredBeoordelingen} currentUserRole={currentUserRole} />
                     ) : (
                         <p>Geen beoordelingen voor deze gebruiker</p>
                     )}
