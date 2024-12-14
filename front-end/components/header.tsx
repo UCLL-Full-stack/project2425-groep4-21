@@ -27,11 +27,6 @@ const Header: React.FC = () => {
         <header className={`${styles.header} flex items-center justify-between px-4 py-2`}>
             <div className="flex items-center">
                 <a className={styles.title}>Drone360 App</a>
-                {loggedInUser && (
-                    <Link href="/profile" className="ml-4 rounded-full bg-gray-200 hover:bg-gray-300 text-blue-800 flex items-center justify-center w-10 h-10">
-                        <span className="text-xl font-bold">P</span>
-                    </Link>
-                )}
             </div>
             <nav className={styles.nav}>
                 <Link href="/" className={styles.link}>
@@ -62,9 +57,12 @@ const Header: React.FC = () => {
                         >
                             Logout
                         </a>
-                        <div className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer">
+                        <Link
+                            href="/profile"
+                            className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer"
+                        >
                             Welcome, {loggedInUser.username}!
-                        </div>
+                        </Link>
                     </>
                 ) : (
                     <Link
