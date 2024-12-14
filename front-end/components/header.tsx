@@ -35,6 +35,11 @@ const Header: React.FC = () => {
                 {loggedInUser ? (
                     <>
                         {loggedInUser.role === 'admin' && (
+                            <Link href="/beoordeling" className={styles.link}>
+                                Beoordelingen
+                            </Link>
+                        )}
+                        {loggedInUser.role === 'admin' && (
                             <Link href="/media" className={styles.link}>
                                 Media
                             </Link>
