@@ -10,6 +10,9 @@ import { useState, useEffect } from "react";
 
 const fetcher = async () => {
     const response = await OpdrachtService.getAllOpdrachten();
+    if (!response.ok) {
+        throw new Error('Failed to fetch opdrachten');
+    }
     return response.json();
 };
 
@@ -34,10 +37,15 @@ const OpdrachtPage: React.FC = () => {
         }
     }, []);
 
-    const handleCreateOpdracht = async (newOpdracht: Opdracht) => {
-        await OpdrachtService.createOpdracht(newOpdracht);
-        mutate("/api/opdrachten");
-        setShowModal(false);
+
+    const handleCloseOpdracht = async (opdrachtId: number) => {
+        try {
+            const response = await OpdrachtService.updateOpdrachtStatus(opdrachtId, 'closed');
+            alert('Opdracht succesvol gesloten.');
+            mutate("/api/opdrachten");
+        } catch (error) {
+            alert(`Fout bij het sluiten van de opdracht: ${error.message}`);
+        }
     };
 
     if (error) return <div>Failed to load</div>;
@@ -58,6 +66,7 @@ const OpdrachtPage: React.FC = () => {
                         opdrachten={opdrachten}
                         selectOpdracht={setSelectedOpdracht}
                         currentUserRole={currentUserRole}
+                        closeOpdracht={handleCloseOpdracht}
                     />
                     {selectedOpdracht && (
                         <>
