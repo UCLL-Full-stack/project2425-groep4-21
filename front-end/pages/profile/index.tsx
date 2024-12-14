@@ -30,7 +30,7 @@ const PilotProfilePage: React.FC = () => {
     if (error) return <div>Failed to load</div>;
     if (!opdrachten) return <div>Loading...</div>;
 
-    const finishedOpdrachten = opdrachten.filter(opdracht => opdracht.status === 'finished');
+    const closedOpdrachten = opdrachten.filter(opdracht => opdracht.status === 'closed');
 
     return (
         <>
@@ -41,10 +41,10 @@ const PilotProfilePage: React.FC = () => {
             <main className="flex flex-col justify-center items-center">
                 <section className="p-6 w-full max-w-4xl">
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-bold">Finished Opdrachten</h2>
+                        <h2 className="text-xl font-bold">Closed Opdrachten</h2>
                     </div>
                     <OpdrachtOverviewTable
-                        opdrachten={finishedOpdrachten}
+                        opdrachten={closedOpdrachten}
                         selectOpdracht={() => {}}
                         currentUserRole={currentUserRole}
                         closeOpdracht={() => {}}
