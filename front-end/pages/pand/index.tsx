@@ -1,6 +1,8 @@
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Header from '@components/header';
 import PandOverviewTable from '@components/pand/PandOverviewTable';
+import AddPandForm from '@components/pand/AddPandForm';
 import { Pand } from '@types';
 import useSWR from 'swr';
 import PandService from '@services/PandService';
@@ -12,6 +14,7 @@ const fetcher = async () => {
 
 const PandPage: React.FC = () => {
     const { data: panden, error } = useSWR<Array<Pand>>('/api/panden', fetcher);
+    const [isAdding, setIsAdding] = useState(false);
 
     const loggedInUser = (typeof window !== 'undefined') ? sessionStorage.getItem('loggedInUser') : null;
     let currentRole = '';
@@ -40,6 +43,10 @@ const PandPage: React.FC = () => {
             <main className="d-flex flex-column justify-content-center align-items-center">
                 <section>
                     <h2>{headingText}</h2>
+                    {currentRole === 'realtor' && (
+                        <button onClick={() => setIsAdding(true)}>Add New Pand</button>
+                    )}
+                    {isAdding && <AddPandForm onClose={() => setIsAdding(false)} />}
                     <PandOverviewTable panden={filteredPanden} currentUserRole={currentRole} />
                 </section>
             </main>
