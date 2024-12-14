@@ -12,6 +12,7 @@ export type User = {
     bevoegdheden: string;
     beoordelingen: Beoordeling[];
     panden: Pand[];
+    starRating?: number;
 };
 
 export type Pand = {

@@ -18,10 +18,13 @@ const getAllBeoordelingen = async () => {
 };
 
 const getBeoordelingByPilotId = async (pilotId: number) => {
+    const loggedInUser = sessionStorage.getItem("loggedInUser");
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/beoordelingen/pilot/${pilotId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
         },
     });
 

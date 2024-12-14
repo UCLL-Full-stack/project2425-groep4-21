@@ -9,25 +9,43 @@ import BeoordelingOverviewTable from '@components/beoordeling/BeoordelingOvervie
 import { useState } from 'react';
 
 const fetcher = async () => {
-    const response = await UserService.getAllUsers();
-    const userData = await response.json();
+    try {
+        const response = await UserService.getAllUsers();
+        if (!response.ok) {
+            throw new Error(`Failed to fetch users: ${response.statusText}`);
+        }
+        const userData = await response.json();
 
-    const updatedUsers = await Promise.all(
-        userData.map(async (user: User) => {
-            if (user.rol === 'pilot') {
-                const beoordelingen = await BeoordelingService.getBeoordelingByPilotId(user.id);
-                return { ...user, beoordelingen };
-            }
-            return user;
-        })
-    );
+        const updatedUsers = await Promise.all(
+            userData.map(async (user: User) => {
+                if (user.rol === 'pilot') {
+                    const beoordelingen = await BeoordelingService.getBeoordelingByPilotId(user.id);
 
-    return updatedUsers;
+                    if (!Array.isArray(beoordelingen)) {
+                        throw new Error(`Beoordelingen for user ID ${user.id} is not an array.`);
+                    }
+
+                    const totalScore = beoordelingen.reduce((sum: number, beoordeling: any) => sum + beoordeling.score, 0);
+                    const averageScore = totalScore / beoordelingen.length;
+                    const starRating = Math.max(1, Math.min(5, Math.round((averageScore / 10) * 5)));
+
+                    return { ...user, beoordelingen, starRating };
+                }
+                return user;
+            })
+        );
+
+        return updatedUsers;
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        throw error;
+    }
 };
 
 const UserPage: React.FC = () => {
     const { data: users, error } = useSWR<Array<User>>('/api/users', fetcher);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [minStarRating, setMinStarRating] = useState<number>(1);
 
     const loggedInUser = (typeof window !== 'undefined') ? sessionStorage.getItem('loggedInUser') : null;
     let currentRole = '';
@@ -40,7 +58,7 @@ const UserPage: React.FC = () => {
     if (!users) return <div>Loading...</div>;
 
     const filteredUsers = currentRole === 'realtor'
-        ? users.filter(user => user.rol === 'pilot')
+        ? users.filter(user => user.rol === 'pilot' && (user.starRating ?? 1) >= minStarRating)
         : users;
 
     return (
@@ -52,6 +70,16 @@ const UserPage: React.FC = () => {
             <main className="d-flex flex-column justify-content-center align-items-center">
                 <section>
                     <h2>User overzicht</h2>
+                    <label>
+                        Minimum Star Rating:
+                        <select value={minStarRating} onChange={(e) => setMinStarRating(Number(e.target.value))}>
+                            <option value={1}>1 Star</option>
+                            <option value={2}>2 Stars</option>
+                            <option value={3}>3 Stars</option>
+                            <option value={4}>4 Stars</option>
+                            <option value={5}>5 Stars</option>
+                        </select>
+                    </label>
                     <UserOverviewTable
                         users={filteredUsers}
                         selectUser={setSelectedUser}
