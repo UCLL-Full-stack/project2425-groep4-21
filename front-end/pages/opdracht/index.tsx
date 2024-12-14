@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import Head from "next/head";
 import Header from "@components/header";
 import OpdrachtOverviewTable from "@components/opdracht/OpdrachtOverviewTable";
@@ -6,7 +7,6 @@ import useSWR, { mutate } from "swr";
 import OpdrachtService from "@services/OpdrachtService";
 import MediaOverviewTable from "@components/media/MediaOverviewTable";
 import BeoordelingOverviewTable from "@components/beoordeling/BeoordelingOverviewTable";
-import { useState, useEffect } from "react";
 
 const fetcher = async () => {
     const response = await OpdrachtService.getAllOpdrachten();
@@ -21,10 +21,9 @@ const OpdrachtPage: React.FC = () => {
         "/api/opdrachten",
         fetcher
     );
-    const [selectedOpdracht, setSelectedOpdracht] = useState<Opdracht | null>(
-        null
-    );
+    const [selectedOpdracht, setSelectedOpdracht] = useState<Opdracht | null>(null);
     const [showModal, setShowModal] = useState(false);
+    const [message, setMessage] = useState<string | null>(null);
 
     const [currentUserRole, setCurrentUserRole] = useState<string>('');
     useEffect(() => {
@@ -37,11 +36,10 @@ const OpdrachtPage: React.FC = () => {
         }
     }, []);
 
-
     const handleCloseOpdracht = async (opdrachtId: number) => {
         try {
             const response = await OpdrachtService.updateOpdrachtStatus(opdrachtId, 'closed');
-            alert('Opdracht succesvol gesloten.');
+            setMessage("Opdracht aan het sluiten... Kijk naar u profiel voor alle gesloten opdrachten");
             mutate("/api/opdrachten");
         } catch (error) {
             alert(`Fout bij het sluiten van de opdracht: ${error.message}`);
@@ -50,6 +48,8 @@ const OpdrachtPage: React.FC = () => {
 
     if (error) return <div>Failed to load</div>;
     if (!opdrachten) return <div>Loading...</div>;
+
+    const filteredOpdrachten = opdrachten.filter(opdracht => opdracht.status !== 'closed');
 
     return (
         <>
@@ -62,8 +62,9 @@ const OpdrachtPage: React.FC = () => {
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold">Opdrachten Overview</h2>
                     </div>
+                    {message && <div className="alert alert-info">{message}</div>}
                     <OpdrachtOverviewTable
-                        opdrachten={opdrachten}
+                        opdrachten={filteredOpdrachten}
                         selectOpdracht={setSelectedOpdracht}
                         currentUserRole={currentUserRole}
                         closeOpdracht={handleCloseOpdracht}
