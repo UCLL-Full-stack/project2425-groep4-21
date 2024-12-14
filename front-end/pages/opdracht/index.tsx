@@ -41,6 +41,9 @@ const OpdrachtPage: React.FC = () => {
             const response = await OpdrachtService.updateOpdrachtStatus(opdrachtId, 'closed');
             setMessage("Opdracht aan het sluiten... Kijk naar u profiel voor alle gesloten opdrachten");
             mutate("/api/opdrachten");
+            setTimeout(() => {
+                setMessage(null);
+            }, 3000);
         } catch (error) {
             alert(`Fout bij het sluiten van de opdracht: ${error.message}`);
         }
@@ -62,7 +65,9 @@ const OpdrachtPage: React.FC = () => {
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold">Opdrachten Overview</h2>
                     </div>
-                    {message && <div className="alert alert-info">{message}</div>}
+                    {message && <div
+                        className="alert alert-success bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+                        role="alert">{message}</div>}
                     <OpdrachtOverviewTable
                         opdrachten={filteredOpdrachten}
                         selectOpdracht={setSelectedOpdracht}
