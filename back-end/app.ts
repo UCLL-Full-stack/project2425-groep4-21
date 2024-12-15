@@ -4,6 +4,7 @@ import cors from 'cors';
 import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import helmet from 'helmet';
 import { beoordelingRouter } from './controller/beoordeling.routes';
 import { mediaRouter } from './controller/media.routes';
 import { opdrachtRouter } from './controller/opdracht.routes';
@@ -15,6 +16,9 @@ import { Request, Response, NextFunction } from 'express';
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
+
+// Use Helmet to secure HTTP headers
+app.use(helmet());
 
 // Configure CORS to allow requests from http://localhost:8080
 app.use(cors({
