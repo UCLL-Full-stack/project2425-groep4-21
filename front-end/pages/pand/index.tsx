@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Header from '@components/header';
 import PandOverviewTable from '@components/pand/PandOverviewTable';
@@ -12,11 +12,29 @@ const fetcher = async () => {
     return response.json();
 };
 
+// type LoggedInUser = {
+//     token: string;
+//     username: string;
+//     role: string;
+// };
+
 const PandPage: React.FC = () => {
     const { data: panden, error } = useSWR<Array<Pand>>('/api/panden', fetcher);
     const [isAdding, setIsAdding] = useState(false);
 
-    const loggedInUser = (typeof window !== 'undefined') ? sessionStorage.getItem('loggedInUser') : null;
+    // const [loggedInUser2, setLoggedInUser] = useState<LoggedInUser | null>(null);
+    // const [isLoadingUser, setIsLoadingUser] = useState(true);
+
+    // useEffect(() => {
+    //     const user = sessionStorage.getItem('loggedInUser');
+    //     if (user) {
+    //         setLoggedInUser(JSON.parse(user));
+    //     }
+    //     setIsLoadingUser(false);
+    // }, []);
+
+    const loggedInUser =
+        typeof window !== 'undefined' ? sessionStorage.getItem('loggedInUser') : null;
     let currentRole = '';
     let currentUserId: number | null = null;
     if (loggedInUser) {
@@ -25,14 +43,28 @@ const PandPage: React.FC = () => {
         currentUserId = parsedUser.userId;
     }
 
+    // if (!loggedInUser2 || loggedInUser2.role !== 'admin') {
+    //     return (
+    //         <>
+    //             <Header />
+    //             <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    //                 <h1 className="text-2xl font-bold text-red-600">
+    //                     Permission denied. You are not authorized to view this page.
+    //                 </h1>
+    //             </div>
+    //         </>
+    //     );
+    // }
+
     if (error) return <div>Failed to load</div>;
     if (!panden) return <div>Loading...</div>;
 
-    const filteredPanden = currentRole === 'realtor' && currentUserId
-        ? panden.filter(pand => pand.userIdMakelaar === currentUserId)
-        : panden;
+    const filteredPanden =
+        currentRole === 'realtor' && currentUserId
+            ? panden.filter((pand) => pand.userIdMakelaar === currentUserId)
+            : panden;
 
-    const headingText = currentRole === 'realtor' ? "Mijn panden" : "Panden overzicht";
+    const headingText = currentRole === 'realtor' ? 'Mijn panden' : 'Panden overzicht';
 
     return (
         <>

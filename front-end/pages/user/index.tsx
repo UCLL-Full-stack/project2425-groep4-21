@@ -30,11 +30,18 @@ const fetcher = async () => {
                     }
 
                     // Calculate totalScore and averageScore
-                    const totalScore = beoordelingen.reduce((sum: number, beoordeling: any) => sum + beoordeling.score, 0);
-                    const averageScore = beoordelingen.length > 0 ? totalScore / beoordelingen.length : 0;
+                    const totalScore = beoordelingen.reduce(
+                        (sum: number, beoordeling: any) => sum + beoordeling.score,
+                        0
+                    );
+                    const averageScore =
+                        beoordelingen.length > 0 ? totalScore / beoordelingen.length : 0;
 
                     // Calculate starRating (1 to 5)
-                    const starRating = Math.max(1, Math.min(5, Math.round((averageScore / 10) * 5)));
+                    const starRating = Math.max(
+                        1,
+                        Math.min(5, Math.round((averageScore / 10) * 5))
+                    );
 
                     return { ...user, beoordelingen, starRating };
                 }
@@ -49,12 +56,21 @@ const fetcher = async () => {
     }
 };
 
+type LoggedInUser = {
+    token: string;
+    username: string;
+    role: string;
+};
+
 const UserPage: React.FC = () => {
     const { data: users, error } = useSWR<Array<User>>('/api/users', fetcher);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [minStarRating, setMinStarRating] = useState<number>(1);
 
     const [currentUserRole, setCurrentUserRole] = useState<string>('');
+
+    const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
+    const [isLoadingUser, setIsLoadingUser] = useState(true);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -64,7 +80,26 @@ const UserPage: React.FC = () => {
                 setCurrentUserRole(parsedUser.role);
             }
         }
+
+        const user = sessionStorage.getItem('loggedInUser');
+        if (user) {
+            setLoggedInUser(JSON.parse(user));
+        }
+        setIsLoadingUser(false);
     }, []);
+
+    if (!loggedInUser || loggedInUser.role !== 'admin') {
+        return (
+            <>
+                <Header />
+                <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                    <h1 className="text-2xl font-bold text-red-600">
+                        Permission denied. You are not authorized to view this page.
+                    </h1>
+                </div>
+            </>
+        );
+    }
 
     if (error) {
         return <div>Failed to load users: {error.message}</div>;
@@ -73,9 +108,12 @@ const UserPage: React.FC = () => {
         return <div>Loading...</div>;
     }
 
-    const filteredUsers = currentUserRole === 'realtor'
-        ? users.filter(user => user.rol === 'pilot' && (user.starRating ?? 1) >= minStarRating)
-        : users;
+    const filteredUsers =
+        currentUserRole === 'realtor'
+            ? users.filter(
+                  (user) => user.rol === 'pilot' && (user.starRating ?? 1) >= minStarRating
+              )
+            : users;
 
     return (
         <>
@@ -90,8 +128,13 @@ const UserPage: React.FC = () => {
                     </h2>
                     {currentUserRole === 'realtor' && (
                         <div className="mb-6 flex items-center">
-                            <label className="text-gray-700 font-medium mr-4">Minimum Star Rating:</label>
-                            <StarRatingSelector minRating={minStarRating} setMinRating={setMinStarRating} />
+                            <label className="text-gray-700 font-medium mr-4">
+                                Minimum Star Rating:
+                            </label>
+                            <StarRatingSelector
+                                minRating={minStarRating}
+                                setMinRating={setMinStarRating}
+                            />
                         </div>
                     )}
                     <UserOverviewTable
@@ -101,7 +144,9 @@ const UserPage: React.FC = () => {
                     />
                     {selectedUser && (
                         <>
-                            <h2 className="text-xl font-semibold mt-8 mb-4">Beoordelingen van {selectedUser.voornaam} {selectedUser.naam}</h2>
+                            <h2 className="text-xl font-semibold mt-8 mb-4">
+                                Beoordelingen van {selectedUser.voornaam} {selectedUser.naam}
+                            </h2>
                             <BeoordelingOverviewTable beoordelingen={selectedUser.beoordelingen} />
                         </>
                     )}
