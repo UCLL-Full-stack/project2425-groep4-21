@@ -34,6 +34,37 @@ const Home: React.FC = () => {
                         gebruiken.
                     </p>
                 </div>
+
+                {/* Gebruikersoverzicht (Hardcoded) */}
+                <section className={styles.userTable}>
+                    <h2 className={styles.subtitle}>Gebruikersoverzicht</h2>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>bjorn123</td>
+                                <td>admin123</td>
+                                <td>admin</td>
+                            </tr>
+                            <tr>
+                                <td>anna_pilot</td>
+                                <td>pilot123</td>
+                                <td>pilot</td>
+                            </tr>
+                            <tr>
+                                <td>john_realtor</td>
+                                <td>realtor123</td>
+                                <td>realtor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
             </main>
         </>
     );
