@@ -29,7 +29,7 @@ const Header: React.FC = () => {
     return (
         <header className={`${styles.header} flex items-center justify-between px-4 py-2`}>
             <div className="flex items-center">
-                <a className={styles.title}>{t('appTitle')}</a>
+                <a className={styles.title}>{t('Drone360')}</a>
             </div>
             <nav className={styles.nav}>
                 <Link href="/" className={styles.link}>

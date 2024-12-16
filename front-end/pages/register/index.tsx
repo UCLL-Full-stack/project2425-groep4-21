@@ -1,6 +1,7 @@
-import Head from "next/head";
-import Header from "@components/header";
-import UserRegisterForm from "@components/user/UserRegisterForm";
+import Head from 'next/head';
+import Header from '@components/header';
+import UserRegisterForm from '@components/user/UserRegisterForm';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const Register: React.FC = () => {
     return (
@@ -17,5 +18,11 @@ const Register: React.FC = () => {
         </>
     );
 };
+
+export const getServerSideProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+    },
+});
 
 export default Register;
