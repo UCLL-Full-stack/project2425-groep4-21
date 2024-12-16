@@ -1,0 +1,25 @@
+{
+    "title": "Drone360",
+    "description": "Drone360 - Plataforma para pilotos de drones y agentes inmobiliarios",
+    "welcomeMessage": "¡Bienvenido a Drone360!",
+    "intro1": "Con Drone360, los agentes inmobiliarios pueden encontrar y contratar fácilmente pilotos de drones para crear fotos aéreas y videos de sus propiedades. Esto les brinda una forma única y atractiva de presentar sus listados.",
+    "intro2": "Los pilotos de drones pueden subir su material directamente a la plataforma y vincularlo a la propiedad correspondiente, permitiendo a los agentes usarlo de inmediato.",
+    "userOverview": "Resumen de Usuarios",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "role": "Rol",
+    "adminUser": "admin",
+    "pilotUser": "piloto",
+    "realtorUser": "agente inmobiliario",
+
+    "appTitle": "Drone360 Aplicación",
+    "home": "Inicio",
+    "reviews": "Reseñas",
+    "media": "Medios",
+    "tasks": "Tareas",
+    "property": "Propiedad",
+    "user": "Usuario",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "welcomeUser": "¡Bienvenido, {{username}}!"
+}

@@ -1,0 +1,25 @@
+{
+    "title": "Drone360",
+    "description": "Drone360 - Platform for drone pilots and realtors",
+    "welcomeMessage": "Welcome to Drone360!",
+    "intro1": "With Drone360, realtors can easily find and hire drone pilots to create aerial photos and videos of their properties. This gives them a unique and attractive way to present their listings.",
+    "intro2": "Drone pilots can upload their footage directly to the platform and link it to the relevant property, allowing realtors to use it immediately.",
+    "userOverview": "User Overview",
+    "username": "Username",
+    "password": "Password",
+    "role": "Role",
+    "adminUser": "admin",
+    "pilotUser": "pilot",
+    "realtorUser": "realtor",
+
+    "appTitle": "Drone360 App",
+    "home": "Home",
+    "reviews": "Reviews",
+    "media": "Media",
+    "tasks": "Tasks",
+    "property": "Property",
+    "user": "User",
+    "logout": "Logout",
+    "login": "Login",
+    "welcomeUser": "Welcome, {{username}}!"
+}

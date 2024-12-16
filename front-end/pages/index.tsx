@@ -1,66 +1,67 @@
 import Head from 'next/head';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import Header from '@components/header';
 import styles from '@styles/home.module.css';
+import { GetStaticProps } from 'next';
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+    return {
+        props: {
+            ...(await serverSideTranslations(locale || 'en', ['common'])),
+        },
+    };
+};
 
 const Home: React.FC = () => {
+    const { t } = useTranslation('common');
+
     return (
         <>
             <Head>
-                <title>Drone360</title>
-                <meta
-                    name="description"
-                    content="Drone360 - Platform voor drone-piloten en makelaars"
-                />
+                <title>{t('title')}</title>
+                <meta name="description" content={t('description')} />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
             <main className={styles.main}>
                 <span className={styles.logoTitle}>
-                    <h1 className={styles.title}>Welkom bij Drone360!</h1>
+                    <h1 className={styles.title}>{t('welcomeMessage')}</h1>
                 </span>
 
                 <div className={styles.description}>
-                    <p>
-                        Met <strong>Drone360</strong> kunnen makelaars eenvoudig drone-piloten
-                        vinden en inhuren voor het maken van luchtfoto's en video's van hun
-                        vastgoed. Hierdoor krijgen zij de mogelijkheid om hun panden op een unieke
-                        en aantrekkelijke manier te presenteren.
-                    </p>
-                    <p>
-                        De drone-piloten kunnen de beelden rechtstreeks op het platform uploaden en
-                        koppelen aan het betreffende pand, zodat de makelaars deze direct kunnen
-                        gebruiken.
-                    </p>
+                    <p>{t('intro1')}</p>
+                    <p>{t('intro2')}</p>
                 </div>
 
-                {/* Gebruikersoverzicht (Hardcoded) */}
+                {/* Gebruikersoverzicht (nu vertaalbaar) */}
                 <section className={styles.userTable}>
-                    <h2 className={styles.subtitle}>Gebruikersoverzicht</h2>
+                    <h2 className={styles.subtitle}>{t('userOverview')}</h2>
                     <table className={styles.table}>
                         <thead>
                             <tr>
-                                <th>Username</th>
-                                <th>Password</th>
-                                <th>Role</th>
+                                <th>{t('username')}</th>
+                                <th>{t('password')}</th>
+                                <th>{t('role')}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>bjorn123</td>
                                 <td>admin123</td>
-                                <td>admin</td>
+                                <td>{t('adminUser')}</td>
                             </tr>
                             <tr>
                                 <td>anna_pilot</td>
                                 <td>pilot123</td>
-                                <td>pilot</td>
+                                <td>{t('pilotUser')}</td>
                             </tr>
                             <tr>
                                 <td>john_realtor</td>
                                 <td>realtor123</td>
-                                <td>realtor</td>
+                                <td>{t('realtorUser')}</td>
                             </tr>
                         </tbody>
                     </table>

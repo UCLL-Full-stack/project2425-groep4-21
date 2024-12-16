@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import styles from '@styles/header.module.css';
 import { useEffect, useState } from 'react';
+import Language from './language/Language';
+import { useTranslation } from 'next-i18next';
 
 type LoggedInUser = {
     token: string;
@@ -9,6 +11,7 @@ type LoggedInUser = {
 };
 
 const Header: React.FC = () => {
+    const { t } = useTranslation('common');
     const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
 
     useEffect(() => {
@@ -26,44 +29,44 @@ const Header: React.FC = () => {
     return (
         <header className={`${styles.header} flex items-center justify-between px-4 py-2`}>
             <div className="flex items-center">
-                <a className={styles.title}>Drone360 App</a>
+                <a className={styles.title}>{t('appTitle')}</a>
             </div>
             <nav className={styles.nav}>
                 <Link href="/" className={styles.link}>
-                    Home
+                    {t('home')}
                 </Link>
                 {loggedInUser ? (
                     <>
                         {loggedInUser.role === 'admin' && (
                             <Link href="/beoordeling" className={styles.link}>
-                                Beoordelingen
+                                {t('reviews')}
                             </Link>
                         )}
                         {loggedInUser.role === 'admin' && (
                             <Link href="/media" className={styles.link}>
-                                Media
+                                {t('media')}
                             </Link>
                         )}
                         <Link href="/opdracht" className={styles.link}>
-                            Opdracht
+                            {t('tasks')}
                         </Link>
                         <Link href="/pand" className={styles.link}>
-                            Pand
+                            {t('property')}
                         </Link>
                         <Link href="/user" className={styles.link}>
-                            User
+                            {t('user')}
                         </Link>
                         <a
                             onClick={handleLogout}
                             className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer"
                         >
-                            Logout
+                            {t('logout')}
                         </a>
                         <Link
                             href="/profile"
                             className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer"
                         >
-                            Welcome, {loggedInUser.username}!
+                            {t('welcomeUser', { username: loggedInUser.username })}
                         </Link>
                     </>
                 ) : (
@@ -71,9 +74,10 @@ const Header: React.FC = () => {
                         href="/login"
                         className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer"
                     >
-                        Login
+                        {t('login')}
                     </Link>
                 )}
+                <Language />
             </nav>
         </header>
     );
