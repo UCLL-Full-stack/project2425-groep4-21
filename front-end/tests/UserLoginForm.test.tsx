@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import UserLoginForm from '../components/user/UserLoginForm';
 import userService from '@services/userService';
 import { useRouter } from 'next/router';
