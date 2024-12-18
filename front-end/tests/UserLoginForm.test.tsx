@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import UserLoginForm from '../components/user/UserLoginForm';
 import userService from '@services/userService';
 import { useRouter } from 'next/router';
@@ -77,6 +77,9 @@ describe('UserLoginForm', () => {
     });
 
     test('successful login redirects to home page', async () => {
+        // Schakel fake timers in
+        jest.useFakeTimers();
+
         // Mock successful login response
         (userService.loginUser as jest.Mock).mockResolvedValue({
             status: 200,
@@ -114,10 +117,16 @@ describe('UserLoginForm', () => {
             userId: '123',
         });
 
-        // Check if redirected to home page
-        await waitFor(() => {
-            expect(mockPush).toHaveBeenCalledWith('/');
+        // Advance timers by 2000ms om de setTimeout te triggeren
+        act(() => {
+            jest.advanceTimersByTime(2000);
         });
+
+        // Controleer of router.push is aangeroepen
+        expect(mockPush).toHaveBeenCalledWith('/');
+
+        // Herstel real timers
+        jest.useRealTimers();
     });
 
     test('shows error message on login failure', async () => {
