@@ -8,8 +8,6 @@ const beoordelingData = {
     userId: 123,
 };
 
-// Beoordeling tests
-
 test('given: valid beoordeling data, when: beoordeling is created, then: beoordeling has the correct properties', () => {
     // given
     const beoordeling = new Beoordeling(beoordelingData);
