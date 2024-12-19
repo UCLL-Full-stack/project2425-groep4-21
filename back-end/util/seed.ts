@@ -117,12 +117,12 @@ async function main() {
             {
                 score: 9,
                 opmerkingen: 'Zeer tevreden met het resultaat!',
-                userId: user3.id,
+                userId: user2.id,
             },
             {
                 score: 7,
                 opmerkingen: 'Enkele verbeterpunten, maar algemeen oké.',
-                userId: user3.id,
+                userId: user2.id,
             },
         ],
     });
