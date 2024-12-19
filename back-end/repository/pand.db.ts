@@ -134,11 +134,14 @@ const createPand = async (newPandData: any): Promise<Pand> => {
 
 const deletePandById = async (id: number): Promise<boolean> => {
     try {
-        await database.pand.delete({
-            where: {
-                id: id,
-            },
+        await database.media.deleteMany({
+            where: { id: id },
         });
+
+        await database.pand.delete({
+            where: { id: id },
+        });
+
         return true;
     } catch (error) {
         console.error('Error deleting pand:', error);
