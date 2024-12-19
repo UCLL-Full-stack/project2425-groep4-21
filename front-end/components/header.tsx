@@ -33,40 +33,40 @@ const Header: React.FC = () => {
             </div>
             <nav className={styles.nav}>
                 <Link href="/" className={styles.link}>
-                    {t('home')}
+                    {t('Home')}
                 </Link>
                 {loggedInUser ? (
                     <>
                         {loggedInUser.role === 'admin' && (
                             <Link href="/beoordeling" className={styles.link}>
-                                {t('reviews')}
+                                {t('Reviews')}
                             </Link>
                         )}
                         {loggedInUser.role === 'admin' && (
                             <Link href="/media" className={styles.link}>
-                                {t('media')}
+                                {t('Media')}
                             </Link>
                         )}
                         <Link href="/opdracht" className={styles.link}>
-                            {t('tasks')}
+                            {t('Tasks')}
                         </Link>
                         <Link href="/pand" className={styles.link}>
-                            {t('property')}
+                            {t('Property')}
                         </Link>
                         <Link href="/user" className={styles.link}>
-                            {t('user')}
+                            {t('User')}
                         </Link>
                         <a
                             onClick={handleLogout}
                             className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer"
                         >
-                            {t('logout')}
+                            {t('Logout')}
                         </a>
                         <Link
                             href="/profile"
                             className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer"
                         >
-                            {t('welcomeUser', { username: loggedInUser.username })}
+                            {t('Welcome', { username: loggedInUser.username })}
                         </Link>
                     </>
                 ) : (
@@ -74,7 +74,7 @@ const Header: React.FC = () => {
                         href="/login"
                         className="px-4 text-blue text-xl hover:bg-gray-600 rounded-lg cursor-pointer"
                     >
-                        {t('login')}
+                        {t('Login')}
                     </Link>
                 )}
                 <Language />
