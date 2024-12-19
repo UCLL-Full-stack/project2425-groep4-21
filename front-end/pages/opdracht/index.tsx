@@ -54,7 +54,7 @@ const OpdrachtPage: React.FC = () => {
             setTimeout(() => {
                 setMessage(null);
             }, 3000);
-        } catch (error) {
+        } catch (error: any) {
             alert(`Fout bij het sluiten van de opdracht: ${error.message}`);
         }
     };
@@ -112,11 +112,8 @@ const OpdrachtPage: React.FC = () => {
                                 Beoordeling van Opdracht {selectedOpdracht.opdrachtnummer}
                             </h2>
                             <BeoordelingOverviewTable
-                                beoordelingen={
-                                    selectedOpdracht.beoordeling
-                                        ? [selectedOpdracht.beoordeling]
-                                        : []
-                                }
+                                beoordelingen={selectedOpdracht.beoordeling ? [selectedOpdracht.beoordeling] : []}
+                                currentUserRole={currentUserRole}
                             />
                         </>
                     )}

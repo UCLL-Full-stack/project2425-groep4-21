@@ -151,7 +151,10 @@ const UserPage: React.FC = () => {
                             <h2 className="text-xl font-semibold mt-8 mb-4">
                                 Beoordelingen van {selectedUser.voornaam} {selectedUser.naam}
                             </h2>
-                            <BeoordelingOverviewTable beoordelingen={selectedUser.beoordelingen} />
+                            <BeoordelingOverviewTable
+                                beoordelingen={selectedUser.beoordelingen}
+                                currentUserRole={currentUserRole}
+                            />
                         </>
                     )}
                 </section>
