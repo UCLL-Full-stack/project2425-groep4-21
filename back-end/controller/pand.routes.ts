@@ -39,6 +39,8 @@ const pandRouter = express.Router();
  *     summary: Get a list of all panden
  *     tags:
  *       - Panden
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of panden
@@ -67,6 +69,8 @@ pandRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *     summary: Get a specific pand by ID
  *     tags:
  *       - Panden
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -107,6 +111,8 @@ pandRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *     summary: Create a new pand
  *     tags:
  *       - Panden
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -136,6 +142,8 @@ pandRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  *     summary: Delete a pand by ID
  *     tags:
  *       - Panden
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -226,6 +234,5 @@ pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) =
         }
     }
 });
-
 
 export { pandRouter };

@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { MediaService } from '../service/media.service';
-import {Media} from "../model/media";
+import { Media } from '../model/media';
 
 const mediaRouter = express.Router();
 
@@ -38,6 +38,8 @@ const mediaRouter = express.Router();
  *     summary: Get a list of all media files
  *     tags:
  *       - Media
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of media files
@@ -66,6 +68,8 @@ mediaRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
  *     summary: Get a specific media file by ID
  *     tags:
  *       - Media
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -106,6 +110,8 @@ mediaRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
  *     summary: Create a new media
  *     tags:
  *       - Media
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -151,6 +157,8 @@ mediaRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
  *     summary: Delete a media by ID
  *     tags:
  *       - Media
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -171,44 +179,47 @@ mediaRouter.delete('/:id', async (req: Request, res: Response, next: NextFunctio
         const id = parseInt(req.params.id, 10);
         const success = await MediaService.deleteMediaById(id);
         if (success) {
-            res.status(200).json({message: 'Media deleted successfully'});
+            res.status(200).json({ message: 'Media deleted successfully' });
         } else {
-            res.status(404).json({message: 'Media not found'});
+            res.status(404).json({ message: 'Media not found' });
         }
     } catch (error) {
         next(error);
     }
 });
-/**
- * @swagger
- * /media/property/{propertyId}:
- *   get:
- *     summary: Retrieve all media from a property
- *     tags:
- *       - Media
- *     parameters:
- *       - in: path
- *         name: propertyId
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID property
- *     responses:
- *       200:
- *         description: List of media of the property
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Media'
- *       400:
- *         description: Invalid property ID
- *       404:
- *         description: Pand not found or no media available
- *       500:
- *         description: Serverfout
- */
+
+// /**
+//  * @swagger
+//  * /media/property/{propertyId}:
+//  *   get:
+//  *     summary: Retrieve all media from a property
+//  *     tags:
+//  *       - Media
+//  *     security:
+//  *       - bearerAuth: []
+//  *     parameters:
+//  *       - in: path
+//  *         name: propertyId
+//  *         schema:
+//  *           type: integer
+//  *         required: true
+//  *         description: ID property
+//  *     responses:
+//  *       200:
+//  *         description: List of media of the property
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: array
+//  *               items:
+//  *                 $ref: '#/components/schemas/Media'
+//  *       400:
+//  *         description: Invalid property ID
+//  *       404:
+//  *         description: Pand not found or no media available
+//  *       500:
+//  *         description: Serverfout
+//  */
 // mediaRouter.get('/property/:propertyId', async (req: Request, res: Response, next: NextFunction) => {
 //     try {
 //         const propertyId = parseInt(req.params.propertyId, 10);

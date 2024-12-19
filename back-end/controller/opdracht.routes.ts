@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import { OpdrachtService } from '../service/opdracht.service';
 import '../types/index';
 
-
 const opdrachtRouter = express.Router();
 
 /**
@@ -59,6 +58,8 @@ const opdrachtRouter = express.Router();
  *     summary: Get a list of all opdrachten
  *     tags:
  *       - Opdrachten
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of opdrachten
@@ -80,32 +81,32 @@ opdrachtRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
-/**
- * @swagger
- * /opdrachten/hired-pilots:
- *   get:
- *     summary: Get all hired drone pilots for a realtor
- *     tags:
- *       - Opdrachten
- *     responses:
- *       200:
- *         description: List of hired drone pilots
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   rating:
- *                     type: number
- *       500:
- *         description: Server error
- */
+// /**
+//  * @swagger
+//  * /opdrachten/hired-pilots:
+//  *   get:
+//  *     summary: Get all hired drone pilots for a realtor
+//  *     tags:
+//  *       - Opdrachten
+//  *     responses:
+//  *       200:
+//  *         description: List of hired drone pilots
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: array
+//  *               items:
+//  *                 type: object
+//  *                 properties:
+//  *                   id:
+//  *                     type: integer
+//  *                   name:
+//  *                     type: string
+//  *                   rating:
+//  *                     type: number
+//  *       500:
+//  *         description: Server error
+//  */
 // opdrachtRouter.get('/hired-pilots', async (req: Request, res: Response, next: NextFunction) => {
 //     // needs also jwt token
 //     try {
@@ -129,6 +130,8 @@ opdrachtRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
  *     summary: Get a specific opdracht by ID
  *     tags:
  *       - Opdrachten
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -169,6 +172,8 @@ opdrachtRouter.get('/:id', async (req: Request, res: Response, next: NextFunctio
  *     summary: Create a new opdracht
  *     tags:
  *       - Opdrachten
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -198,6 +203,8 @@ opdrachtRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
  *     summary: Delete an opdracht by ID
  *     tags:
  *       - Opdrachten
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -218,9 +225,9 @@ opdrachtRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
         const id = parseInt(req.params.id, 10);
         const success = await OpdrachtService.deleteOpdrachtById(id);
         if (success) {
-            res.status(200).json({message: 'Opdracht deleted successfully'});
+            res.status(200).json({ message: 'Opdracht deleted successfully' });
         } else {
-            res.status(404).json({message: 'Opdracht not found'});
+            res.status(404).json({ message: 'Opdracht not found' });
         }
     } catch (error) {
         next(error);
@@ -234,6 +241,8 @@ opdrachtRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
  *     summary: Book a drone pilot
  *     tags:
  *       - Opdrachten
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -270,6 +279,8 @@ opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunct
  *     summary: Get completed assignments and reviews for a drone pilot
  *     tags:
  *       - Opdrachten
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of completed assignments and reviews
@@ -291,17 +302,20 @@ opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunct
  *       500:
  *         description: Server error
  */
-opdrachtRouter.get('/completed-assignments', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        if (!req.user) {
-            return res.status(401).json({ message: 'Unauthorized' });
+opdrachtRouter.get(
+    '/completed-assignments',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            if (!req.user) {
+                return res.status(401).json({ message: 'Unauthorized' });
+            }
+            const assignments = await OpdrachtService.getCompletedAssignments(req.user.id);
+            res.status(200).json(assignments);
+        } catch (error) {
+            next(error);
         }
-        const assignments = await OpdrachtService.getCompletedAssignments(req.user.id);
-        res.status(200).json(assignments);
-    } catch (error) {
-        next(error);
     }
-});
+);
 
 /**
  * @swagger
@@ -310,6 +324,8 @@ opdrachtRouter.get('/completed-assignments', async (req: Request, res: Response,
  *     summary: Update the status of an opdracht
  *     tags:
  *       - Opdrachten
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -351,7 +367,6 @@ opdrachtRouter.put('/:id/status', async (req: Request, res: Response, next: Next
     }
 });
 
-
 //TODO do we still iplement this? beoordeling or not?
 //
 // /**
@@ -382,7 +397,6 @@ opdrachtRouter.put('/:id/status', async (req: Request, res: Response, next: Next
 //  *       500:
 //  *         description: Serverfout
 //  */
-
 
 // opdrachtRouter.get('/:opdrachtId/beoordeling', async (req: Request, res: Response, next: NextFunction) => {
 //     try {

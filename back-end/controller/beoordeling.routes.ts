@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { BeoordelingService } from '../service/beoordeling.service';
-import {Beoordeling} from "../model/beoordeling";
+import { Beoordeling } from '../model/beoordeling';
 
 const beoordelingRouter = express.Router();
 
@@ -37,6 +37,8 @@ const beoordelingRouter = express.Router();
  *     summary: Get a list of all beoordelingen
  *     tags:
  *       - Beoordelingen
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of beoordelingen
@@ -65,6 +67,8 @@ beoordelingRouter.get('/', async (req: Request, res: Response, next: NextFunctio
  *     summary: Get a specific beoordeling by ID
  *     tags:
  *       - Beoordelingen
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -105,6 +109,8 @@ beoordelingRouter.get('/:id', async (req: Request, res: Response, next: NextFunc
  *     summary: Create a new beoordeling
  *     tags:
  *       - Beoordelingen
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -142,6 +148,8 @@ beoordelingRouter.post('/', async (req: Request, res: Response, next: NextFuncti
  *     summary: Delete a beoordeling by ID
  *     tags:
  *       - Beoordelingen
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -162,9 +170,9 @@ beoordelingRouter.delete('/:id', async (req: Request, res: Response, next: NextF
         const id = parseInt(req.params.id, 10);
         const success = await BeoordelingService.deleteBeoordelingById(id);
         if (success) {
-            res.status(200).json({message: 'Beoordeling deleted successfully'});
+            res.status(200).json({ message: 'Beoordeling deleted successfully' });
         } else {
-            res.status(404).json({message: 'Beoordeling not found'});
+            res.status(404).json({ message: 'Beoordeling not found' });
         }
     } catch (error) {
         next(error);
@@ -178,6 +186,8 @@ beoordelingRouter.delete('/:id', async (req: Request, res: Response, next: NextF
  *     summary: Get all beoordeling for a specific pilot
  *     tags:
  *       - Beoordelingen
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: pilotId

@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { UserService } from '../service/user.service';
-import {User} from "../model/user";
-import {UserInput} from "../types";
+import { User } from '../model/user';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -53,6 +53,8 @@ const userRouter = express.Router();
  *     summary: Get a list of all users
  *     tags:
  *       - Users
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of users
@@ -81,6 +83,8 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *     summary: Get a list of all pilots, with filtering options
  *     tags:
  *       - Users
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: minRating
@@ -112,7 +116,10 @@ userRouter.get('/pilots', async (req: Request, res: Response, next: NextFunction
     try {
         const { minRating, niveau } = req.query;
         const ratingFilter = minRating ? parseFloat(minRating as string) : undefined;
-        const pilots = await UserService.getPilots({ minRating: ratingFilter, niveau: niveau as string });
+        const pilots = await UserService.getPilots({
+            minRating: ratingFilter,
+            niveau: niveau as string,
+        });
         res.status(200).json(pilots);
     } catch (error) {
         next(error);
@@ -126,6 +133,8 @@ userRouter.get('/pilots', async (req: Request, res: Response, next: NextFunction
  *     summary: Get a specific user by ID
  *     tags:
  *       - Users
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -166,6 +175,8 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *     summary: Create a new user
  *     tags:
  *       - Users
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -196,6 +207,8 @@ userRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  *     summary: Delete a user by ID
  *     tags:
  *       - Users
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -331,6 +344,5 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
 // GET /users/profile: Haal het profiel van de ingelogde gebruiker op.
 // PUT /users/profile: Werk het profiel van de ingelogde gebruiker bij.
 // PUT /users/:id/verify: Verifieer een gebruiker (alleen voor beheerders).
-
 
 export { userRouter };
