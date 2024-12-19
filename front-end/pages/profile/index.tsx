@@ -42,10 +42,24 @@ const PilotProfilePage: React.FC = () => {
         }
     }, []);
 
+
+    if (!currentUserRole) {
+        return (
+            <>
+                <Header />
+                <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                    <h1 className="text-2xl font-bold text-red-600">
+                        Permission denied. You are not authorized to view this page.
+                    </h1>
+                </div>
+            </>
+        );
+    }
+
     if (opdrachtError || beoordelingError) return <div>Failed to load</div>;
     if (!opdrachten || !beoordelingen) return <div>Loading...</div>;
 
-    const closedOpdrachten = opdrachten.filter((opdracht) => opdracht.status === 'closed');
+    const closedOpdrachten = opdrachten.filter((opdracht) => opdracht.status === 'Completed');
     const filteredBeoordelingen =
         currentUserRole === 'admin'
             ? beoordelingen
