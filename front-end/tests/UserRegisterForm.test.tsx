@@ -1,4 +1,3 @@
-// UserRegisterForm.test.tsx
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import UserRegisterForm from '../components/user/UserRegisterForm';
