@@ -12,49 +12,44 @@ const fetcher = async () => {
     return response.json();
 };
 
-// type LoggedInUser = {
-//     token: string;
-//     username: string;
-//     role: string;
-// };
+type LoggedInUser = {
+    token: string;
+    username: string;
+    role: string;
+};
 
 const PandPage: React.FC = () => {
     const { data: panden, error } = useSWR<Array<Pand>>('/api/panden', fetcher);
     const [isAdding, setIsAdding] = useState(false);
+    const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
+    const [isLoadingUser, setIsLoadingUser] = useState(true);
 
-    // const [loggedInUser2, setLoggedInUser] = useState<LoggedInUser | null>(null);
-    // const [isLoadingUser, setIsLoadingUser] = useState(true);
+    useEffect(() => {
+        const user = sessionStorage.getItem('loggedInUser');
+        if (user) {
+            setLoggedInUser(JSON.parse(user));
+        }
+        setIsLoadingUser(false);
+    }, []);
 
-    // useEffect(() => {
-    //     const user = sessionStorage.getItem('loggedInUser');
-    //     if (user) {
-    //         setLoggedInUser(JSON.parse(user));
-    //     }
-    //     setIsLoadingUser(false);
-    // }, []);
-
-    const loggedInUser =
-        typeof window !== 'undefined' ? sessionStorage.getItem('loggedInUser') : null;
     let currentRole = '';
     let currentUserId: number | null = null;
     if (loggedInUser) {
-        const parsedUser = JSON.parse(loggedInUser);
-        currentRole = parsedUser.role;
-        currentUserId = parsedUser.userId;
+        currentRole = loggedInUser.role;
     }
 
-    // if (!loggedInUser2 || loggedInUser2.role !== 'admin') {
-    //     return (
-    //         <>
-    //             <Header />
-    //             <div className="min-h-screen flex items-center justify-center bg-gray-100">
-    //                 <h1 className="text-2xl font-bold text-red-600">
-    //                     Permission denied. You are not authorized to view this page.
-    //                 </h1>
-    //             </div>
-    //         </>
-    //     );
-    // }
+    if (!loggedInUser) {
+        return (
+            <>
+                <Header />
+                <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                    <h1 className="text-2xl font-bold text-red-600">
+                        Permission denied. You are not authorized to view this page.
+                    </h1>
+                </div>
+            </>
+        );
+    }
 
     if (error) return <div>Failed to load</div>;
     if (!panden) return <div>Loading...</div>;

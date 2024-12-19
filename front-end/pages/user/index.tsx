@@ -25,12 +25,10 @@ const fetcher = async () => {
                     try {
                         const beoordelingen = await BeoordelingService.getBeoordelingByPilotId(user.id);
 
-                        // Ensure beoordelingen is an array
                         if (!Array.isArray(beoordelingen)) {
                             throw new Error(`Beoordelingen for user ID ${user.id} is not an array.`);
                         }
 
-                        // Calculate totalScore and averageScore
                         const totalScore = beoordelingen.reduce(
                             (sum: number, beoordeling: any) => sum + beoordeling.score,
                             0
@@ -92,6 +90,19 @@ const UserPage: React.FC = () => {
         }
         setIsLoadingUser(false);
     }, []);
+
+    if (!loggedInUser) {
+        return (
+            <>
+                <Header />
+                <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                    <h1 className="text-2xl font-bold text-red-600">
+                        Permission denied. You are not authorized to view this page.
+                    </h1>
+                </div>
+            </>
+        );
+    }
 
 
     if (error) {
