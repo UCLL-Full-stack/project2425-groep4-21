@@ -106,7 +106,7 @@ async function main() {
         },
     });
 
-    //Media
+    //Beoordeling
     await prisma.beoordeling.createMany({
         data: [
             {
@@ -123,6 +123,24 @@ async function main() {
                 score: 7,
                 opmerkingen: 'Enkele verbeterpunten, maar algemeen oké.',
                 userId: user3.id,
+            },
+        ],
+    });
+
+    //Media
+    await prisma.media.createMany({
+        data: [
+            {
+                type: 'image',
+                bestandslocatie: 'https://example.com/image1.jpg',
+                uploadDatum: new Date(),
+                opdrachtId: opdracht1.opdrachtnummer,
+            },
+            {
+                type: 'video',
+                bestandslocatie: 'https://example.com/video1.mp4',
+                uploadDatum: new Date(),
+                opdrachtId: opdracht2.opdrachtnummer,
             },
         ],
     });
