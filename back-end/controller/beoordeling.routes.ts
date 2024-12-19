@@ -16,9 +16,6 @@ const beoordelingRouter = express.Router();
  *      Beoordeling:
  *          type: object
  *          properties:
- *            beoordelingId:
- *              type: number
- *              format: int64
  *            score:
  *              type: number
  *              description: Score given in the beoordeling.
