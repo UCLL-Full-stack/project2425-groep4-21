@@ -131,7 +131,6 @@ beoordelingRouter.post('/', async (req: Request, res: Response, next: NextFuncti
 
         const beoordeling = await BeoordelingService.createBeoordeling(newBeoordeling);
 
-        // Respond with the created beoordeling
         res.status(200).json(beoordeling);
     } catch (error) {
         next(error);

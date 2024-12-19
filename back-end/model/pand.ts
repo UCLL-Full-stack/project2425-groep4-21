@@ -8,7 +8,7 @@ export class Pand {
     private beschrijving: string;
     private userIdMakelaar: number;
     private opdrachten: Opdracht[];
-    private user?: User; //toegevoegd
+    private user?: User;
 
     constructor(pand: {
         id?: number;
@@ -16,7 +16,7 @@ export class Pand {
         beschrijving: string;
         userIdMakelaar: number;
         opdrachten: Opdracht[];
-        user?: User; //toegevoegd
+        user?: User;
     }) {
         this.validateInput(pand);
         this.validateBusinessRules(pand);
@@ -35,7 +35,7 @@ export class Pand {
         beschrijving,
         userIdMakelaar,
         user,
-        opdrachten = [], // Voeg 'opdrachten' toe met een default lege array
+        opdrachten = [],
     }: PandPrisma & { user: UserPrisma; opdrachten?: Opdracht[] }) {
         return new Pand({
             id: id,
@@ -98,7 +98,6 @@ export class Pand {
         );
     }
 
-    // Getters
     getPandId(): number | undefined {
         return this.id;
     }

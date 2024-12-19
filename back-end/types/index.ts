@@ -54,15 +54,6 @@ declare global {
     }
 }
 
-// type AuthenticationResponse = {
-//     token: string;
-//     username: string;
-//     fullname: string;
-//     role: string;
-// };
-
-//is voor later in week 7 of 8
-
 export {
     Role,
     UserInput,
@@ -70,5 +61,4 @@ export {
     OpdrachtInput,
     MediaInput,
     BeoordelingInput,
-    //AuthenticationResponse,
 };

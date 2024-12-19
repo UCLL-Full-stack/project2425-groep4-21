@@ -95,14 +95,6 @@ const deleteUserById = async (id: number): Promise<boolean> => {
     }
 };
 
-// const getUsersByRoleAndRating = (role: string, rating: number): User[] => {
-//     return users.filter(user => user.getRol() === role && user.getBeoordelingen().some(b => b.getScore() >= rating));
-// };
-//
-// const getUsersByIdsAndRole = (ids: number[], role: string): User[] => {
-//     return users.filter(user => ids.includes(user.id) && user.getRol() === role);
-// };
-
 const getUsersByRole = async (role: 'pilot' | 'realtor' | 'admin'): Promise<User[]> => {
     const usersPrisma = await database.user.findMany({
         where: { rol: role },
@@ -139,8 +131,6 @@ export default {
     getUserById,
     createUser,
     deleteUserById,
-    //getUsersByRoleAndRating,
-    //getUsersByIdsAndRole,
     getUsersByRole,
     getUserByUsername
 };

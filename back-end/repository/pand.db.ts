@@ -149,7 +149,6 @@ const deletePandById = async (id: number): Promise<boolean> => {
     }
 };
 
-//TODO fix update pand problem with userIdmakelaar
 const updatePand = async (pandId: number, updatedPandData: any): Promise<Pand | null> => {
     try {
         const updatedPandPrisma = await database.pand.update({

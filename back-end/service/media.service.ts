@@ -35,26 +35,6 @@ class MediaService {
         return await mediaDb.deleteMediaById(id);
     }
 
-    // static async getMediaByPropertyId(propertyId: number): Promise<Media[] | null> {
-    //     const pand = await pandDb.getPandById(propertyId);
-    //     if (!pand) {
-    //         return null;
-    //     }
-
-    //     const opdrachten = pand.getOpdracht();
-    //     if (!opdrachten || opdrachten.length === 0) {
-    //         return [];
-    //     }
-
-    //     const mediaList: Media[] = [];
-    //     for (const opdracht of opdrachten) {
-    //         const medias = opdracht.getMedias();
-    //         if (medias && medias.length > 0) {
-    //             mediaList.push(...medias);
-    //         }
-    //     }
-    //     return mediaList;
-    // }
 }
 
 export { MediaService };

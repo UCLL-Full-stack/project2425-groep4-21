@@ -68,7 +68,6 @@ export class Media {
             throw new Error(`Type must be one of the following: ${allowedTypes.join(', ')}.`);
         }
 
-        // Upload date must not be in the future
         const now = new Date();
         if (uploadDatum > now) {
             throw new Error('Upload date cannot be in the future.');

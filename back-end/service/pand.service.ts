@@ -23,10 +23,10 @@ class PandService {
     }
 
     static async updatePand(pandId: number, updatedPandData: any): Promise<Pand | null> {
-        console.log(`PandService: Updating Pand with ID ${pandId}`); // Debugging
+        console.log(`PandService: Updating Pand with ID ${pandId}`);
         const existingPand = await pandDb.getPandById(pandId);
         if (!existingPand) {
-            console.error(`Pand with ID ${pandId} not found`); // Debugging
+            console.error(`Pand with ID ${pandId} not found`);
             throw new Error(`Pand with ID ${pandId} not found`);
         }
 

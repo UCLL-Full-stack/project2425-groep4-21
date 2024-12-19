@@ -340,9 +340,4 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
-//Todo endpoints jwt
-// GET /users/profile: Haal het profiel van de ingelogde gebruiker op.
-// PUT /users/profile: Werk het profiel van de ingelogde gebruiker bij.
-// PUT /users/:id/verify: Verifieer een gebruiker (alleen voor beheerders).
-
 export { userRouter };

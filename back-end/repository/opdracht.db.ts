@@ -126,21 +126,6 @@ const getOpdrachtenByRealtorId = async (realtorId: number): Promise<Opdracht[]> 
 
     return opdrachtenPrisma.map((opdrachtPrisma) => Opdracht.from(opdrachtPrisma));
 };
-
-//TODO: fix this
-const getCompletedOpdrachtenByPilotId = async (pilotId: number): Promise<Opdracht[]> => {
-    const opdrachtenPrisma = await database.opdracht.findMany({
-        where: {
-            pilotId: pilotId,
-            status: 'Completed',
-        },
-        include: {
-            medias: true,
-        },
-    });
-    return opdrachtenPrisma.map((opdrachtPrisma) => Opdracht.from(opdrachtPrisma));
-};
-
 const updateOpdracht = async (updatedOpdracht: Opdracht): Promise<Opdracht> => {
     const updatedOpdrachtPrisma = await database.opdracht.update({
         where: { opdrachtnummer: updatedOpdracht.getOpdrachtnummer() },
@@ -182,11 +167,7 @@ const updateOpdracht = async (updatedOpdracht: Opdracht): Promise<Opdracht> => {
         pilotId: updatedOpdrachtPrisma.pilotId,
     });
 };
-//TODO for later maybe?
-// const getAssignmentById = async (OpdrachtId: number): Promise<Opdracht | null> => {
-//     const opdracht = opdrachten.find(a => a.getOpdrachtnummer() === OpdrachtId);
-//     return opdracht || null;
-// };
+
 
 export default {
     getAllOpdrachten,
@@ -194,7 +175,5 @@ export default {
     createOpdracht,
     deleteOpdrachtById,
     getOpdrachtenByRealtorId,
-    getCompletedOpdrachtenByPilotId,
     updateOpdracht,
-    //getAssignmentById
 };

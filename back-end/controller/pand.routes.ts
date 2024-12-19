@@ -222,7 +222,7 @@ pandRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) =
         const updatedPand = await PandService.updatePand(pandId, updatedPandData);
         res.status(200).json(updatedPand);
     } catch (error) {
-        console.error('Error in PUT /panden/:id:', error); // Debugging
+        console.error('Error in PUT /panden/:id:', error);
         if (error instanceof Error && error.message.includes('not found')) {
             res.status(404).json({ message: error.message });
         } else {

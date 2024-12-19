@@ -77,48 +77,6 @@ opdrachtRouter.get('/', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
-// /**
-//  * @swagger
-//  * /opdrachten/hired-pilots:
-//  *   get:
-//  *     summary: Get all hired drone pilots for a realtor
-//  *     tags:
-//  *       - Opdrachten
-//  *     responses:
-//  *       200:
-//  *         description: List of hired drone pilots
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: array
-//  *               items:
-//  *                 type: object
-//  *                 properties:
-//  *                   id:
-//  *                     type: integer
-//  *                   name:
-//  *                     type: string
-//  *                   rating:
-//  *                     type: number
-//  *       500:
-//  *         description: Server error
-//  */
-// opdrachtRouter.get('/hired-pilots', async (req: Request, res: Response, next: NextFunction) => {
-//     // needs also jwt token
-//     try {
-//         //temporarily hardcoded realtorId
-//         const realtorId = 3; // Replace with the realtorId you want to test
-//         const pilots = await OpdrachtService.getHiredPilots(realtorId);
-//         if (pilots && pilots.length > 0) {
-//             res.status(200).json(pilots);
-//         } else {
-//             res.status(404).json({ message: 'No hired pilots found' });
-//         }
-//     } catch (error) {
-//         next(error);
-//     }
-// });
-
 /**
  * @swagger
  * /opdrachten/{id}:
@@ -318,54 +276,5 @@ opdrachtRouter.put('/:id/status', async (req: Request, res: Response, next: Next
         next(error);
     }
 });
-
-//TODO do we still iplement this? beoordeling or not?
-//
-// /**
-//  * @swagger
-//  * /opdrachten/{opdrachtId}/beoordeling:
-//  *   get:
-//  *     summary: Get the assessment of a specific assignment
-//  *     tags:
-//  *       - Opdrachten
-//  *     parameters:
-//  *       - in: path
-//  *         name: opdrachtId
-//  *         schema:
-//  *           type: integer
-//  *         required: true
-//  *         description: ID of the opdracht
-//  *     responses:
-//  *       200:
-//  *         description: Assignment assessment
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               $ref: '#/components/schemas/Beoordeling'
-//  *       404:
-//  *         description: Assignment or assessment not found
-//  *       400:
-//  *         description: Invalid order ID
-//  *       500:
-//  *         description: Serverfout
-//  */
-
-// opdrachtRouter.get('/:opdrachtId/beoordeling', async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const opdrachtId = parseInt(req.params.opdrachtId, 10);
-//         if (isNaN(opdrachtId)) {
-//             return res.status(400).json({ message: 'Invalid order ID' });
-//         }
-//
-//         const beoordeling = await OpdrachtService.getBeoordelingByAssignmentId(opdrachtId);
-//         if (!beoordeling) {
-//             return res.status(404).json({ message: 'Rating not found for this assignment' });
-//         }
-//
-//         res.status(200).json(beoordeling);
-//     } catch (error) {
-//         next(error);
-//     }
-// });
 
 export { opdrachtRouter };
