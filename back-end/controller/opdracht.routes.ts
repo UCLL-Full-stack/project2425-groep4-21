@@ -16,10 +16,6 @@ const opdrachtRouter = express.Router();
  *      Opdracht:
  *          type: object
  *          properties:
- *            opdrachtnummer:
- *              type: number
- *              format: int64
- *              description: Unique identifier for the opdracht.
  *            datum:
  *              type: string
  *              format: date-time
@@ -272,50 +268,6 @@ opdrachtRouter.post('/book', async (req: Request, res: Response, next: NextFunct
     }
 });
 
-/**
- * @swagger
- * /opdrachten/completed-assignments:
- *   get:
- *     summary: Get completed assignments and reviews for a drone pilot
- *     tags:
- *       - Opdrachten
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: List of completed assignments and reviews
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   opdrachtDetails:
- *                     type: object
- *                   review:
- *                     type: string
- *                   points:
- *                     type: number
- *       500:
- *         description: Server error
- */
-opdrachtRouter.get(
-    '/completed-assignments',
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            if (!req.user) {
-                return res.status(401).json({ message: 'Unauthorized' });
-            }
-            const assignments = await OpdrachtService.getCompletedAssignments(req.user.id);
-            res.status(200).json(assignments);
-        } catch (error) {
-            next(error);
-        }
-    }
-);
 
 /**
  * @swagger

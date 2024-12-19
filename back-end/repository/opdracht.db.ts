@@ -38,7 +38,6 @@ const createOpdracht = async (newOpdrachtData: any): Promise<Opdracht> => {
         throw new Error('pilotId is required');
     }
 
-    // Generate a unique opdrachtnummer
     const lastOpdracht = await database.opdracht.findFirst({
         orderBy: { opdrachtnummer: 'desc' }
     });
@@ -104,9 +103,14 @@ const createOpdracht = async (newOpdrachtData: any): Promise<Opdracht> => {
 
 const deleteOpdrachtById = async (id: number): Promise<boolean> => {
     try {
+        await database.media.deleteMany({
+            where: { opdrachtId: id },
+        });
+
         await database.opdracht.delete({
             where: { opdrachtnummer: id },
         });
+
         return true;
     } catch (error) {
         console.error('Error deleting Opdracht:', error);

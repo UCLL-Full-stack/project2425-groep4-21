@@ -57,10 +57,6 @@ class OpdrachtService {
     //     return userDb.getUsersByIdsAndRole(pilotIds, 'pilot');
     // }
 
-    static async getCompletedAssignments(pilotId: number): Promise<Opdracht[]> {
-        return opdrachtDb.getCompletedOpdrachtenByPilotId(pilotId);
-    }
-
     //TODO do we still implement this? beoordeling or not?
     // static async getBeoordelingByAssignmentId(assignmentId: number): Promise<string | null> {
     //     const assignment = await opdrachtDb.getAssignmentById(assignmentId);

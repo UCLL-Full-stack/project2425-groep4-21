@@ -22,28 +22,33 @@ const fetcher = async () => {
         const updatedUsers = await Promise.all(
             userData.map(async (user: User) => {
                 if (user.rol === 'pilot') {
-                    const beoordelingen = await BeoordelingService.getBeoordelingByPilotId(user.id);
+                    try {
+                        const beoordelingen = await BeoordelingService.getBeoordelingByPilotId(user.id);
 
-                    // Ensure beoordelingen is an array
-                    if (!Array.isArray(beoordelingen)) {
-                        throw new Error(`Beoordelingen for user ID ${user.id} is not an array.`);
+                        // Ensure beoordelingen is an array
+                        if (!Array.isArray(beoordelingen)) {
+                            throw new Error(`Beoordelingen for user ID ${user.id} is not an array.`);
+                        }
+
+                        // Calculate totalScore and averageScore
+                        const totalScore = beoordelingen.reduce(
+                            (sum: number, beoordeling: any) => sum + beoordeling.score,
+                            0
+                        );
+                        const averageScore =
+                            beoordelingen.length > 0 ? totalScore / beoordelingen.length : 0;
+
+                        // Calculate starRating (1 to 5)
+                        const starRating = Math.max(
+                            1,
+                            Math.min(5, Math.round((averageScore / 10) * 5))
+                        );
+
+                        return { ...user, beoordelingen, starRating };
+                    } catch (error) {
+                        console.error(`Failed to fetch beoordelingen for pilot with ID ${user.id}:`, error);
+                        return { ...user, beoordelingen: [], starRating: 1 };
                     }
-
-                    // Calculate totalScore and averageScore
-                    const totalScore = beoordelingen.reduce(
-                        (sum: number, beoordeling: any) => sum + beoordeling.score,
-                        0
-                    );
-                    const averageScore =
-                        beoordelingen.length > 0 ? totalScore / beoordelingen.length : 0;
-
-                    // Calculate starRating (1 to 5)
-                    const starRating = Math.max(
-                        1,
-                        Math.min(5, Math.round((averageScore / 10) * 5))
-                    );
-
-                    return { ...user, beoordelingen, starRating };
                 }
                 return user;
             })
@@ -88,18 +93,6 @@ const UserPage: React.FC = () => {
         setIsLoadingUser(false);
     }, []);
 
-    if (!loggedInUser || loggedInUser.role !== 'admin') {
-        return (
-            <>
-                <Header />
-                <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                    <h1 className="text-2xl font-bold text-red-600">
-                        Permission denied. You are not authorized to view this page.
-                    </h1>
-                </div>
-            </>
-        );
-    }
 
     if (error) {
         return <div>Failed to load users: {error.message}</div>;

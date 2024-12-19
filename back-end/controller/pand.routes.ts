@@ -15,10 +15,6 @@ const pandRouter = express.Router();
  *      Pand:
  *          type: object
  *          properties:
- *            pandId:
- *              type: number
- *              format: int64
- *              description: Unique identifier for the pand.
  *            adres:
  *              type: string
  *              description: Address of the pand.

@@ -59,18 +59,18 @@ const OpdrachtPage: React.FC = () => {
         }
     };
 
-    if (!loggedInUser || loggedInUser.role !== 'admin') {
-        return (
-            <>
-                <Header />
-                <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                    <h1 className="text-2xl font-bold text-red-600">
-                        Permission denied. You are not authorized to view this page.
-                    </h1>
-                </div>
-            </>
-        );
-    }
+    // if (!loggedInUser || loggedInUser.role !== 'admin') {
+    //     return (
+    //         <>
+    //             <Header />
+    //             <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    //                 <h1 className="text-2xl font-bold text-red-600">
+    //                     Permission denied. You are not authorized to view this page.
+    //                 </h1>
+    //             </div>
+    //         </>
+    //     );
+    // }
 
     if (error) return <div>Failed to load</div>;
     if (!opdrachten) return <div>Loading...</div>;
