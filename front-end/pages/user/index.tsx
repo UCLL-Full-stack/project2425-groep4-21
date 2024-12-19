@@ -1,5 +1,3 @@
-// pages/users/index.tsx
-
 import Head from 'next/head';
 import Header from '@components/header';
 import UserOverviewTable from '@components/user/UserOverviewTable';

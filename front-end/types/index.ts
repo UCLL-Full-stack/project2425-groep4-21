@@ -49,10 +49,3 @@ export type StatusMessage = {
     message: string;
     type: "error" | "success";
 };
-
-// export type AuthenticationResponse = {
-//     token: string;
-//     username: string;
-//     fullname: string;
-//     role: Role;
-// };
