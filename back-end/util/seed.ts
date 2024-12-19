@@ -82,47 +82,31 @@ async function main() {
     });
 
     // Opdrachten
-    // const opdracht1 = await prisma.opdracht.create({
-    //     data: {
-    //         datum: new Date(),
-    //         puntentotaal: 85,
-    //         status: 'In Progress',
-    //         realtorId: user3.id,
-    //         pilotId: user2.id,
-    //         pandId: pand1.id,
-    //     },
-    // });
+    const opdracht1 = await prisma.opdracht.create({
+        data: {
+            datum: new Date(),
+            puntentotaal: 85,
+            status: 'In Progress',
+            realtorId: user3.id,
+            pilotId: user2.id,
+            pandId: pand1.id,
+            userId: user1.id,
+        },
+    });
 
-    // const opdracht2 = await prisma.opdracht.create({
-    //     data: {
-    //         datum: new Date(),
-    //         puntentotaal: 90,
-    //         status: 'Completed',
-    //         realtorId: user3.id,
-    //         pilotId: user2.id,
-    //         pandId: pand2.id,
-    //     },
-    // });
+    const opdracht2 = await prisma.opdracht.create({
+        data: {
+            datum: new Date(),
+            puntentotaal: 90,
+            status: 'Completed',
+            realtorId: user3.id,
+            pilotId: user2.id,
+            pandId: pand2.id,
+            userId: user1.id,
+        },
+    });
 
     //Media
-    // await prisma.media.createMany({
-    //     data: [
-    //         {
-    //             type: 'image',
-    //             bestandslocatie: 'https://example.com/image1.jpg',
-    //             uploadDatum: new Date(),
-    //             opdrachtId: opdracht1.opdrachtnummer,
-    //         },
-    //         {
-    //             type: 'video',
-    //             bestandslocatie: 'https://example.com/video1.mp4',
-    //             uploadDatum: new Date(),
-    //             opdrachtId: opdracht2.opdrachtnummer,
-    //         },
-    //     ],
-    // });
-
-    // Beoordelingen
     await prisma.beoordeling.createMany({
         data: [
             {
@@ -142,8 +126,6 @@ async function main() {
             },
         ],
     });
-
-    console.log('Seeding succesvol voltooid!');
 }
 
 main()
