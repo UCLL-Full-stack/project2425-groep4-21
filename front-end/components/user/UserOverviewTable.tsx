@@ -23,7 +23,6 @@ const UserOverviewTable: React.FC<Props> = ({ users, selectUser, currentUserRole
         ) {
             const beoordelingId = user.beoordelingen[0].beoordelingId;
             console.log('Beoordeling ID:', beoordelingId);
-            router.push(`/beoordeling/${beoordelingId}`);
         }
     };
 
